@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/color.h>
 #include <allegro5/keycodes.h>
 #include <stdlib.h>
 
@@ -33,11 +34,11 @@ void player1Update(PLAYER *player, unsigned char *keyboardKeys) {
 /*
   Draw the player on the screen
 */
-void drawPlayer(PLAYER *player) {
+void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
   al_draw_filled_rectangle(player->xPosition,
                            (player->yPosition - player->character->height),
                            (player->character->width + player->xPosition),
-                           player->yPosition, al_map_rgb(255, 0, 0));
+                           player->yPosition, playerColor);
 }
 
 /*

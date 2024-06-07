@@ -1,4 +1,5 @@
 #include "character.h"
+#include <allegro5/color.h>
 #include <stdbool.h>
 #ifndef __PLAYER__
 #define __PLAYER__
@@ -27,7 +28,7 @@ void player1Update(PLAYER *player, unsigned char *keyboardKeys);
 /*
   Draw the player on the screen
 */
-void drawPlayer(PLAYER *player);
+void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor);
 
 /*
   Free up the space that were being utilized by a Player instance

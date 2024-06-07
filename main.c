@@ -1,3 +1,5 @@
+// gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
+// $(pkg-config allegro-5 allegro_primitives-5 allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
@@ -7,7 +9,6 @@
 #include <allegro5/keyboard.h>
 #include <allegro5/keycodes.h>
 #include <allegro5/timer.h>
-#include <time.h>
 
 #include "character.h"
 #include "display.h"
@@ -46,6 +47,11 @@ int main(void) {
   PLAYER *player1;
   player1 = initPlayer(bigBoxForTest, 50, 250, true);
 
+  // Register the events to our events queue
+  al_register_event_source(queue, al_get_keyboard_event_source());
+  al_register_event_source(queue, al_get_display_event_source(disp));
+  al_register_event_source(queue, al_get_timer_event_source(timer));
+
   // -------------- MAIN GAME THINGS --------------
   bool done = false;
   bool redraw = true;
@@ -82,7 +88,7 @@ int main(void) {
       dispPreDraw(bufferBitmap);
       al_clear_to_color(al_map_rgb(0, 0, 0));
 
-      drawPlayer(player1);
+      drawPlayer(player1, al_map_rgb(176, 30, 100));
 
       dispPostDraw(disp, bufferBitmap);
       redraw = false;
@@ -90,6 +96,8 @@ int main(void) {
   }
 
   dispDestroyer(disp, bufferBitmap);
-
+  playerDestroyer(player1);
+  al_destroy_timer(timer);
+  al_destroy_event_queue(queue);
   return 0;
 }
