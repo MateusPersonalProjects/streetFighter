@@ -1,6 +1,6 @@
 // gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
-// environment.c
-// $(pkg-config allegro-5 allegro_primitives-5 allegro_image-5 --libs --cflags)
+// environment.c $(pkg-config allegro-5 allegro_primitives-5 allegro_image-5
+// --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>

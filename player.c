@@ -24,6 +24,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
   newPlayer->xPosition = xPosit;
   newPlayer->yPosition = yPosit;
   newPlayer->facingRight = facingRight;
+  newPlayer->yAcel = 0;
 
   return newPlayer;
 }
@@ -73,9 +74,18 @@ void playerSight(PLAYER *player1, PLAYER *player2) {
 */
 void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
                   unsigned char *keyboardKeys, unsigned char *whichKey) {
-  int vely = 0;
-  int jumpAcel = 15;
-  bool jump = false;
+  bool jumping;
+  bool onTheGround;
+
+  if (player->yPosition >= FLOOR) {
+    jumping = false;
+    player->yPosition = FLOOR;
+    onTheGround = true;
+  } else {
+    jumping = true;
+    onTheGround = false;
+  }
+
   if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
     player->xPosition += PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
@@ -86,12 +96,10 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
     if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
   }
-  if (keyboardKeys[whichKey[JUMP]] && jump) {
-    vely = -jumpAcel;
-    // player->yPosition -= jumpAcel;
-    jump = false;
-    // if (playersCollision(player, anotherPlayer))
-    //  player->yPosition += jumpAcel;
+  if (keyboardKeys[whichKey[JUMP]] && !jumping && onTheGround) {
+    player->yAcel = PLAYER_VEL * 3;
+    jumping = true;
+    onTheGround = false;
   }
   if (keyboardKeys[whichKey[CROUCH]]) {
     player->yPosition += PLAYER_VEL;
@@ -99,15 +107,13 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
       player->yPosition -= PLAYER_VEL;
   }
 
-  if (!jump)
-    vely += GRAVITY_COEF;
-  else
-    vely = 0;
-  player->yPosition += vely;
-
-  jump = player->yPosition >= FLOOR;
-
-  if (jump) player->yPosition = FLOOR;
+  if (jumping) {
+    player->yPosition -= player->yAcel;
+    if (playersCollision(player, anotherPlayer))
+      player->yPosition += player->yAcel;
+    // We lose velocity because of gravity
+    player->yAcel -= GRAVITY_COEF;
+  }
 
   // Dont let the player get out of the bounds of the screen
   playerScreenBounds(player);

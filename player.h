@@ -8,6 +8,7 @@ typedef struct {
   CHARACTER *character;
   int xPosition;
   int yPosition;
+  int yAcel;
   bool facingRight;
   short int life;
   short int roundsWon;
