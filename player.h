@@ -13,6 +13,12 @@ typedef struct {
   short int roundsWon;
 } PLAYER;
 
+typedef enum{
+  JUMP = 0,
+  CROUCH,
+  MOVE_LEFT,
+  MOVE_RIGHT,
+} BASIC_MOVE;
 
 /*
   Initialize a new player
@@ -21,9 +27,9 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
                    bool facingRight);
 
 /*
-  Update things for player 1
+  Update things for player
 */
-void player1Update(PLAYER *player, unsigned char *keyboardKeys);
+void playerUpdate(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey);
 
 /*
   Draw the player on the screen

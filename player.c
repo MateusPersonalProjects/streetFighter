@@ -6,6 +6,11 @@
 #include <stdlib.h>
 
 #include "character.h"
+#include "display.h"
+#include "environment.h"
+#include "misc.h"
+
+#define PLAYER_VEL 5
 
 /*
   Initialize a new player
@@ -24,11 +29,91 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
 }
 
 /*
-  Update things for player 1
+  Verify if the player is trying to get out of the bounds of the screen
 */
-void player1Update(PLAYER *player, unsigned char *keyboardKeys) {
-  if (keyboardKeys[ALLEGRO_KEY_D]) player->xPosition += 10;
-  if (keyboardKeys[ALLEGRO_KEY_A]) player->xPosition -= 10;
+void playerScreenBounds(PLAYER *player) {
+  int playerXmax = player->xPosition + player->character->width;
+  if (player->xPosition < 0) player->xPosition = 0;
+  if (playerXmax > BUFFER_W)
+    player->xPosition = BUFFER_W - player->character->width;
+}
+
+/*
+  Dont let the players get inside each other :9
+*/
+bool playersCollision(PLAYER *player1, PLAYER *player2) {
+  int p1Xmax = player1->xPosition + player1->character->width;
+  int p2Xmax = player2->xPosition + player2->character->width;
+  int p1Ymax = player1->yPosition + player1->character->height;
+  int p2Ymax = player2->yPosition + player2->character->height;
+
+  return boxCollision(player1->xPosition, player1->yPosition, p1Xmax, p1Ymax,
+                      player2->xPosition, player2->yPosition, p2Xmax, p2Ymax);
+}
+
+/*
+  Verify which player is looking to the right side of the screen, so in this way
+  we can make them look to each other for the entire match and fall in love
+*/
+void playerSight(PLAYER *player1, PLAYER *player2) {
+  int p1Mid = (player1->xPosition + player1->character->width) / 2;
+  int p2Mid = (player2->xPosition + player2->character->width) / 2;
+
+  if (p2Mid < p1Mid) {
+    player2->facingRight = true;
+    player1->facingRight = false;
+  } else {
+    player1->facingRight = true;
+    player2->facingRight = false;
+  }
+}
+
+/*
+  Update things for player
+*/
+void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
+                  unsigned char *keyboardKeys, unsigned char *whichKey) {
+  int vely = 0;
+  int jumpAcel = 15;
+  bool jump = false;
+  if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
+    player->xPosition += PLAYER_VEL;
+    if (playersCollision(player, anotherPlayer))
+      player->xPosition -= PLAYER_VEL;
+  }
+  if (keyboardKeys[whichKey[MOVE_LEFT]]) {
+    player->xPosition -= PLAYER_VEL;
+    if (playersCollision(player, anotherPlayer))
+      player->xPosition += PLAYER_VEL;
+  }
+  if (keyboardKeys[whichKey[JUMP]] && jump) {
+    vely = -jumpAcel;
+    // player->yPosition -= jumpAcel;
+    jump = false;
+    // if (playersCollision(player, anotherPlayer))
+    //  player->yPosition += jumpAcel;
+  }
+  if (keyboardKeys[whichKey[CROUCH]]) {
+    player->yPosition += PLAYER_VEL;
+    if (playersCollision(player, anotherPlayer))
+      player->yPosition -= PLAYER_VEL;
+  }
+
+  if (!jump)
+    vely += GRAVITY_COEF;
+  else
+    vely = 0;
+  player->yPosition += vely;
+
+  jump = player->yPosition >= FLOOR;
+
+  if (jump) player->yPosition = FLOOR;
+
+  // Dont let the player get out of the bounds of the screen
+  playerScreenBounds(player);
+
+  // Who is looking to the right side
+  playerSight(player, anotherPlayer);
 }
 
 /*
@@ -39,6 +124,22 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
                            (player->yPosition - player->character->height),
                            (player->character->width + player->xPosition),
                            player->yPosition, playerColor);
+
+  // Bette davis eyes
+  int playerMaxX = (player->xPosition + player->character->width);
+  if (player->facingRight) {
+    al_draw_filled_rectangle(
+        (playerMaxX - 10), (player->yPosition - player->character->height) + 5,
+        (playerMaxX + 1), (player->yPosition - player->character->height) + 10,
+        al_map_rgb(255, 255, 255));
+  } else {
+    al_draw_filled_rectangle(
+        (player->xPosition - 1),
+        (player->yPosition - player->character->height) + 5,
+        (player->xPosition + 10),
+        (player->yPosition - player->character->height) + 10,
+        al_map_rgb(255, 255, 255));
+  }
 }
 
 /*

@@ -1,4 +1,5 @@
 // gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
+// environment.c
 // $(pkg-config allegro-5 allegro_primitives-5 allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_primitives.h>
@@ -12,9 +13,14 @@
 
 #include "character.h"
 #include "display.h"
+#include "environment.h"
 #include "keyboard.h"
 #include "misc.h"
 #include "player.h"
+
+// Defines where the players must start
+#define PLAYER_1_INIT_POSIT_X (BUFFER_W * 0.15)
+#define PLAYER_2_INIT_POSIT_X ((BUFFER_W - 25) * 0.75)
 
 int main(void) {
   // Initialize allegro and keyboard
@@ -45,7 +51,13 @@ int main(void) {
   bigBoxForTest = characterInit(25, 50);
 
   PLAYER *player1;
-  player1 = initPlayer(bigBoxForTest, 50, 250, true);
+  unsigned char p1Keys[4] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
+                             ALLEGRO_KEY_D};
+  player1 = initPlayer(bigBoxForTest, PLAYER_1_INIT_POSIT_X, FLOOR, true);
+  PLAYER *player2;
+  unsigned char p2Keys[4] = {ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_LEFT,
+                             ALLEGRO_KEY_RIGHT};
+  player2 = initPlayer(bigBoxForTest, PLAYER_2_INIT_POSIT_X, FLOOR, false);
 
   // Register the events to our events queue
   al_register_event_source(queue, al_get_keyboard_event_source());
@@ -67,7 +79,8 @@ int main(void) {
 
     switch (event.type) {
       case ALLEGRO_EVENT_TIMER:
-        player1Update(player1, keyboardKeys);
+        playerUpdate(player1, player2, keyboardKeys, p1Keys);
+        playerUpdate(player2, player1, keyboardKeys, p2Keys);
 
         if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
         redraw = true;
@@ -89,6 +102,7 @@ int main(void) {
       al_clear_to_color(al_map_rgb(0, 0, 0));
 
       drawPlayer(player1, al_map_rgb(176, 30, 100));
+      drawPlayer(player2, al_map_rgb(0, 50, 200));
 
       dispPostDraw(disp, bufferBitmap);
       redraw = false;
@@ -97,6 +111,7 @@ int main(void) {
 
   dispDestroyer(disp, bufferBitmap);
   playerDestroyer(player1);
+  // playerDestroyer(player2);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
   return 0;
