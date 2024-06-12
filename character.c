@@ -5,12 +5,13 @@
 /*
   Initialize a new character
 */
-CHARACTER* characterInit(int width, int height) {
+CHARACTER* characterInit(int width, int height, int crouchHeight) {
   CHARACTER* newChar = (CHARACTER*)malloc(sizeof(CHARACTER));
   if (newChar == NULL) exit(1);
 
   newChar->width = width;
   newChar->height = height;
+  newChar->crouchHeight = crouchHeight;
   return newChar;
 }
 

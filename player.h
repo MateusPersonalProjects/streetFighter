@@ -10,6 +10,7 @@ typedef struct {
   int yPosition;
   int yAcel;
   bool facingRight;
+  bool crouching;
   short int life;
   short int roundsWon;
 } PLAYER;

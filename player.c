@@ -24,6 +24,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
   newPlayer->xPosition = xPosit;
   newPlayer->yPosition = yPosit;
   newPlayer->facingRight = facingRight;
+  newPlayer->crouching = false;
   newPlayer->yAcel = 0;
 
   return newPlayer;
@@ -74,16 +75,20 @@ void playerSight(PLAYER *player1, PLAYER *player2) {
 */
 void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
                   unsigned char *keyboardKeys, unsigned char *whichKey) {
-  bool jumping;
-  bool onTheGround;
+  bool jumping, crouching;
 
-  if (player->yPosition >= FLOOR) {
+  player->crouching = crouching = false;
+
+  if ((player->yPosition + player->character->height) >= FLOOR) {
     jumping = false;
-    player->yPosition = FLOOR;
-    onTheGround = true;
+    player->yAcel = 0;
+    int difPlayerFloor =
+        (player->yPosition + player->character->height) - FLOOR;
+    player->yPosition -= difPlayerFloor;
+    if (playersCollision(player, anotherPlayer))
+      player->yPosition -= difPlayerFloor;
   } else {
     jumping = true;
-    onTheGround = false;
   }
 
   if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
@@ -96,23 +101,26 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
     if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
   }
-  if (keyboardKeys[whichKey[JUMP]] && !jumping && onTheGround) {
+  if (keyboardKeys[whichKey[JUMP]] && !jumping) {
     player->yAcel = PLAYER_VEL * 3;
     jumping = true;
-    onTheGround = false;
   }
-  if (keyboardKeys[whichKey[CROUCH]]) {
-    player->yPosition += PLAYER_VEL;
-    if (playersCollision(player, anotherPlayer))
-      player->yPosition -= PLAYER_VEL;
+  if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
+    player->crouching = true;
+    crouching = true;
+  }
+
+  if (crouching) {
+    player->yPosition = FLOOR - player->character->crouchHeight;
   }
 
   if (jumping) {
     player->yPosition -= player->yAcel;
     if (playersCollision(player, anotherPlayer))
       player->yPosition += player->yAcel;
-    // We lose velocity because of gravity
-    player->yAcel -= GRAVITY_COEF;
+    else
+      // We lose velocity because of gravity
+      player->yAcel -= GRAVITY_COEF;
   }
 
   // Dont let the player get out of the bounds of the screen
@@ -126,25 +134,23 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
   Draw the player on the screen
 */
 void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
-  al_draw_filled_rectangle(player->xPosition,
-                           (player->yPosition - player->character->height),
+  int height = player->character->height;
+  if (player->crouching) height = player->character->crouchHeight;
+
+  al_draw_filled_rectangle(player->xPosition, player->yPosition,
                            (player->character->width + player->xPosition),
-                           player->yPosition, playerColor);
+                           (player->yPosition + height), playerColor);
 
   // Bette davis eyes
   int playerMaxX = (player->xPosition + player->character->width);
   if (player->facingRight) {
-    al_draw_filled_rectangle(
-        (playerMaxX - 10), (player->yPosition - player->character->height) + 5,
-        (playerMaxX + 1), (player->yPosition - player->character->height) + 10,
-        al_map_rgb(255, 255, 255));
+    al_draw_filled_rectangle((playerMaxX - 10), player->yPosition + 5,
+                             (playerMaxX + 1), (player->yPosition + 10),
+                             al_map_rgb(255, 255, 255));
   } else {
-    al_draw_filled_rectangle(
-        (player->xPosition - 1),
-        (player->yPosition - player->character->height) + 5,
-        (player->xPosition + 10),
-        (player->yPosition - player->character->height) + 10,
-        al_map_rgb(255, 255, 255));
+    al_draw_filled_rectangle((player->xPosition - 1), (player->yPosition + 5),
+                             (player->xPosition + 10), (player->yPosition + 10),
+                             al_map_rgb(255, 255, 255));
   }
 }
 

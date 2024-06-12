@@ -4,6 +4,7 @@
 typedef struct{
   int width;
   int height;
+  int crouchHeight;
   // MOVE LIST (array de ponteiro para funções)
   // SPRITES :)
 } CHARACTER;
@@ -11,7 +12,7 @@ typedef struct{
 /*
   Initialize a new character
 */
-CHARACTER* characterInit(int width, int height);
+CHARACTER* characterInit(int width, int height, int crouchHeight);
 
 /*
   Free the memory that a character was being utilized by a character

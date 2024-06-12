@@ -48,16 +48,18 @@ int main(void) {
 
   // Test things
   CHARACTER *bigBoxForTest;
-  bigBoxForTest = characterInit(25, 50);
+  bigBoxForTest = characterInit(25, 50, 50 * 0.3);
 
   PLAYER *player1;
   unsigned char p1Keys[4] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
                              ALLEGRO_KEY_D};
-  player1 = initPlayer(bigBoxForTest, PLAYER_1_INIT_POSIT_X, FLOOR, true);
+  player1 = initPlayer(bigBoxForTest, PLAYER_1_INIT_POSIT_X,
+                       FLOOR - bigBoxForTest->height, true);
   PLAYER *player2;
   unsigned char p2Keys[4] = {ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_LEFT,
                              ALLEGRO_KEY_RIGHT};
-  player2 = initPlayer(bigBoxForTest, PLAYER_2_INIT_POSIT_X, FLOOR, false);
+  player2 = initPlayer(bigBoxForTest, PLAYER_2_INIT_POSIT_X,
+                       FLOOR - bigBoxForTest->height, false);
 
   // Register the events to our events queue
   al_register_event_source(queue, al_get_keyboard_event_source());
