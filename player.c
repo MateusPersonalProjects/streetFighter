@@ -26,6 +26,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
   newPlayer->facingRight = facingRight;
   newPlayer->crouching = false;
   newPlayer->yAcel = 0;
+  newPlayer->life = 150;
 
   return newPlayer;
 }
@@ -81,11 +82,12 @@ void playerJump(PLAYER *player, PLAYER *anotherPlayer, bool jumping) {
     // if (jumping && ((anotherPlayer->yPosition +
     //                  anotherPlayer->character->height) < FLOOR)) {
     player->yAcel = 0;
-    player->yAcel -= GRAVITY_COEF;
+    //  player->yAcel -= GRAVITY_COEF;
     //}
-  } else
+    //} else
     // We lose velocity because of gravity
-    player->yAcel -= GRAVITY_COEF;
+    // player->yAcel -= GRAVITY_COEF;
+  }
 }
 
 /*
@@ -130,6 +132,7 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
       player->xPosition -= PLAYER_VEL;
   }
   if (keyboardKeys[whichKey[MOVE_LEFT]]) {
+    player->life -= 1;
     player->xPosition -= PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
@@ -147,6 +150,7 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
 
   // Gravity effect and collision on the sky
   playerJump(player, anotherPlayer, jumping);
+  player->yAcel -= GRAVITY_COEF;
 
   // Dont let the player get out of the bounds of the screen
   playerScreenBounds(player);

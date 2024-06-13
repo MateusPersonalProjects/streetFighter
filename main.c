@@ -15,6 +15,7 @@
 #include "display.h"
 #include "environment.h"
 #include "keyboard.h"
+#include "matchInterface.h"
 #include "misc.h"
 #include "player.h"
 
@@ -61,6 +62,9 @@ int main(void) {
   player2 = initPlayer(bigBoxForTest, PLAYER_2_INIT_POSIT_X,
                        FLOOR - bigBoxForTest->height, false);
 
+  MATCH_INTERFACE *matchInterface;
+  matchInterface = initMatchInterface(player1, player2);
+
   // Register the events to our events queue
   al_register_event_source(queue, al_get_keyboard_event_source());
   al_register_event_source(queue, al_get_display_event_source(disp));
@@ -83,6 +87,7 @@ int main(void) {
       case ALLEGRO_EVENT_TIMER:
         playerUpdate(player1, player2, keyboardKeys, p1Keys);
         playerUpdate(player2, player1, keyboardKeys, p2Keys);
+        matchInterfaceUpdate(matchInterface, player1, player2);
 
         if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
         redraw = true;
@@ -105,6 +110,7 @@ int main(void) {
 
       drawPlayer(player1, al_map_rgb(176, 30, 100));
       drawPlayer(player2, al_map_rgb(0, 50, 200));
+      drawMatchInterface(matchInterface);
 
       dispPostDraw(disp, bufferBitmap);
       redraw = false;
@@ -114,6 +120,7 @@ int main(void) {
   dispDestroyer(disp, bufferBitmap);
   playerDestroyer(player1);
   // playerDestroyer(player2);
+  matchInterfaceDestroyer(matchInterface);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
   return 0;
