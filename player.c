@@ -71,11 +71,46 @@ void playerSight(PLAYER *player1, PLAYER *player2) {
 }
 
 /*
+ Works with the gravity and if the players collided on the air
+*/
+void playerJump(PLAYER *player, PLAYER *anotherPlayer, bool jumping) {
+  // If the player is jumping gravity starts to desacelerate him
+  player->yPosition -= player->yAcel;
+  if (playersCollision(player, anotherPlayer)) {
+    player->yPosition += player->yAcel;
+    // if (jumping && ((anotherPlayer->yPosition +
+    //                  anotherPlayer->character->height) < FLOOR)) {
+    player->yAcel = 0;
+    player->yAcel -= GRAVITY_COEF;
+    //}
+  } else
+    // We lose velocity because of gravity
+    player->yAcel -= GRAVITY_COEF;
+}
+
+/*
+ Changes the y position when the player is crouching, and dont let the another
+ player stand on the player head when he is crouching
+*/
+void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
+  // if the player in crouching and the other player jumped on him, he cannot
+  // stand and the other player is going to slip away
+  if (playersCollision(player, anotherPlayer)) {
+    anotherPlayer->xPosition += PLAYER_VEL;
+    player->crouching = true;
+  }
+  // if the player is crouching his y position changes
+  if (player->crouching) {
+    player->yPosition = FLOOR - player->character->crouchHeight;
+  }
+}
+
+/*
   Update things for player
 */
 void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
                   unsigned char *keyboardKeys, unsigned char *whichKey) {
-  bool jumping, crouching;
+  bool jumping;
   int difPlayerFloor;
 
   // If the player is not on the ground, well he is jumping xD
@@ -85,7 +120,6 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
   if (!jumping) {
     player->yAcel = 0;
     difPlayerFloor = (player->yPosition + player->character->height) - FLOOR;
-
     // Wether the player got into the ground we get him back
     player->yPosition -= difPlayerFloor;
   }
@@ -106,31 +140,13 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
   }
   if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
     player->crouching = true;
-    crouching = true;
   }
 
-  // if the player in crouching and the other player jumped on him, he cannot
-  // stand and the other player is going to slip away
-  if (playersCollision(player, anotherPlayer)) {
-    anotherPlayer->xPosition += PLAYER_VEL;
-    player->crouching = true;
-  }
-  // if the player is crouching his y position changes
-  if (player->crouching) {
-    player->yPosition = FLOOR - player->character->crouchHeight;
-  }
+  // Changes y position (the head position, because he is croucing right)
+  playerCrouch(player, anotherPlayer);
 
-  // If the player is jumping gravity starts to desacelerate him
-  player->yPosition -= player->yAcel;
-  if (playersCollision(player, anotherPlayer)) {
-    player->yPosition += player->yAcel;
-    if (jumping && ((player->yPosition + player->character->height) < FLOOR)) {
-      player->yAcel = 0;
-      player->yAcel -= GRAVITY_COEF;
-    }
-  } else
-    // We lose velocity because of gravity
-    player->yAcel -= GRAVITY_COEF;
+  // Gravity effect and collision on the sky
+  playerJump(player, anotherPlayer, jumping);
 
   // Dont let the player get out of the bounds of the screen
   playerScreenBounds(player);
