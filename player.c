@@ -107,6 +107,27 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
   }
 }
 
+bool punch(PLAYER *deliver, PLAYER *receiver) {
+  bool hit = false;
+  int deliverXmax = deliver->xPosition + deliver->character->width;
+  int deliverYmax = deliver->yPosition + deliver->character->height;
+  int receiverXmax = receiver->xPosition + receiver->character->width;
+  int receiverYmax = receiver->yPosition + receiver->character->height;
+
+  if (deliver->facingRight) {
+    hit =
+        boxCollision(deliverXmax, (deliver->yPosition + 15), (deliverXmax + 10),
+                     (deliver->yPosition + 21), receiver->xPosition,
+                     receiver->yPosition, receiverXmax, receiverYmax);
+  } else {
+    hit = boxCollision((deliver->xPosition - 10), (deliver->yPosition + 15),
+                       deliver->xPosition, (deliver->yPosition + 21),
+                       receiver->xPosition, receiver->yPosition, receiverXmax,
+                       receiverYmax);
+  }
+  return hit;
+}
+
 /*
   Update things for player
 */
@@ -124,25 +145,33 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
     difPlayerFloor = (player->yPosition + player->character->height) - FLOOR;
     // Wether the player got into the ground we get him back
     player->yPosition -= difPlayerFloor;
+    player->character->currentSprite = STEADY;
   }
 
   if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
+    if (!jumping) player->character->currentSprite = WALKING;
     player->xPosition += PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
       player->xPosition -= PLAYER_VEL;
   }
   if (keyboardKeys[whichKey[MOVE_LEFT]]) {
-    player->life -= 1;
+    if (!jumping) player->character->currentSprite = WALKING;
     player->xPosition -= PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
   }
   if (keyboardKeys[whichKey[JUMP]] && !jumping) {
     // Give me some boost to reach the skyies o/
+    player->character->currentSprite = JUMPING;
     player->yAcel = PLAYER_VEL * 3;
   }
   if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
     player->crouching = true;
+    player->character->currentSprite = CROUCHING;
+  }
+  if (keyboardKeys[whichKey[PUNCH]]) {
+    player->character->currentSprite = PUNCHING;
+    if (punch(player, anotherPlayer)) anotherPlayer->life -= 1;
   }
 
   // Changes y position (the head position, because he is croucing right)
@@ -180,6 +209,19 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
     al_draw_filled_rectangle((player->xPosition - 1), (player->yPosition + 5),
                              (player->xPosition + 10), (player->yPosition + 10),
                              al_map_rgb(255, 255, 255));
+  }
+
+  switch (player->character->currentSprite) {
+    case (PUNCHING):
+      if (player->facingRight)
+        al_draw_filled_rectangle(playerMaxX, player->yPosition + 15,
+                                 playerMaxX + 10, player->yPosition + 21,
+                                 al_map_rgb(255, 255, 255));
+      else
+        al_draw_filled_rectangle(player->xPosition - 10, player->yPosition + 15,
+                                 player->xPosition + 1, player->yPosition + 21,
+                                 al_map_rgb(255, 255, 255));
+      break;
   }
 }
 

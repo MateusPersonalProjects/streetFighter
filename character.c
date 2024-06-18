@@ -12,6 +12,7 @@ CHARACTER* characterInit(int width, int height, int crouchHeight) {
   newChar->width = width;
   newChar->height = height;
   newChar->crouchHeight = crouchHeight;
+  newChar->currentSprite = STEADY;
   return newChar;
 }
 

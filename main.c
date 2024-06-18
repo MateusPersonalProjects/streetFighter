@@ -1,6 +1,6 @@
 // gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
-// environment.c $(pkg-config allegro-5 allegro_primitives-5 allegro_image-5
-// --libs --cflags)
+// environment.c matchInterface.c $(pkg-config allegro-5 allegro_primitives-5
+// allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
@@ -48,19 +48,20 @@ int main(void) {
   alCheckInit(al_init_primitives_addon(), "primitives");
 
   // Test things
-  CHARACTER *bigBoxForTest;
-  bigBoxForTest = characterInit(25, 50, 50 * 0.3);
+  CHARACTER *bigBoxForTest1, *bigBoxForTest2;
+  bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
+  bigBoxForTest2 = characterInit(25, 50, 50 * 0.3);
 
   PLAYER *player1;
-  unsigned char p1Keys[4] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
-                             ALLEGRO_KEY_D};
-  player1 = initPlayer(bigBoxForTest, PLAYER_1_INIT_POSIT_X,
-                       FLOOR - bigBoxForTest->height, true);
+  unsigned char p1Keys[5] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
+                             ALLEGRO_KEY_D, ALLEGRO_KEY_G};
+  player1 = initPlayer(bigBoxForTest1, PLAYER_1_INIT_POSIT_X,
+                       FLOOR - bigBoxForTest1->height, true);
   PLAYER *player2;
-  unsigned char p2Keys[4] = {ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_LEFT,
-                             ALLEGRO_KEY_RIGHT};
-  player2 = initPlayer(bigBoxForTest, PLAYER_2_INIT_POSIT_X,
-                       FLOOR - bigBoxForTest->height, false);
+  unsigned char p2Keys[5] = {ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_LEFT,
+                             ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_U};
+  player2 = initPlayer(bigBoxForTest2, PLAYER_2_INIT_POSIT_X,
+                       FLOOR - bigBoxForTest2->height, false);
 
   MATCH_INTERFACE *matchInterface;
   matchInterface = initMatchInterface(player1, player2);

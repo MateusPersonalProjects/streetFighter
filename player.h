@@ -1,9 +1,9 @@
-#include "character.h"
 #include <allegro5/color.h>
 #include <stdbool.h>
 #ifndef __PLAYER__
 #define __PLAYER__
 
+#include "character.h"
 typedef struct {
   CHARACTER *character;
   int xPosition;
@@ -20,6 +20,7 @@ typedef enum{
   CROUCH,
   MOVE_LEFT,
   MOVE_RIGHT,
+  PUNCH,
 } BASIC_MOVE;
 
 /*
