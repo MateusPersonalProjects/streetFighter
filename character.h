@@ -7,6 +7,8 @@ typedef enum{
   WALKING,
   JUMPING,
   CROUCHING,
+  DEFENDING,
+  GOT_HIT,
   PUNCHING
 } SPRITE_LIST;
 

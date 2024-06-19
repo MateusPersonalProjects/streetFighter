@@ -3,6 +3,7 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
+#include "attacks_SpecialMoves.h"
 #include "character.h"
 typedef struct {
   CHARACTER *character;
@@ -11,6 +12,7 @@ typedef struct {
   int yAcel;
   bool facingRight;
   bool crouching;
+  bool blocking;
   short int life;
   short int roundsWon;
 } PLAYER;

@@ -1,6 +1,6 @@
 // gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
-// environment.c matchInterface.c $(pkg-config allegro-5 allegro_primitives-5
-// allegro_image-5 --libs --cflags)
+// environment.c matchInterface.c attacks_SpecialMoves.c $(pkg-config allegro-5
+// allegro_primitives-5 allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
@@ -86,6 +86,7 @@ int main(void) {
 
     switch (event.type) {
       case ALLEGRO_EVENT_TIMER:
+
         playerUpdate(player1, player2, keyboardKeys, p1Keys);
         playerUpdate(player2, player1, keyboardKeys, p2Keys);
         matchInterfaceUpdate(matchInterface, player1, player2);
@@ -120,7 +121,7 @@ int main(void) {
 
   dispDestroyer(disp, bufferBitmap);
   playerDestroyer(player1);
-  // playerDestroyer(player2);
+  playerDestroyer(player2);
   matchInterfaceDestroyer(matchInterface);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);

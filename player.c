@@ -2,6 +2,7 @@
 
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
+#include <allegro5/events.h>
 #include <allegro5/keycodes.h>
 #include <stdlib.h>
 
@@ -25,6 +26,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
   newPlayer->yPosition = yPosit;
   newPlayer->facingRight = facingRight;
   newPlayer->crouching = false;
+  newPlayer->blocking = false;
   newPlayer->yAcel = 0;
   newPlayer->life = 150;
 
@@ -107,27 +109,6 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
   }
 }
 
-bool punch(PLAYER *deliver, PLAYER *receiver) {
-  bool hit = false;
-  int deliverXmax = deliver->xPosition + deliver->character->width;
-  int deliverYmax = deliver->yPosition + deliver->character->height;
-  int receiverXmax = receiver->xPosition + receiver->character->width;
-  int receiverYmax = receiver->yPosition + receiver->character->height;
-
-  if (deliver->facingRight) {
-    hit =
-        boxCollision(deliverXmax, (deliver->yPosition + 15), (deliverXmax + 10),
-                     (deliver->yPosition + 21), receiver->xPosition,
-                     receiver->yPosition, receiverXmax, receiverYmax);
-  } else {
-    hit = boxCollision((deliver->xPosition - 10), (deliver->yPosition + 15),
-                       deliver->xPosition, (deliver->yPosition + 21),
-                       receiver->xPosition, receiver->yPosition, receiverXmax,
-                       receiverYmax);
-  }
-  return hit;
-}
-
 /*
   Update things for player
 */
@@ -136,25 +117,39 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
   bool jumping;
   int difPlayerFloor;
 
+  int p1MaxX = player->xPosition + player->character->width;
+  int p1MaxY = player->xPosition + player->character->height;
+  int p2MaxX = anotherPlayer->xPosition + anotherPlayer->character->width;
+  int p2MaxY = anotherPlayer->yPosition + anotherPlayer->character->height;
+
   // If the player is not on the ground, well he is jumping xD
   jumping = ((player->yPosition + player->character->height) < FLOOR);
   player->crouching = false;
+  // player->blocking = false;
 
   if (!jumping) {
     player->yAcel = 0;
     difPlayerFloor = (player->yPosition + player->character->height) - FLOOR;
     // Wether the player got into the ground we get him back
     player->yPosition -= difPlayerFloor;
-    player->character->currentSprite = STEADY;
+    // player->character->currentSprite = STEADY;
   }
 
   if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
+    // If player is a moonwalker, well the king of pop gives him the power to
+    // block xD
+    if (!player->facingRight) player->blocking = true;
+
     if (!jumping) player->character->currentSprite = WALKING;
     player->xPosition += PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
       player->xPosition -= PLAYER_VEL;
   }
   if (keyboardKeys[whichKey[MOVE_LEFT]]) {
+    // If player is a moonwalker, well the king of pop gives him the power to
+    // block xD
+    if (player->facingRight) player->blocking = true;
+
     if (!jumping) player->character->currentSprite = WALKING;
     player->xPosition -= PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
@@ -171,7 +166,20 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
   }
   if (keyboardKeys[whichKey[PUNCH]]) {
     player->character->currentSprite = PUNCHING;
-    if (punch(player, anotherPlayer)) anotherPlayer->life -= 1;
+    if (punch(player->xPosition, p1MaxX, player->yPosition, p1MaxY,
+              player->facingRight, anotherPlayer->xPosition, p2MaxX,
+              anotherPlayer->yPosition, p2MaxY)) {
+      if (!anotherPlayer->blocking) {
+        anotherPlayer->life -= 1;
+        anotherPlayer->character->currentSprite = GOT_HIT;
+      } else
+        anotherPlayer->character->currentSprite = DEFENDING;
+
+      if (anotherPlayer->facingRight)
+        anotherPlayer->xPosition -= 2;
+      else
+        anotherPlayer->xPosition += 2;
+    }
   }
 
   // Changes y position (the head position, because he is croucing right)
@@ -193,11 +201,20 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
 */
 void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
   int height = player->character->height;
+  ALLEGRO_COLOR color;
+
   if (player->crouching) height = player->character->crouchHeight;
+
+  if (player->character->currentSprite == GOT_HIT)
+    color = al_map_rgb(255, 255, 255);
+  else if (player->character->currentSprite == DEFENDING)
+    color = al_map_rgb(10, 180, 10);
+  else
+    color = playerColor;
 
   al_draw_filled_rectangle(player->xPosition, player->yPosition,
                            (player->character->width + player->xPosition),
-                           (player->yPosition + height), playerColor);
+                           (player->yPosition + height), color);
 
   // Bette davis eyes
   int playerMaxX = (player->xPosition + player->character->width);
@@ -223,6 +240,10 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
                                  al_map_rgb(255, 255, 255));
       break;
   }
+
+  // ONDE VOU COLOCAR ESSES RESETS????
+  player->character->currentSprite = STEADY;
+  player->blocking = false;
 }
 
 /*
