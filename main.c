@@ -87,8 +87,11 @@ int main(void) {
     switch (event.type) {
       case ALLEGRO_EVENT_TIMER:
 
-        playerUpdate(player1, player2, keyboardKeys, p1Keys);
-        playerUpdate(player2, player1, keyboardKeys, p2Keys);
+        playerUpdateMovements(player1, player2, keyboardKeys, p1Keys);
+        playerUpdateMovements(player2, player1, keyboardKeys, p2Keys);
+
+        playerUpdateAttacks(player1, player2, keyboardKeys, p1Keys);
+        playerUpdateAttacks(player2, player1, keyboardKeys, p2Keys);
         matchInterfaceUpdate(matchInterface, player1, player2);
 
         if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;

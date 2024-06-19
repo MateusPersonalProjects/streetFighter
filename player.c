@@ -110,17 +110,13 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
 }
 
 /*
-  Update things for player
+  Update things for player movements
 */
-void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
-                  unsigned char *keyboardKeys, unsigned char *whichKey) {
+void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
+                           unsigned char *keyboardKeys,
+                           unsigned char *whichKey) {
   bool jumping;
   int difPlayerFloor;
-
-  int p1MaxX = player->xPosition + player->character->width;
-  int p1MaxY = player->xPosition + player->character->height;
-  int p2MaxX = anotherPlayer->xPosition + anotherPlayer->character->width;
-  int p2MaxY = anotherPlayer->yPosition + anotherPlayer->character->height;
 
   // If the player is not on the ground, well he is jumping xD
   jumping = ((player->yPosition + player->character->height) < FLOOR);
@@ -164,6 +160,30 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
     player->crouching = true;
     player->character->currentSprite = CROUCHING;
   }
+  // Changes y position (the head position, because he is croucing right)
+  playerCrouch(player, anotherPlayer);
+
+  // Gravity effect and collision on the sky
+  playerJump(player, anotherPlayer, jumping);
+  player->yAcel -= GRAVITY_COEF;
+
+  // Dont let the player get out of the bounds of the screen
+  playerScreenBounds(player);
+
+  // Who is looking to the right side
+  playerSight(player, anotherPlayer);
+}
+
+/*
+ * Update things for the player attacks
+ */
+void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
+                         unsigned char *keyboardKeys, unsigned char *whichKey) {
+  int p1MaxX = player->xPosition + player->character->width;
+  int p1MaxY = player->xPosition + player->character->height;
+  int p2MaxX = anotherPlayer->xPosition + anotherPlayer->character->width;
+  int p2MaxY = anotherPlayer->yPosition + anotherPlayer->character->height;
+
   if (keyboardKeys[whichKey[PUNCH]]) {
     player->character->currentSprite = PUNCHING;
     if (punch(player->xPosition, p1MaxX, player->yPosition, p1MaxY,
@@ -181,19 +201,6 @@ void playerUpdate(PLAYER *player, PLAYER *anotherPlayer,
         anotherPlayer->xPosition += 2;
     }
   }
-
-  // Changes y position (the head position, because he is croucing right)
-  playerCrouch(player, anotherPlayer);
-
-  // Gravity effect and collision on the sky
-  playerJump(player, anotherPlayer, jumping);
-  player->yAcel -= GRAVITY_COEF;
-
-  // Dont let the player get out of the bounds of the screen
-  playerScreenBounds(player);
-
-  // Who is looking to the right side
-  playerSight(player, anotherPlayer);
 }
 
 /*

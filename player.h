@@ -34,7 +34,14 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
 /*
   Update things for player
 */
-void playerUpdate(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey);
+void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey);
+
+
+/*
+ * Update things for the player attacks
+ */
+void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
+                         unsigned char *keyboardKeys, unsigned char *whichKey);
 
 /*
   Draw the player on the screen
