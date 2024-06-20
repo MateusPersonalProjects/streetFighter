@@ -74,6 +74,8 @@ int main(void) {
   // -------------- MAIN GAME THINGS --------------
   bool done = false;
   bool redraw = true;
+  bool match = true;
+  int round = 0;
 
   ALLEGRO_EVENT event;
 
