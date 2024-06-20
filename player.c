@@ -120,7 +120,7 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
 
   // If the player is not on the ground, well he is jumping xD
   jumping = ((player->yPosition + player->character->height) < FLOOR);
-  player->crouching = false;
+  // player->crouching = false;
   // player->blocking = false;
 
   if (!jumping) {
@@ -251,6 +251,7 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
   // ONDE VOU COLOCAR ESSES RESETS????
   player->character->currentSprite = STEADY;
   player->blocking = false;
+  player->crouching = false;
 }
 
 /*
