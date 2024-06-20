@@ -1,7 +1,8 @@
 // gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
 // environment.c matchInterface.c attacks_SpecialMoves.c $(pkg-config allegro-5
-// allegro_primitives-5 allegro_image-5 --libs --cflags)
+// allegro_primitives-5 allegro_font-5 allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
+#include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
 #include <allegro5/display.h>
@@ -44,6 +45,10 @@ int main(void) {
   ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   alCheckInit(queue, "queue");
 
+  // Init Font
+  ALLEGRO_FONT *font = al_create_builtin_font();
+  alCheckInit(font, "font");
+
   // Initialize primites for tests
   alCheckInit(al_init_primitives_addon(), "primitives");
 
@@ -74,8 +79,6 @@ int main(void) {
   // -------------- MAIN GAME THINGS --------------
   bool done = false;
   bool redraw = true;
-  bool match = true;
-  int round = 0;
 
   ALLEGRO_EVENT event;
 
@@ -84,51 +87,120 @@ int main(void) {
   while (1) {
     al_wait_for_event(queue, &event);
 
-    // -------------- UPDATE PHASE --------------
+    bool matchLoop = true;
+    bool match = true;
+    bool controlON = false;
+    bool roundEnded = false;
+    bool reset = false;
 
-    switch (event.type) {
-      case ALLEGRO_EVENT_TIMER:
+    unsigned short frames = 0;
 
-        playerUpdateMovements(player1, player2, keyboardKeys, p1Keys);
-        playerUpdateMovements(player2, player1, keyboardKeys, p2Keys);
+    // ---------------- MATCH LOGIC ---------------
+    while (matchLoop) {
+      // -------------- UPDATE PHASE --------------
 
-        playerUpdateAttacks(player1, player2, keyboardKeys, p1Keys);
-        playerUpdateAttacks(player2, player1, keyboardKeys, p2Keys);
-        matchInterfaceUpdate(matchInterface, player1, player2);
+      if (controlON) {
+        switch (event.type) {
+          case ALLEGRO_EVENT_TIMER:
 
-        if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
-        redraw = true;
-        break;
+            playerUpdateMovements(player1, player2, keyboardKeys, p1Keys);
+            playerUpdateMovements(player2, player1, keyboardKeys, p2Keys);
 
-      case ALLEGRO_EVENT_DISPLAY_CLOSE:
-        done = true;
-        break;
+            playerUpdateAttacks(player1, player2, keyboardKeys, p1Keys);
+            playerUpdateAttacks(player2, player1, keyboardKeys, p2Keys);
+            matchInterfaceUpdate(matchInterface, player1, player2);
+
+            if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
+            redraw = true;
+            break;
+
+          case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            done = true;
+            break;
+        }
+      }
+      if (event.type == ALLEGRO_EVENT_TIMER) redraw = true;
+      // If the user wants to close the game break the loop
+      if (done) break;
+
+      if (player1->life <= 0 || player2->life <= 0) {
+        roundEnded = true;
+        controlON = false;
+        if (player1->life <= 0) player2->roundsWon += 1;
+        if (player2->life <= 0) player1->roundsWon += 1;
+
+        if ((player1->roundsWon == 2) || (player2->roundsWon == 2))
+          match = false;
+      }
+
+      keyboardUpdate(&event, keyboardKeys);
+
+      // ------------ REDRAW PHASE ------------
+      if (redraw && al_event_queue_is_empty(queue)) {
+        dispPreDraw(bufferBitmap);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        if (!controlON && !roundEnded) {
+          if (event.type == ALLEGRO_EVENT_TIMER) frames++;
+          if (frames <= 80) {
+            if (frames <= 45)
+              al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
+                           BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
+                           "R O U N D   O N E");
+            else
+              al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
+                           BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER, "F I G H T");
+          }
+          // DRAW THE ROUND START FIGHT THING 90 frames
+          // 90 FRAMES PASSED then
+          else {
+            controlON = true;
+            frames = 0;
+            reset = false;
+          }
+        }
+
+        if (roundEnded) {
+          // DRAW THE K.O THING THEN AFTER 90 FRAMES RESET PLAYER AND START NEW
+          // ROUND
+          if (event.type == ALLEGRO_EVENT_TIMER) frames++;
+          if (frames <= 90) {
+            al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
+                         BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER, "K . O");
+
+          } else {
+            reset = true;
+            frames = 0;
+            if (!match) {
+              // SHOW OUR WINNER and after 90 frames turn off matchLoop
+            }
+          }
+          roundEnded = false;
+        }
+        drawPlayer(player1, al_map_rgb(176, 30, 100));
+        drawPlayer(player2, al_map_rgb(0, 50, 200));
+        drawMatchInterface(matchInterface);
+
+        dispPostDraw(disp, bufferBitmap);
+        redraw = false;
+      }
+
+      // RESET THE PLAYERS
+      if (reset) {
+        player1->life = 100;
+        player2->life = 100;
+        player1->xPosition = PLAYER_1_INIT_POSIT_X;
+        player2->xPosition = PLAYER_2_INIT_POSIT_X;
+      }
+      al_wait_for_event(queue, &event);
     }
 
-    // If the user wants to close the game break the loop
-    if (done) break;
-
-    keyboardUpdate(&event, keyboardKeys);
-
-    // ------------ REDRAW PHASE ------------
-    if (redraw && al_event_queue_is_empty(queue)) {
-      dispPreDraw(bufferBitmap);
-      al_clear_to_color(al_map_rgb(0, 0, 0));
-
-      drawPlayer(player1, al_map_rgb(176, 30, 100));
-      drawPlayer(player2, al_map_rgb(0, 50, 200));
-      drawMatchInterface(matchInterface);
-
-      dispPostDraw(disp, bufferBitmap);
-      redraw = false;
-    }
+    dispDestroyer(disp, bufferBitmap);
+    playerDestroyer(player1);
+    playerDestroyer(player2);
+    matchInterfaceDestroyer(matchInterface);
+    al_destroy_timer(timer);
+    al_destroy_event_queue(queue);
+    return 0;
   }
-
-  dispDestroyer(disp, bufferBitmap);
-  playerDestroyer(player1);
-  playerDestroyer(player2);
-  matchInterfaceDestroyer(matchInterface);
-  al_destroy_timer(timer);
-  al_destroy_event_queue(queue);
-  return 0;
 }
