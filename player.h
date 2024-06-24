@@ -32,6 +32,11 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
                    bool facingRight);
 
 /*
+ Reset the player
+*/
+void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight);
+
+/*
   Update things for player
 */
 void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey);

@@ -29,8 +29,22 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
   newPlayer->blocking = false;
   newPlayer->yAcel = 0;
   newPlayer->life = 150;
+  newPlayer->roundsWon = 0;
 
   return newPlayer;
+}
+
+/*
+ Reset the player
+*/
+void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight) {
+  player->xPosition = xPosit;
+  player->yPosition = yPosit;
+  player->facingRight = facingRight;
+  player->crouching = false;
+  player->blocking = false;
+  player->yAcel = 0;
+  player->life = 150;
 }
 
 /*

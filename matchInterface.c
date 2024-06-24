@@ -46,6 +46,8 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface) {
       matchInterface->lifebarColor);
 }
 
+void roundStarter(short frames) {}
+
 /*
   Destroy a match interface
 */
