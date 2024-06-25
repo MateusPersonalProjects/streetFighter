@@ -88,12 +88,15 @@ int main(void) {
     al_wait_for_event(queue, &event);
 
     bool matchLoop = true;
-    bool match = true;
+    // bool match = true;
     bool controlON = false;
-    bool roundEnded = false;
+    // bool roundEnded = false;
     bool reset = false;
-    bool att = true;
-    short rounds = 0;
+    // short rounds = 0;
+    matchInterface->rounds = 0;
+
+    matchInterface->matchUP = true;
+    matchInterface->roundUP = true;
 
     unsigned short frames = 0;
 
@@ -104,6 +107,7 @@ int main(void) {
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
 
+          // If the control is on the player can move around and start the fight
           if (controlON) {
             playerUpdateMovements(player1, player2, keyboardKeys, p1Keys);
             playerUpdateMovements(player2, player1, keyboardKeys, p2Keys);
@@ -111,6 +115,7 @@ int main(void) {
             playerUpdateAttacks(player1, player2, keyboardKeys, p1Keys);
             playerUpdateAttacks(player2, player1, keyboardKeys, p2Keys);
             matchInterfaceUpdate(matchInterface, player1, player2);
+            controlON = matchUpdate(matchInterface, player1, player2);
           }
 
           if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
@@ -125,17 +130,6 @@ int main(void) {
       // If the user wants to close the game break the loop
       if (done) break;
 
-      if ((player1->life <= 0 || player2->life <= 0) && att) {
-        rounds++;
-        roundEnded = true;
-        controlON = false;
-        if (player1->life <= 0) player2->roundsWon += 1;
-        if (player2->life <= 0) player1->roundsWon += 1;
-        if ((player1->roundsWon == 2) || (player2->roundsWon == 2))
-          match = false;
-        att = false;
-      }
-
       keyboardUpdate(&event, keyboardKeys);
 
       // ------------ REDRAW PHASE ------------
@@ -147,74 +141,26 @@ int main(void) {
         drawPlayer(player2, al_map_rgb(0, 50, 200));
         drawMatchInterface(matchInterface);
 
-        if (!controlON && !roundEnded) {
-          frames++;
-          if (frames <= 80) {
-            if (frames <= 45) {
-              if (rounds == 0)
-                al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                             BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                             "R O U N D   O N E");
-              else if (rounds == 1)
-                al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                             BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                             "R O U N D   T W O");
-              else
-                al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                             BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                             "F I N A L   R O U N D");
+        // If the players are not able to control and the round is up, well it
+        // just started so lets draw the things
+        if (!controlON && matchInterface->roundUP)
+          controlON = roundStartWriter(matchInterface, &frames, font);
 
-            } else
-              al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                           BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                           "F I G H T  !");
-          }
-          // DRAW THE ROUND START FIGHT THING 90 frames
-          // 90 FRAMES PASSED then
-          else {
-            controlON = true;
-            att = true;
-            frames = 0;
-          }
-        }
-
-        if (roundEnded) {
-          // DRAW THE K.O THING THEN AFTER 90 FRAMES RESET PLAYER AND START NEW
-          // ROUND
-          frames++;
-          if (frames <= 90) {
-            al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                         BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER, "K . O");
-
-          } else if (frames > 90 && match) {
+        // If the round is not up, well someone died, so lets check this and
+        // start a new round
+        if (!matchInterface->roundUP) {
+          if (roundEndWriter(matchInterface, &frames, font)) {
             resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
                         FLOOR - bigBoxForTest1->height, true);
             resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
                         FLOOR - bigBoxForTest2->height, false);
-            frames = 0;
-            roundEnded = false;
-          } else {
-            roundEnded = true;
           }
         }
 
-        if (!match) {
-          // SHOW OUR WINNER and after 90 frames turn off matchLoop
-          frames++;
-          if (frames <= 180) {
-            if (frames > 90) {
-              if (player1->roundsWon == 2)
-                al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                             BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                             "P L A Y E R   O N E   W I N S  !");
-              else
-                al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                             BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                             "P L A Y E R   T W O   W I N S  !");
-            }
-          } else
-            matchLoop = false;
-        }
+        // If the match ended, we have a winner so lets show him
+        if (!matchInterface->matchUP)
+          matchLoop = drawWinnerGreater(matchInterface, &frames, font,
+                                        (player1->roundsWon == 2));
 
         dispPostDraw(disp, bufferBitmap);
         redraw = false;
