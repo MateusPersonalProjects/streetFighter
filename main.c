@@ -139,7 +139,7 @@ int main(void) {
 
         drawPlayer(player1, al_map_rgb(176, 30, 100));
         drawPlayer(player2, al_map_rgb(0, 50, 200));
-        drawMatchInterface(matchInterface);
+        drawMatchInterface(matchInterface, player1, player2);
 
         // If the players are not able to control and the round is up, well it
         // just started so lets draw the things

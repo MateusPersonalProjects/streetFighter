@@ -45,7 +45,7 @@ bool matchUpdate(MATCH_INTERFACE* matchInterface, PLAYER* player1,
 /*
   Draw the match interface
 */
-void drawMatchInterface(MATCH_INTERFACE* matchInterface);
+void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER *player1, PLAYER *player2);
 
 /*
   Draw the initial text of the fight

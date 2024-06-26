@@ -55,7 +55,9 @@ bool matchUpdate(MATCH_INTERFACE* matchInterface, PLAYER* player1,
 /*
   Draw the match interface
 */
-void drawMatchInterface(MATCH_INTERFACE* matchInterface) {
+void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
+                        PLAYER* player2) {
+  // Draw the lifebars
   al_draw_filled_rectangle(
       matchInterface->lifebarP1X, matchInterface->lifebarY,
       (matchInterface->lifebarP1X + matchInterface->lifebarP1Width),
@@ -65,12 +67,30 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface) {
       matchInterface->lifebarP2X, matchInterface->lifebarY, BUFFER_W - 10,
       (matchInterface->lifebarY + matchInterface->lifebarHeight),
       matchInterface->lifebarColor);
+
+  // Draw the rounds won for p1
+  if (player1->roundsWon >= 1) {
+    al_draw_filled_circle(140, (matchInterface->lifebarY + 22), 2,
+                          al_map_rgb(200, 0, 20));
+    if (player1->roundsWon == 2)
+      al_draw_filled_circle(155, (matchInterface->lifebarY + 22), 2,
+                            al_map_rgb(200, 0, 20));
+  }
+
+  // Draw the rounds won for p2
+  if (player2->roundsWon >= 1) {
+    al_draw_filled_circle(BUFFER_W - 140, (matchInterface->lifebarY + 22), 2,
+                          al_map_rgb(200, 0, 20));
+    if (player2->roundsWon == 2)
+      al_draw_filled_circle(BUFFER_W - 155, (matchInterface->lifebarY + 22), 2,
+                            al_map_rgb(200, 0, 20));
+  }
 }
 
 /*
   Draw the initial text of the fight
-  It deactivate the players controls for a 3 seconds then turn it on back again
-  so the fight can start
+  It deactivate the players controls for a 3 seconds then turn it on back
+  again so the fight can start
 
   return the flag that control the controls
 */
@@ -105,8 +125,8 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
 }
 
 /*
-  Ends a round writting K.O, return true when the writting ends so the code can
-  reset the players or end the match
+  Ends a round writting K.O, return true when the writting ends so the code
+  can reset the players or end the match
 */
 bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
                     ALLEGRO_FONT* font) {
