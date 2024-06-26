@@ -87,12 +87,23 @@ int main(void) {
   while (1) {
     al_wait_for_event(queue, &event);
 
+    bool chacSelecLoop = true;
+    // ------------- CHARACTER SELECTION MENU -----------------
+    while (chacSelecLoop) {
+      /*
+        4 personagens, 4 quadrados só a borda
+
+        Vai funcionar da forma que
+          se -> ++
+          se <- --
+          se DOWN +2
+          se UP -2
+
+      */
+    }
     bool matchLoop = true;
-    // bool match = true;
     bool controlON = false;
-    // bool roundEnded = false;
     bool reset = false;
-    // short rounds = 0;
     matchInterface->rounds = 0;
 
     matchInterface->matchUP = true;
