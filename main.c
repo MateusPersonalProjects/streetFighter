@@ -1,6 +1,7 @@
 // gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
-// environment.c matchInterface.c attacks_SpecialMoves.c $(pkg-config allegro-5
-// allegro_primitives-5 allegro_font-5 allegro_image-5 --libs --cflags)
+// environment.c matchInterface.c attacks_SpecialMoves.c characSelecMenu.c
+// $(pkg-config allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5
+// --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
@@ -12,6 +13,7 @@
 #include <allegro5/keycodes.h>
 #include <allegro5/timer.h>
 
+#include "characSelecMenu.h"
 #include "character.h"
 #include "display.h"
 #include "environment.h"
@@ -57,6 +59,9 @@ int main(void) {
   bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
   bigBoxForTest2 = characterInit(25, 50, 50 * 0.3);
 
+  SELECTION_BOX characSelectBoxes[4];
+  initSelectionBoxes(characSelectBoxes);
+
   PLAYER *player1;
   unsigned char p1Keys[5] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
                              ALLEGRO_KEY_D, ALLEGRO_KEY_G};
@@ -100,8 +105,34 @@ int main(void) {
           se UP -2
 
       */
+      switch (event.type) {
+        case ALLEGRO_EVENT_TIMER:
+          if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
+          redraw = true;
+          break;
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+          done = true;
+          break;
+      }
+
+      // If the user wants to close the game break the loop
+      if (done) break;
+
+      keyboardUpdate(&event, keyboardKeys);
+
+      // ------------ REDRAW PHASE ------------
+      if (redraw && al_event_queue_is_empty(queue)) {
+        dispPreDraw(bufferBitmap);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        drawSelectionBoxes(characSelectBoxes);
+        dispPostDraw(disp, bufferBitmap);
+        redraw = false;
+      }
+
+      al_wait_for_event(queue, &event);
     }
-    bool matchLoop = true;
+    bool matchLoop = false;
     bool controlON = false;
     bool reset = false;
     matchInterface->rounds = 0;
