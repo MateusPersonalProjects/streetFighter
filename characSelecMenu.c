@@ -1,5 +1,6 @@
 #include "characSelecMenu.h"
 
+#include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
 
@@ -119,4 +120,19 @@ void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes,
     al_draw_rectangle(x1, y1, x2, y2, allSelectionBoxes[i].color,
                       SELECT_BOX_THICKNESS);
   }
+}
+
+/*
+  Draw the versus screen
+*/
+void drawVersusScreen(ALLEGRO_COLOR p1, ALLEGRO_COLOR p2, ALLEGRO_FONT* font) {
+  al_draw_filled_rectangle(20, 100, (BUFFER_W / 2.0) - 50, BUFFER_H - 5, p1);
+  al_draw_filled_rectangle((BUFFER_W / 2.0) - 130, 140, (BUFFER_W / 2.0) - 40,
+                           180, al_map_rgb(255, 255, 255));
+  al_draw_filled_rectangle((BUFFER_W - 20), 100, (BUFFER_W / 2.0) + 50,
+                           BUFFER_H - 5, p2);
+  al_draw_filled_rectangle((BUFFER_W / 2.0) + 130, 140, (BUFFER_W / 2.0) + 40,
+                           180, al_map_rgb(255, 255, 255));
+  al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0, BUFFER_H / 2.0,
+               ALLEGRO_ALIGN_CENTER, "V . S");
 }

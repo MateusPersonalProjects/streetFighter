@@ -2,6 +2,7 @@
 #include <allegro5/bitmap.h>
 #include <allegro5/color.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
 #include "display.h"
 
 #ifndef __CHARAC_SELEC_MENU__
@@ -46,5 +47,5 @@ bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
 */
 void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes, ALLEGRO_COLOR* boxOfColors);
 
-
+void drawVersusScreen(ALLEGRO_COLOR p1, ALLEGRO_COLOR p2, ALLEGRO_FONT* font);
 #endif

@@ -95,6 +95,8 @@ int main(void) {
 
   while (1) {
     resetSelectionBoxes(characSelectBoxes);
+
+    // CHARACTER SELECTION MENU VARIABLES
     short selectP1 = 0;
     short selectP2 = 1;
     bool p1Selected = false;
@@ -146,6 +148,23 @@ int main(void) {
 
     if (done) break;
 
+    bool versusLoop = true;
+    unsigned short frames = 0;
+
+    while (versusLoop) {
+      if (event.type == ALLEGRO_EVENT_TIMER) {
+        dispPreDraw(bufferBitmap);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        drawVersusScreen(boxColors[selectP1], boxColors[selectP2], font);
+        dispPostDraw(disp, bufferBitmap);
+        frames++;
+        if (frames > 120) versusLoop = false;
+      }
+      al_wait_for_event(queue, &event);
+    }
+
+    // MATCH CONTROL VARIABLES
     bool matchLoop = true;
     bool controlON = false;
     matchInterface->rounds = 0;
@@ -153,7 +172,7 @@ int main(void) {
     matchInterface->matchUP = true;
     matchInterface->roundUP = true;
 
-    unsigned short frames = 0;
+    frames = 0;
 
     // ---------------- MATCH LOGIC ---------------
     while (matchLoop) {
