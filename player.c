@@ -37,7 +37,8 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
 /*
  Reset the player
 */
-void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight) {
+void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
+                 bool matchEnd) {
   player->xPosition = xPosit;
   player->yPosition = yPosit;
   player->facingRight = facingRight;
@@ -45,6 +46,7 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight) {
   player->blocking = false;
   player->yAcel = 0;
   player->life = 150;
+  if (matchEnd) player->roundsWon = 0;
 }
 
 /*

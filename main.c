@@ -59,6 +59,10 @@ int main(void) {
   bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
   bigBoxForTest2 = characterInit(25, 50, 50 * 0.3);
 
+  ALLEGRO_COLOR boxColors[4] = {al_map_rgb(255, 0, 0), al_map_rgb(0, 255, 0),
+                                al_map_rgb(0, 0, 255),
+                                al_map_rgb(255, 200, 50)};
+
   SELECTION_BOX characSelectBoxes[4];
   initSelectionBoxes(characSelectBoxes);
 
@@ -90,26 +94,33 @@ int main(void) {
   al_start_timer(timer);
 
   while (1) {
-    al_wait_for_event(queue, &event);
-
+    resetSelectionBoxes(characSelectBoxes);
+    short selectP1 = 0;
+    short selectP2 = 1;
+    bool p1Selected = false;
+    bool p2Selected = false;
     bool chacSelecLoop = true;
     // ------------- CHARACTER SELECTION MENU -----------------
     while (chacSelecLoop) {
-      /*
-        4 personagens, 4 quadrados só a borda
-
-        Vai funcionar da forma que
-          se -> ++
-          se <- --
-          se DOWN +2
-          se UP -2
-
-      */
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
+          resetSelectionBoxesColor(characSelectBoxes);
+
+          if (!p1Selected)
+            p1Selected =
+                updateSelectionBoxes(characSelectBoxes, &selectP1, keyboardKeys,
+                                     p1Keys, al_map_rgb(0, 0, 255));
+          if (!p2Selected)
+            p2Selected =
+                updateSelectionBoxes(characSelectBoxes, &selectP2, keyboardKeys,
+                                     p2Keys, al_map_rgb(255, 0, 0));
+
+          chacSelecLoop = (!p1Selected || !p2Selected);
+
           if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
           redraw = true;
           break;
+
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
           done = true;
           break;
@@ -125,16 +136,18 @@ int main(void) {
         dispPreDraw(bufferBitmap);
         al_clear_to_color(al_map_rgb(0, 0, 0));
 
-        drawSelectionBoxes(characSelectBoxes);
+        drawSelectionBoxes(characSelectBoxes, boxColors);
         dispPostDraw(disp, bufferBitmap);
         redraw = false;
       }
 
       al_wait_for_event(queue, &event);
     }
-    bool matchLoop = false;
+
+    if (done) break;
+
+    bool matchLoop = true;
     bool controlON = false;
-    bool reset = false;
     matchInterface->rounds = 0;
 
     matchInterface->matchUP = true;
@@ -179,8 +192,8 @@ int main(void) {
         dispPreDraw(bufferBitmap);
         al_clear_to_color(al_map_rgb(0, 0, 0));
 
-        drawPlayer(player1, al_map_rgb(176, 30, 100));
-        drawPlayer(player2, al_map_rgb(0, 50, 200));
+        drawPlayer(player1, boxColors[selectP1]);
+        drawPlayer(player2, boxColors[selectP2]);
         drawMatchInterface(matchInterface, player1, player2);
 
         // If the players are not able to control and the round is up, well it
@@ -193,9 +206,11 @@ int main(void) {
         if (!matchInterface->roundUP) {
           if (roundEndWriter(matchInterface, &frames, font)) {
             resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
-                        FLOOR - bigBoxForTest1->height, true);
+                        FLOOR - bigBoxForTest1->height, true,
+                        !matchInterface->matchUP);
             resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
-                        FLOOR - bigBoxForTest2->height, false);
+                        FLOOR - bigBoxForTest2->height, false,
+                        !matchInterface->matchUP);
           }
         }
 
@@ -210,13 +225,12 @@ int main(void) {
 
       al_wait_for_event(queue, &event);
     }
-
-    dispDestroyer(disp, bufferBitmap);
-    playerDestroyer(player1);
-    playerDestroyer(player2);
-    matchInterfaceDestroyer(matchInterface);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    return 0;
   }
+  dispDestroyer(disp, bufferBitmap);
+  playerDestroyer(player1);
+  playerDestroyer(player2);
+  matchInterfaceDestroyer(matchInterface);
+  al_destroy_timer(timer);
+  al_destroy_event_queue(queue);
+  return 0;
 }

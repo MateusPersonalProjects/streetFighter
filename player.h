@@ -34,7 +34,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
 /*
  Reset the player
 */
-void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight);
+void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight, bool matchEnd);
 
 /*
   Update things for player

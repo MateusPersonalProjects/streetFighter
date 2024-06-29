@@ -11,6 +11,7 @@
 #define SELECT_BOX_HEIGHT 100
 #define SELECT_BOX_THICKNESS 2.5
 
+
 typedef struct{
   int xPosit;
   int yPosit;
@@ -25,9 +26,25 @@ typedef struct{
 void initSelectionBoxes(SELECTION_BOX* allSelectionBoxes);
 
 /*
+  Reset all the boxes 
+*/
+void resetSelectionBoxes(SELECTION_BOX* allSelectionBoxes);
+
+/*
+  Reset all the boxes to the white color
+*/
+void resetSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes);
+/*
+  Update the selection boxes
+*/
+bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
+                          unsigned char* keyboardKeys,
+                          unsigned char* playerKeys, ALLEGRO_COLOR color);
+
+/*
   Draw all the four selection boxes
 */
-void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes);
+void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes, ALLEGRO_COLOR* boxOfColors);
 
 
 #endif
