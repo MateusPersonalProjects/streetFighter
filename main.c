@@ -4,6 +4,7 @@
 // --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
 #include <allegro5/display.h>
@@ -54,6 +55,9 @@ int main(void) {
   // Initialize primites for tests
   alCheckInit(al_init_primitives_addon(), "primitives");
 
+  // Initialize the image addon
+  alCheckInit(al_init_image_addon(), "images");
+
   // Test things
   CHARACTER *bigBoxForTest1, *bigBoxForTest2;
   bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
@@ -63,8 +67,11 @@ int main(void) {
                                 al_map_rgb(0, 0, 255),
                                 al_map_rgb(255, 200, 50)};
 
+  CHARAC_SELECT_SPRITES *characSelectSprites;
+  characSelectSprites = initCharacSelectSprites();
+
   SELECTION_BOX characSelectBoxes[4];
-  initSelectionBoxes(characSelectBoxes);
+  initSelectionBoxes(characSelectBoxes, characSelectSprites);
 
   PLAYER *player1;
   unsigned char p1Keys[5] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
@@ -138,7 +145,7 @@ int main(void) {
         dispPreDraw(bufferBitmap);
         al_clear_to_color(al_map_rgb(0, 0, 0));
 
-        drawSelectionBoxes(characSelectBoxes, boxColors);
+        drawSelectionBoxes(characSelectBoxes);
         dispPostDraw(disp, bufferBitmap);
         redraw = false;
       }
@@ -156,7 +163,8 @@ int main(void) {
         dispPreDraw(bufferBitmap);
         al_clear_to_color(al_map_rgb(0, 0, 0));
 
-        drawVersusScreen(boxColors[selectP1], boxColors[selectP2], font);
+        drawVersusScreen(characSelectBoxes[selectP1].portraitImage,
+                         characSelectBoxes[selectP2].portraitImage, font);
         dispPostDraw(disp, bufferBitmap);
         frames++;
         if (frames > 120) versusLoop = false;
@@ -249,6 +257,7 @@ int main(void) {
   playerDestroyer(player1);
   playerDestroyer(player2);
   matchInterfaceDestroyer(matchInterface);
+  destroyCharacSelectSprites(characSelectSprites);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
   return 0;

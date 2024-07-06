@@ -1,5 +1,7 @@
 #include "misc.h"
 
+#include <allegro5/bitmap.h>
+
 // Checks if an allegro module was initialized correctly
 void alCheckInit(bool test, char* description) {
   if (test) return;
@@ -19,4 +21,13 @@ bool boxCollision(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2,
   if (ay2 < by1) return false;
 
   return true;
+}
+
+/*
+  Grabs a sprite inside a spritesheet
+*/
+ALLEGRO_BITMAP* grabSprite(ALLEGRO_BITMAP* sheet, int x, int y, int w, int h) {
+  ALLEGRO_BITMAP* sprite = al_create_sub_bitmap(sheet, x, y, w, h);
+  alCheckInit(sprite, "grab sprite");
+  return sprite;
 }
