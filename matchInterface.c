@@ -101,18 +101,18 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
   if (*frames <= 80) {
     if (*frames <= 45) {
       if (matchInterface->rounds == 0)
-        al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
+        al_draw_text(font, al_map_rgb(255, 211, 0), BUFFER_W / 2.0,
                      BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER, "R O U N D   O N E");
       else if (matchInterface->rounds == 1)
-        al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
+        al_draw_text(font, al_map_rgb_f(255, 211, 0), BUFFER_W / 2.0,
                      BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER, "R O U N D   T W O");
       else
-        al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
+        al_draw_text(font, al_map_rgb(255, 211, 0), BUFFER_W / 2.0,
                      BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
                      "F I N A L   R O U N D");
 
     } else
-      al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0, BUFFER_H / 2.0,
+      al_draw_text(font, al_map_rgb(255, 8, 0), BUFFER_W / 2.0, BUFFER_H / 2.0,
                    ALLEGRO_ALIGN_CENTER, "F I G H T  !");
   }
   // DRAW THE ROUND START FIGHT THING 90 frames

@@ -84,6 +84,10 @@ int main(void) {
   player2 = initPlayer(bigBoxForTest2, PLAYER_2_INIT_POSIT_X,
                        FLOOR - bigBoxForTest2->height, false);
 
+  // STAGE THINGS
+  GUILE_STAGE *guileStage;
+  guileStage = initGuileStage();
+
   MATCH_INTERFACE *matchInterface;
   matchInterface = initMatchInterface(player1, player2);
 
@@ -217,8 +221,9 @@ int main(void) {
       // ------------ REDRAW PHASE ------------
       if (redraw && al_event_queue_is_empty(queue)) {
         dispPreDraw(bufferBitmap);
-        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_clear_to_color(al_map_rgb(80, 136, 200));
 
+        drawStage(guileStage, al_get_timer_count(timer));
         drawPlayer(player1, boxColors[selectP1]);
         drawPlayer(player2, boxColors[selectP2]);
         drawMatchInterface(matchInterface, player1, player2);
@@ -258,6 +263,7 @@ int main(void) {
   playerDestroyer(player2);
   matchInterfaceDestroyer(matchInterface);
   destroyCharacSelectSprites(characSelectSprites);
+  destroyStage(guileStage);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
   return 0;
