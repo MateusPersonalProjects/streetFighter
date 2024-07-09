@@ -34,6 +34,12 @@
 #define PORTRAIT_Y_CHUNLI 516
 #define PORTRAIT_Y_GUILE 319
 
+#define LOGO_W 224
+#define LOGO_H 124
+
+#define LOGO_Y 565
+#define LOGO_X 276
+
 typedef struct{
   int xPosit;
   int yPosit;
@@ -46,7 +52,8 @@ typedef struct{
 typedef struct{
   ALLEGRO_BITMAP* sheet;
   ALLEGRO_BITMAP* sheetPortrait;
-  
+ 
+  ALLEGRO_BITMAP* logo;
   ALLEGRO_BITMAP* ryu;
   ALLEGRO_BITMAP* ken;
   ALLEGRO_BITMAP* chunli;
@@ -84,12 +91,24 @@ void resetSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes);
 bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
                           unsigned char* keyboardKeys,
                           unsigned char* playerKeys, ALLEGRO_COLOR color);
+/*
+  Draw the main menu
+*/
+void drawMainMenu(ALLEGRO_BITMAP* logo, ALLEGRO_FONT* font, long timer,
+                  short* twinkle);
 
 /*
   Draw all the four selection boxes
 */
-void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes);
+void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes, ALLEGRO_BITMAP* logo);
 
+/*
+  Draw portraits for the selection screen
+*/
+void drawCharacterCursorOver(SELECTION_BOX* allSelectionBoxes, short p1Over,
+                             short p2Over, ALLEGRO_FONT* font, bool p1selected,
+                             bool p2selected, long timer, short* twinkle);
+ 
 void drawVersusScreen(ALLEGRO_BITMAP* p1, ALLEGRO_BITMAP* p2, ALLEGRO_FONT* font);
 
 /*

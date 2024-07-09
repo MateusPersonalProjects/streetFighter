@@ -6,6 +6,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/bitmap_draw.h>
 #include <allegro5/color.h>
 #include <allegro5/display.h>
 #include <allegro5/drawing.h>
@@ -105,8 +106,44 @@ int main(void) {
   al_start_timer(timer);
 
   while (1) {
-    resetSelectionBoxes(characSelectBoxes);
+    // Main menu
+    bool mainMenuLoop = true;
 
+    short twinkle = 0;
+    while (mainMenuLoop) {
+      switch (event.type) {
+        case ALLEGRO_EVENT_TIMER:
+
+          if (keyboardKeys[ALLEGRO_KEY_G]) mainMenuLoop = false;
+          if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
+          redraw = true;
+          break;
+
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+          done = true;
+          break;
+      }
+
+      // If the user wants to close the game break the loop
+      if (done) break;
+
+      keyboardUpdate(&event, keyboardKeys);
+
+      // ------------ REDRAW PHASE ------------
+      if (redraw && al_event_queue_is_empty(queue)) {
+        dispPreDraw(bufferBitmap);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        drawMainMenu(characSelectSprites->logo, font, al_get_timer_count(timer),
+                     &twinkle);
+        dispPostDraw(disp, bufferBitmap);
+        redraw = false;
+      }
+
+      al_wait_for_event(queue, &event);
+    }
+    if (done) break;
+    resetSelectionBoxes(characSelectBoxes);
     // CHARACTER SELECTION MENU VARIABLES
     short selectP1 = 0;
     short selectP2 = 1;
@@ -147,9 +184,12 @@ int main(void) {
       // ------------ REDRAW PHASE ------------
       if (redraw && al_event_queue_is_empty(queue)) {
         dispPreDraw(bufferBitmap);
-        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_clear_to_color(al_map_rgb(15, 30, 86));
 
-        drawSelectionBoxes(characSelectBoxes);
+        drawSelectionBoxes(characSelectBoxes, characSelectSprites->logo);
+        drawCharacterCursorOver(characSelectBoxes, selectP1, selectP2, font,
+                                p1Selected, p2Selected,
+                                al_get_timer_count(timer), &twinkle);
         dispPostDraw(disp, bufferBitmap);
         redraw = false;
       }
@@ -175,7 +215,6 @@ int main(void) {
       }
       al_wait_for_event(queue, &event);
     }
-
     // MATCH CONTROL VARIABLES
     bool matchLoop = true;
     bool controlON = false;

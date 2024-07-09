@@ -12,27 +12,36 @@
 */
 void initSelectionBoxes(SELECTION_BOX* allSelectionBoxes,
                         CHARAC_SELECT_SPRITES* characSelecSprites) {
-  int midScreenY = BUFFER_H / 2;
+  int midScreenY = (BUFFER_H / 2) + 20;
   int midScreenX = BUFFER_W / 2;
+  int midPadding = 5;
   ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
 
-  allSelectionBoxes[0].xPosit = midScreenX - (SELECT_BOX_WIDTH / 2) - 10;
-  allSelectionBoxes[0].yPosit = midScreenY - (SELECT_BOX_HEIGHT / 2) - 10;
+  allSelectionBoxes[0].xPosit =
+      midScreenX - (SELECT_BOX_WIDTH / 2) - midPadding;
+  allSelectionBoxes[0].yPosit =
+      midScreenY - (SELECT_BOX_HEIGHT / 2) - midPadding;
   allSelectionBoxes[0].image = characSelecSprites->ryu;
   allSelectionBoxes[0].portraitImage = characSelecSprites->ryuPortrait;
 
-  allSelectionBoxes[1].xPosit = midScreenX + (SELECT_BOX_WIDTH / 2) + 10;
-  allSelectionBoxes[1].yPosit = midScreenY - (SELECT_BOX_HEIGHT / 2) - 10;
+  allSelectionBoxes[1].xPosit =
+      midScreenX + (SELECT_BOX_WIDTH / 2) + midPadding;
+  allSelectionBoxes[1].yPosit =
+      midScreenY - (SELECT_BOX_HEIGHT / 2) - midPadding;
   allSelectionBoxes[1].image = characSelecSprites->ken;
   allSelectionBoxes[1].portraitImage = characSelecSprites->kenPortrait;
 
-  allSelectionBoxes[2].xPosit = midScreenX - (SELECT_BOX_WIDTH / 2) - 10;
-  allSelectionBoxes[2].yPosit = midScreenY + (SELECT_BOX_HEIGHT / 2) + 10;
+  allSelectionBoxes[2].xPosit =
+      midScreenX - (SELECT_BOX_WIDTH / 2) - midPadding;
+  allSelectionBoxes[2].yPosit =
+      midScreenY + (SELECT_BOX_HEIGHT / 2) + midPadding;
   allSelectionBoxes[2].image = characSelecSprites->chunli;
   allSelectionBoxes[2].portraitImage = characSelecSprites->chunliPortrait;
 
-  allSelectionBoxes[3].xPosit = midScreenX + (SELECT_BOX_WIDTH / 2) + 10;
-  allSelectionBoxes[3].yPosit = midScreenY + (SELECT_BOX_HEIGHT / 2) + 10;
+  allSelectionBoxes[3].xPosit =
+      midScreenX + (SELECT_BOX_WIDTH / 2) + midPadding;
+  allSelectionBoxes[3].yPosit =
+      midScreenY + (SELECT_BOX_HEIGHT / 2) + midPadding;
   allSelectionBoxes[3].image = characSelecSprites->guile;
   allSelectionBoxes[3].portraitImage = characSelecSprites->guilePortrait;
 
@@ -51,10 +60,14 @@ CHARAC_SELECT_SPRITES* initCharacSelectSprites() {
   characSelecSprites->sheet =
       al_load_bitmap("./images/characMenu/characSelectSpriteSheet.png");
   alCheckInit(characSelecSprites->sheet, "characMenu spritesheet");
+  al_convert_mask_to_alpha(characSelecSprites->sheet, al_map_rgb(192, 0, 192));
 
   characSelecSprites->sheetPortrait = al_load_bitmap(
       "./images/characMenu/characSelectSpriteSheetPortraits.png");
   alCheckInit(characSelecSprites->sheetPortrait, "portrait sheet");
+
+  characSelecSprites->logo =
+      grabSprite(characSelecSprites->sheet, LOGO_X, LOGO_Y, LOGO_W, LOGO_H);
 
   characSelecSprites->ken = grabSprite(
       characSelecSprites->sheet, CHARAC_SELECT_SPRITE_X_KEN,
@@ -152,11 +165,36 @@ bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
 
   return playerSelected;
 }
+
+/*
+  Draw the main menu
+*/
+void drawMainMenu(ALLEGRO_BITMAP* logo, ALLEGRO_FONT* font, long timer,
+                  short* twinkle) {
+  al_draw_bitmap(logo, (BUFFER_W / 2.0) - (LOGO_W / 2.0), 40, 0);
+  int timerDelay;
+  if (*twinkle)
+    timerDelay = 20;
+  else
+    timerDelay = 50;
+  if (!(timer % timerDelay)) (*twinkle) ^= 1;
+  if (!(*twinkle)) {
+    al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0, 210,
+                 ALLEGRO_ALIGN_CENTER, "P R E S S  G  T O  S T A R T");
+  }
+}
+
 /*
   Draw all the four selection boxes
 */
-void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes) {
+void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes,
+                        ALLEGRO_BITMAP* logo) {
   float x1, y1, x2, y2;
+  // LOGO
+  al_draw_scaled_bitmap(logo, 0, 0, LOGO_W, LOGO_H,
+                        (BUFFER_W / 2.0) - ((LOGO_W * 0.35) / 2.0), 5.0,
+                        LOGO_W * 0.35, LOGO_H * 0.35, 0);
+
   for (int i = 0; i < 4; i++) {
     x1 = allSelectionBoxes[i].xPosit - (SELECT_BOX_WIDTH / 2.0);
     y1 = allSelectionBoxes[i].yPosit - (SELECT_BOX_HEIGHT / 2.0);
@@ -168,6 +206,33 @@ void drawSelectionBoxes(SELECTION_BOX* allSelectionBoxes) {
     al_draw_rectangle(x1, y1, x2, y2, allSelectionBoxes[i].color,
                       SELECT_BOX_THICKNESS);
   }
+}
+
+/*
+  Draw portraits for the selection screen
+*/
+void drawCharacterCursorOver(SELECTION_BOX* allSelectionBoxes, short p1Over,
+                             short p2Over, ALLEGRO_FONT* font, bool p1selected,
+                             bool p2selected, long timer, short* twinkle) {
+  float p1X = 10;
+  float p2X = BUFFER_W - (PORTRAIT_W * 1.3) - 10;
+  float pY = (BUFFER_H / 2.0) - (PORTRAIT_H / 2.0);
+  al_draw_scaled_bitmap(allSelectionBoxes[p1Over].portraitImage, 0, 0,
+                        PORTRAIT_W, PORTRAIT_H, p1X, pY, PORTRAIT_W * 1.3,
+                        PORTRAIT_H * 1.3, 0);
+  al_draw_scaled_bitmap(allSelectionBoxes[p2Over].portraitImage, 0, 0,
+                        PORTRAIT_W, PORTRAIT_H, p2X, pY, PORTRAIT_W * 1.3,
+                        PORTRAIT_H * 1.3, ALLEGRO_FLIP_HORIZONTAL);
+
+  float textY = allSelectionBoxes[0].yPosit / 2.0;
+
+  if (!(timer % 20)) (*twinkle) ^= 1;
+  if (p1selected || !(*twinkle))
+    al_draw_text(font, al_map_rgb_f(1, 1, 1), 68, textY, ALLEGRO_ALIGN_CENTER,
+                 "P L A Y E R  1");
+  if (p2selected || !(*twinkle))
+    al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W - 68, textY,
+                 ALLEGRO_ALIGN_CENTER, "P L A Y E R  2");
 }
 
 /*
@@ -192,6 +257,7 @@ void drawVersusScreen(ALLEGRO_BITMAP* p1, ALLEGRO_BITMAP* p2,
   Destroy all the charact select sprites
 */
 void destroyCharacSelectSprites(CHARAC_SELECT_SPRITES* characSelectSprites) {
+  al_destroy_bitmap(characSelectSprites->logo);
   al_destroy_bitmap(characSelectSprites->chunli);
   al_destroy_bitmap(characSelectSprites->guile);
   al_destroy_bitmap(characSelectSprites->ryu);
