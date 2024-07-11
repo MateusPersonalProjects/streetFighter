@@ -43,7 +43,12 @@ typedef struct{
 /*
   Initialize a new character
 */
-CHARACTER* characterInit(int width, int height, int crouchHeight);
+CHARACTER* characterInit(FIGHTER_SPRITES* fighterSprite);
+
+/*
+  Initialize RYU
+*/
+FIGHTER_SPRITES* initRyu();
 
 /*
   Free the memory that a character was being utilized by a character

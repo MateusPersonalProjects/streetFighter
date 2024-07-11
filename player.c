@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/bitmap_draw.h>
 #include <allegro5/color.h>
 #include <allegro5/events.h>
 #include <allegro5/keycodes.h>
@@ -152,7 +153,7 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     // block xD
     if (!player->facingRight) player->blocking = true;
 
-    if (!jumping) player->character->currentSprite = WALKING;
+    if (!jumping) player->character->currentSprite = STEADY;  // WALKING
     player->xPosition += PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
       player->xPosition -= PLAYER_VEL;
@@ -162,19 +163,19 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     // block xD
     if (player->facingRight) player->blocking = true;
 
-    if (!jumping) player->character->currentSprite = WALKING;
+    if (!jumping) player->character->currentSprite = STEADY;  // WALKING
     player->xPosition -= PLAYER_VEL;
     if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
   }
   if (keyboardKeys[whichKey[JUMP]] && !jumping) {
     // Give me some boost to reach the skyies o/
-    player->character->currentSprite = JUMPING;
+    player->character->currentSprite = STEADY;  // JUMPING
     player->yAcel = PLAYER_VEL * 3;
   }
   if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
     player->crouching = true;
-    player->character->currentSprite = CROUCHING;
+    player->character->currentSprite = STEADY;  // CROUNCHING
   }
   // Changes y position (the head position, because he is croucing right)
   playerCrouch(player, anotherPlayer);
@@ -201,7 +202,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   int p2MaxY = anotherPlayer->yPosition + anotherPlayer->character->height;
 
   if (keyboardKeys[whichKey[PUNCH]]) {
-    player->character->currentSprite = PUNCHING;
+    player->character->currentSprite = STEADY;  // PUNCHING
     if (punch(player->xPosition, p1MaxX, player->yPosition, p1MaxY,
               player->facingRight, anotherPlayer->xPosition, p2MaxX,
               anotherPlayer->yPosition, p2MaxY)) {
@@ -250,6 +251,15 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
                              (player->xPosition + 10), (player->yPosition + 10),
                              al_map_rgb(255, 255, 255));
   }
+
+  SPRITE_LIST currentSprite = player->character->currentSprite;
+  short maxSpriteFrame =
+      player->character->Sprites->movesSprites[currentSprite].numFrames;
+  short currentSpriteFrame =
+      player->character->Sprites->movesSprites[currentSprite].currentFrame;
+  al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
+                     .Sprites[currentSprite],
+                 player->xPosition, player->yPosition, 0);
 
   switch (player->character->currentSprite) {
     case (PUNCHING):

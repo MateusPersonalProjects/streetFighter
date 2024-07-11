@@ -60,9 +60,11 @@ int main(void) {
   alCheckInit(al_init_image_addon(), "images");
 
   // Test things
-  CHARACTER *bigBoxForTest1, *bigBoxForTest2;
-  bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
-  bigBoxForTest2 = characterInit(25, 50, 50 * 0.3);
+  FIGHTER_SPRITES *ryu = initRyu();
+
+  CHARACTER *testRyu = characterInit(ryu);
+  // bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
+  // bigBoxForTest2 = characterInit(25, 50, 50 * 0.3);
 
   ALLEGRO_COLOR boxColors[4] = {al_map_rgb(255, 0, 0), al_map_rgb(0, 255, 0),
                                 al_map_rgb(0, 0, 255),
@@ -77,13 +79,13 @@ int main(void) {
   PLAYER *player1;
   unsigned char p1Keys[5] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
                              ALLEGRO_KEY_D, ALLEGRO_KEY_G};
-  player1 = initPlayer(bigBoxForTest1, PLAYER_1_INIT_POSIT_X,
-                       FLOOR - bigBoxForTest1->height, true);
+  player1 =
+      initPlayer(testRyu, PLAYER_1_INIT_POSIT_X, FLOOR - testRyu->height, true);
   PLAYER *player2;
   unsigned char p2Keys[5] = {ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_LEFT,
                              ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_U};
-  player2 = initPlayer(bigBoxForTest2, PLAYER_2_INIT_POSIT_X,
-                       FLOOR - bigBoxForTest2->height, false);
+  player2 = initPlayer(testRyu, PLAYER_2_INIT_POSIT_X, FLOOR - testRyu->height,
+                       false);
 
   // STAGE THINGS
   GUILE_STAGE *guileStage;
@@ -215,6 +217,7 @@ int main(void) {
       }
       al_wait_for_event(queue, &event);
     }
+
     // MATCH CONTROL VARIABLES
     bool matchLoop = true;
     bool controlON = false;
@@ -276,12 +279,10 @@ int main(void) {
         // start a new round
         if (!matchInterface->roundUP) {
           if (roundEndWriter(matchInterface, &frames, font)) {
-            resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
-                        FLOOR - bigBoxForTest1->height, true,
-                        !matchInterface->matchUP);
-            resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
-                        FLOOR - bigBoxForTest2->height, false,
-                        !matchInterface->matchUP);
+            resetPlayer(player1, PLAYER_1_INIT_POSIT_X, FLOOR - testRyu->height,
+                        true, !matchInterface->matchUP);
+            resetPlayer(player2, PLAYER_2_INIT_POSIT_X, FLOOR - testRyu->height,
+                        false, !matchInterface->matchUP);
           }
         }
 
