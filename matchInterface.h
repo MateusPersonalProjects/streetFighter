@@ -1,6 +1,8 @@
 #include <allegro5/allegro5.h>
+#include <allegro5/bitmap.h>
 #include <allegro5/color.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_image.h>
  
 #include "display.h"
 #include "player.h"
@@ -8,7 +10,40 @@
 #ifndef __MATCH_INTERFACE__
 #define __MATCH_INTERFACE__
 
+// ROUND DEFINES
+#define ROUND_S_W 61
+#define FROUND_S_W 77
+#define ROUND_S_H 21
+#define ROUND_S_X 272
+#define FROUND_S_X 256
+#define ROUND_S_Y 168
+
+// NUMBER DEFINES
+#define NUMBER_S_H 21
+#define NUMBER_S_Y 168
+
+#define N_ONE_S_X 106
+#define N_TWO_S_X 120
+#define N_ONE_S_W 9
+#define N_TWO_S_W 19
+
+// FIGHT DEFINES
+#define FIGHT_S_W 63
+#define FIGHT_S_H 18
+
+#define FIGHT_S_X 16
+#define FIGHT_S_Y 168
+
+// ROUND COUNT DEFINES
+#define RC_S_W 18
+#define RC_S_H 18
+
+#define RC_S_X 343
+#define RC_S_Y 15
+
 typedef struct{
+
+  // Lifebar things
   int lifebarY;
   int lifebarP1X;
   int lifebarP2X;
@@ -16,6 +51,16 @@ typedef struct{
   int lifebarP2Width;
   int lifebarHeight;
   ALLEGRO_COLOR lifebarColor;
+
+  // Sprites
+  ALLEGRO_BITMAP* sheet;
+  ALLEGRO_BITMAP* roundSprite;
+  ALLEGRO_BITMAP* fRoundSprite;
+  ALLEGRO_BITMAP* numOneSprite;
+  ALLEGRO_BITMAP* numTwoSprite;
+  ALLEGRO_BITMAP* fightSprite;
+  ALLEGRO_BITMAP* countWonSprite;
+
   bool matchUP;
   bool roundUP;
   unsigned short rounds;

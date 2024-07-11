@@ -2,6 +2,9 @@
 
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/bitmap.h>
+#include <allegro5/bitmap_draw.h>
+#include <allegro5/bitmap_io.h>
 #include <allegro5/color.h>
 #include <time.h>
 
@@ -18,8 +21,32 @@ MATCH_INTERFACE* initMatchInterface(PLAYER* player1, PLAYER* player2) {
   newMatchInterface->lifebarY = 5;
   newMatchInterface->lifebarHeight = 15;
 
-  newMatchInterface->lifebarColor = al_map_rgb(255, 255, 255);
+  newMatchInterface->lifebarColor = al_map_rgb(243, 243, 0);
 
+  // Load the sprite sheet
+  newMatchInterface->sheet =
+      al_load_bitmap("./images/matchInterface/matchInterfaceSpriteSheet.png");
+  alCheckInit(newMatchInterface->sheet, "match interface sheet");
+
+  // Loading round sprites
+  newMatchInterface->roundSprite = grabSprite(
+      newMatchInterface->sheet, ROUND_S_X, ROUND_S_Y, ROUND_S_W, ROUND_S_H);
+  newMatchInterface->fRoundSprite = grabSprite(
+      newMatchInterface->sheet, FROUND_S_X, ROUND_S_Y, FROUND_S_W, ROUND_S_H);
+
+  // Loading number sprites
+  newMatchInterface->numOneSprite = grabSprite(
+      newMatchInterface->sheet, N_ONE_S_X, NUMBER_S_Y, N_ONE_S_W, NUMBER_S_H);
+  newMatchInterface->numTwoSprite = grabSprite(
+      newMatchInterface->sheet, N_TWO_S_X, NUMBER_S_Y, N_TWO_S_W, NUMBER_S_H);
+
+  // Loading fight sprites
+  newMatchInterface->fightSprite = grabSprite(
+      newMatchInterface->sheet, FIGHT_S_X, FIGHT_S_Y, FIGHT_S_W, FIGHT_S_H);
+
+  // Loading counting rounds
+  newMatchInterface->countWonSprite =
+      grabSprite(newMatchInterface->sheet, RC_S_X, RC_S_Y, RC_S_W, RC_S_H);
   return newMatchInterface;
 }
 
@@ -70,20 +97,21 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
 
   // Draw the rounds won for p1
   if (player1->roundsWon >= 1) {
-    al_draw_filled_circle(140, (matchInterface->lifebarY + 22), 2,
-                          al_map_rgb(200, 0, 20));
+    al_draw_bitmap(matchInterface->countWonSprite, 140,
+                   matchInterface->lifebarY + 22, 0);
     if (player1->roundsWon == 2)
-      al_draw_filled_circle(155, (matchInterface->lifebarY + 22), 2,
-                            al_map_rgb(200, 0, 20));
+      al_draw_bitmap(matchInterface->countWonSprite, 120,
+                     matchInterface->lifebarY + 22, 0);
   }
 
   // Draw the rounds won for p2
   if (player2->roundsWon >= 1) {
-    al_draw_filled_circle(BUFFER_W - 140, (matchInterface->lifebarY + 22), 2,
-                          al_map_rgb(200, 0, 20));
+    al_draw_bitmap(matchInterface->countWonSprite, BUFFER_W - 160,
+                   matchInterface->lifebarY + 22, 0);
+
     if (player2->roundsWon == 2)
-      al_draw_filled_circle(BUFFER_W - 155, (matchInterface->lifebarY + 22), 2,
-                            al_map_rgb(200, 0, 20));
+      al_draw_bitmap(matchInterface->countWonSprite, BUFFER_W - 140,
+                     matchInterface->lifebarY + 22, 0);
   }
 }
 
@@ -100,20 +128,30 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
   (*frames)++;
   if (*frames <= 80) {
     if (*frames <= 45) {
-      if (matchInterface->rounds == 0)
-        al_draw_text(font, al_map_rgb(255, 211, 0), BUFFER_W / 2.0,
-                     BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER, "R O U N D   O N E");
-      else if (matchInterface->rounds == 1)
-        al_draw_text(font, al_map_rgb_f(255, 211, 0), BUFFER_W / 2.0,
-                     BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER, "R O U N D   T W O");
-      else
-        al_draw_text(font, al_map_rgb(255, 211, 0), BUFFER_W / 2.0,
-                     BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                     "F I N A L   R O U N D");
+      if (matchInterface->rounds == 0) {
+        al_draw_bitmap(matchInterface->roundSprite,
+                       (BUFFER_W / 2.0) - (ROUND_S_W / 2.0),
+                       (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+        al_draw_bitmap(matchInterface->numOneSprite,
+                       (BUFFER_W / 2.0) + (ROUND_S_W / 2.0) + (N_ONE_S_W),
+                       (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+      } else if (matchInterface->rounds == 1) {
+        al_draw_bitmap(matchInterface->roundSprite,
+                       (BUFFER_W / 2.0) - (ROUND_S_W / 2.0),
+                       (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+        al_draw_bitmap(matchInterface->numTwoSprite,
+                       (BUFFER_W / 2.0) + (ROUND_S_W / 2.0) + (N_TWO_S_W),
+                       (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+
+      } else
+        al_draw_bitmap(matchInterface->fRoundSprite,
+                       (BUFFER_W / 2.0) - (FROUND_S_W / 2.0),
+                       (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
 
     } else
-      al_draw_text(font, al_map_rgb(255, 8, 0), BUFFER_W / 2.0, BUFFER_H / 2.0,
-                   ALLEGRO_ALIGN_CENTER, "F I G H T  !");
+      al_draw_bitmap(matchInterface->fightSprite,
+                     (BUFFER_W / 2.0) - (FIGHT_S_W / 2.0),
+                     (BUFFER_H / 2.0) - (FIGHT_S_H / 2.0), 0);
   }
   // DRAW THE ROUND START FIGHT THING 90 frames
   // 90 FRAMES PASSED then
@@ -176,5 +214,12 @@ bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned short* frames,
   Destroy a match interface
 */
 void matchInterfaceDestroyer(MATCH_INTERFACE* matchInterface) {
+  al_destroy_bitmap(matchInterface->numOneSprite);
+  al_destroy_bitmap(matchInterface->numTwoSprite);
+  al_destroy_bitmap(matchInterface->roundSprite);
+  al_destroy_bitmap(matchInterface->fRoundSprite);
+  al_destroy_bitmap(matchInterface->fightSprite);
+  al_destroy_bitmap(matchInterface->countWonSprite);
+  al_destroy_bitmap(matchInterface->sheet);
   free(matchInterface);
 }
