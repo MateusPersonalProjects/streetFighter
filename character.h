@@ -4,7 +4,7 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/bitmap.h>
-//#include "fightersDefines/ryu.h"
+#include "fightersDefines/ryu.h"
 
 typedef enum{
   STEADY = 0,
