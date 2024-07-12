@@ -130,8 +130,8 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
   Update things for player movements
 */
 void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
-                           unsigned char *keyboardKeys,
-                           unsigned char *whichKey) {
+                           unsigned char *keyboardKeys, unsigned char *whichKey,
+                           long timerCount) {
   bool jumping;
   int difPlayerFloor;
   SPRITE_LIST currentSprite;
@@ -161,7 +161,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
         player->character->Sprites->movesSprites[currentSprite].numFrames;
 
     player->xPosition += PLAYER_VEL;
-    (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
+    if (!(timerCount % 4))
+      (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
     player->character->Sprites->movesSprites[currentSprite].currentFrame %=
         maxSpriteFrame;
     if (playersCollision(player, anotherPlayer))
@@ -178,7 +179,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
         player->character->Sprites->movesSprites[currentSprite].numFrames;
 
     player->xPosition -= PLAYER_VEL;
-    (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
+    if (!(timerCount % 4))
+      (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
     player->character->Sprites->movesSprites[currentSprite].currentFrame %=
         maxSpriteFrame;
 

@@ -39,7 +39,7 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight, bool 
 /*
   Update things for player
 */
-void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey);
+void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey, long timerCount);
 
 
 /*

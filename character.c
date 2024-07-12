@@ -33,44 +33,44 @@ FIGHTER_SPRITES* initRyu() {
   al_convert_mask_to_alpha(ryu->sheet, al_map_rgb(112, 136, 136));
 
   // IDLE THINGS
-  ryu->movesSprites[0].width = RYU_IDLE_W;
-  ryu->movesSprites[0].height = RYU_IDLE_H;
-  ryu->movesSprites[0].numFrames = 4;
-  ryu->movesSprites[0].currentFrame = 0;
+  ryu->movesSprites[STEADY].width = RYU_IDLE_W;
+  ryu->movesSprites[STEADY].height = RYU_IDLE_H;
+  ryu->movesSprites[STEADY].numFrames = 4;
+  ryu->movesSprites[STEADY].currentFrame = 0;
 
   // Getting memory for idle bitmaps
-  ryu->movesSprites[0].Sprites =
+  ryu->movesSprites[STEADY].Sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
-  if (ryu->movesSprites[0].Sprites == NULL) exit(1);
+  if (ryu->movesSprites[STEADY].Sprites == NULL) exit(1);
 
-  ryu->movesSprites[0].Sprites[0] =
+  ryu->movesSprites[STEADY].Sprites[0] =
       grabSprite(ryu->sheet, RYU_IDLE_1_X, RYU_IDLE_Y, RYU_IDLE_W, RYU_IDLE_H);
-  ryu->movesSprites[0].Sprites[1] =
+  ryu->movesSprites[STEADY].Sprites[1] =
       grabSprite(ryu->sheet, RYU_IDLE_2_X, RYU_IDLE_Y, RYU_IDLE_W, RYU_IDLE_H);
-  ryu->movesSprites[0].Sprites[2] =
+  ryu->movesSprites[STEADY].Sprites[2] =
       grabSprite(ryu->sheet, RYU_IDLE_3_X, RYU_IDLE_Y, RYU_IDLE_W, RYU_IDLE_H);
-  ryu->movesSprites[0].Sprites[3] =
+  ryu->movesSprites[STEADY].Sprites[3] =
       grabSprite(ryu->sheet, RYU_IDLE_4_X, RYU_IDLE_Y, RYU_IDLE_W, RYU_IDLE_H);
 
   // WALKING THINGS
-  ryu->movesSprites[1].width = RYU_WALK_W_1;
-  ryu->movesSprites[1].height = RYU_WALK_H_2;
-  ryu->movesSprites[1].numFrames = 5;
-  ryu->movesSprites[1].currentFrame = 0;
+  ryu->movesSprites[WALKING].width = RYU_WALK_W_1;
+  ryu->movesSprites[WALKING].height = RYU_WALK_H_2;
+  ryu->movesSprites[WALKING].numFrames = 5;
+  ryu->movesSprites[WALKING].currentFrame = 0;
 
-  ryu->movesSprites[1].Sprites =
+  ryu->movesSprites[WALKING].Sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 5);
-  if (ryu->movesSprites[1].Sprites == NULL) exit(1);
+  if (ryu->movesSprites[WALKING].Sprites == NULL) exit(1);
 
-  ryu->movesSprites[1].Sprites[0] = grabSprite(
+  ryu->movesSprites[WALKING].Sprites[0] = grabSprite(
       ryu->sheet, RYU_WALK_X_1, RYU_WALK_Y_1, RYU_WALK_W_1, RYU_WALK_H_1);
-  ryu->movesSprites[1].Sprites[1] = grabSprite(
+  ryu->movesSprites[WALKING].Sprites[1] = grabSprite(
       ryu->sheet, RYU_WALK_X_2, RYU_WALK_Y_2, RYU_WALK_W_2, RYU_WALK_H_2);
-  ryu->movesSprites[1].Sprites[2] = grabSprite(
+  ryu->movesSprites[WALKING].Sprites[2] = grabSprite(
       ryu->sheet, RYU_WALK_X_3, RYU_WALK_Y_3, RYU_WALK_W_3, RYU_WALK_H_3);
-  ryu->movesSprites[1].Sprites[3] = grabSprite(
+  ryu->movesSprites[WALKING].Sprites[3] = grabSprite(
       ryu->sheet, RYU_WALK_X_4, RYU_WALK_Y_4, RYU_WALK_W_4, RYU_WALK_H_4);
-  ryu->movesSprites[1].Sprites[4] = grabSprite(
+  ryu->movesSprites[WALKING].Sprites[4] = grabSprite(
       ryu->sheet, RYU_WALK_X_5, RYU_WALK_Y_5, RYU_WALK_W_5, RYU_WALK_H_5);
 
   return ryu;

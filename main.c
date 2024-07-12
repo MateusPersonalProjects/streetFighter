@@ -114,9 +114,9 @@ int main(void) {
 
   al_start_timer(timer);
 
+  bool mainMenuLoop = true;
   while (1) {
     // Main menu
-    bool mainMenuLoop = true;
 
     short twinkle = 0;
     while (mainMenuLoop) {
@@ -210,9 +210,9 @@ int main(void) {
 
     // After the fighters have been selected, we assigne them for the player and
     // set the y position
-    player1->character = allCharacters[p1Selected];
+    player1->character = allCharacters[selectP1];
     player1->yPosition = FLOOR - player1->character->height;
-    player2->character = allCharacters[p2Selected];
+    player2->character = allCharacters[selectP2];
     player2->yPosition = FLOOR - player2->character->height;
 
     bool versusLoop = true;
@@ -251,8 +251,10 @@ int main(void) {
 
           // If the control is on the player can move around and start the fight
           if (controlON) {
-            playerUpdateMovements(player1, player2, keyboardKeys, p1Keys);
-            playerUpdateMovements(player2, player1, keyboardKeys, p2Keys);
+            playerUpdateMovements(player1, player2, keyboardKeys, p1Keys,
+                                  al_get_timer_count(timer));
+            playerUpdateMovements(player2, player1, keyboardKeys, p2Keys,
+                                  al_get_timer_count(timer));
 
             playerUpdateAttacks(player1, player2, keyboardKeys, p1Keys);
             playerUpdateAttacks(player2, player1, keyboardKeys, p2Keys);
@@ -281,7 +283,7 @@ int main(void) {
 
         drawStage(guileStage, al_get_timer_count(timer));
         drawPlayer(player1, boxColors[selectP1], al_get_timer_count(timer));
-        // drawPlayer(player2, boxColors[selectP2], al_get_timer_count(timer));
+        drawPlayer(player2, boxColors[selectP2], al_get_timer_count(timer));
         drawMatchInterface(matchInterface, player1, player2);
 
         // If the players are not able to control and the round is up, well it
