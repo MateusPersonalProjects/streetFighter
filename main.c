@@ -60,9 +60,18 @@ int main(void) {
   alCheckInit(al_init_image_addon(), "images");
 
   // Test things
-  FIGHTER_SPRITES *ryu = initRyu();
+  FIGHTER_SPRITES *ryuSprites = initRyu();
+  FIGHTER_SPRITES *kenSprites = initRyu();
+  FIGHTER_SPRITES *chunliSprites = initRyu();
+  FIGHTER_SPRITES *guileSprites = initRyu();
 
-  CHARACTER *testRyu = characterInit(ryu);
+  CHARACTER *allCharacters[4];
+
+  allCharacters[0] = characterInit(ryuSprites);
+  allCharacters[1] = characterInit(kenSprites);
+  allCharacters[2] = characterInit(chunliSprites);
+  allCharacters[3] = characterInit(guileSprites);
+
   // bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
   // bigBoxForTest2 = characterInit(25, 50, 50 * 0.3);
 
@@ -79,13 +88,11 @@ int main(void) {
   PLAYER *player1;
   unsigned char p1Keys[5] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
                              ALLEGRO_KEY_D, ALLEGRO_KEY_G};
-  player1 =
-      initPlayer(testRyu, PLAYER_1_INIT_POSIT_X, FLOOR - testRyu->height, true);
+  player1 = initPlayer(NULL, PLAYER_1_INIT_POSIT_X, 0, true);
   PLAYER *player2;
   unsigned char p2Keys[5] = {ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_LEFT,
                              ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_U};
-  player2 = initPlayer(testRyu, PLAYER_2_INIT_POSIT_X, FLOOR - testRyu->height,
-                       false);
+  player2 = initPlayer(NULL, PLAYER_2_INIT_POSIT_X, 0, false);
 
   // STAGE THINGS
   GUILE_STAGE *guileStage;
@@ -201,6 +208,13 @@ int main(void) {
 
     if (done) break;
 
+    // After the fighters have been selected, we assigne them for the player and
+    // set the y position
+    player1->character = allCharacters[p1Selected];
+    player1->yPosition = FLOOR - player1->character->height;
+    player2->character = allCharacters[p2Selected];
+    player2->yPosition = FLOOR - player2->character->height;
+
     bool versusLoop = true;
     unsigned short frames = 0;
 
@@ -266,8 +280,8 @@ int main(void) {
         al_clear_to_color(al_map_rgb(80, 136, 200));
 
         drawStage(guileStage, al_get_timer_count(timer));
-        drawPlayer(player1, boxColors[selectP1]);
-        drawPlayer(player2, boxColors[selectP2]);
+        drawPlayer(player1, boxColors[selectP1], al_get_timer_count(timer));
+        // drawPlayer(player2, boxColors[selectP2], al_get_timer_count(timer));
         drawMatchInterface(matchInterface, player1, player2);
 
         // If the players are not able to control and the round is up, well it
@@ -279,10 +293,12 @@ int main(void) {
         // start a new round
         if (!matchInterface->roundUP) {
           if (roundEndWriter(matchInterface, &frames, font)) {
-            resetPlayer(player1, PLAYER_1_INIT_POSIT_X, FLOOR - testRyu->height,
-                        true, !matchInterface->matchUP);
-            resetPlayer(player2, PLAYER_2_INIT_POSIT_X, FLOOR - testRyu->height,
-                        false, !matchInterface->matchUP);
+            resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
+                        FLOOR - player1->character->height, true,
+                        !matchInterface->matchUP);
+            resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
+                        FLOOR - player2->character->height, false,
+                        !matchInterface->matchUP);
           }
         }
 

@@ -27,7 +27,7 @@ typedef struct{
 typedef struct{
   ALLEGRO_BITMAP* sheet;
 
-  MOVE_SPRITES movesSprites[1];
+  MOVE_SPRITES movesSprites[2];
 } FIGHTER_SPRITES;
 
 typedef struct{

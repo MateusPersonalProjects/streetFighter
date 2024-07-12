@@ -134,6 +134,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
                            unsigned char *whichKey) {
   bool jumping;
   int difPlayerFloor;
+  SPRITE_LIST currentSprite;
+  short maxSpriteFrame;
 
   // If the player is not on the ground, well he is jumping xD
   jumping = ((player->yPosition + player->character->height) < FLOOR);
@@ -153,8 +155,15 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     // block xD
     if (!player->facingRight) player->blocking = true;
 
-    if (!jumping) player->character->currentSprite = STEADY;  // WALKING
+    if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+    currentSprite = player->character->currentSprite;
+    maxSpriteFrame =
+        player->character->Sprites->movesSprites[currentSprite].numFrames;
+
     player->xPosition += PLAYER_VEL;
+    (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
+    player->character->Sprites->movesSprites[currentSprite].currentFrame %=
+        maxSpriteFrame;
     if (playersCollision(player, anotherPlayer))
       player->xPosition -= PLAYER_VEL;
   }
@@ -163,8 +172,16 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     // block xD
     if (player->facingRight) player->blocking = true;
 
-    if (!jumping) player->character->currentSprite = STEADY;  // WALKING
+    if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+    currentSprite = player->character->currentSprite;
+    maxSpriteFrame =
+        player->character->Sprites->movesSprites[currentSprite].numFrames;
+
     player->xPosition -= PLAYER_VEL;
+    (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
+    player->character->Sprites->movesSprites[currentSprite].currentFrame %=
+        maxSpriteFrame;
+
     if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
   }
@@ -208,9 +225,9 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
               anotherPlayer->yPosition, p2MaxY)) {
       if (!anotherPlayer->blocking) {
         anotherPlayer->life -= 1;
-        anotherPlayer->character->currentSprite = GOT_HIT;
+        anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
       } else
-        anotherPlayer->character->currentSprite = DEFENDING;
+        anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
 
       if (anotherPlayer->facingRight)
         anotherPlayer->xPosition -= 2;
@@ -223,7 +240,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
 /*
   Draw the player on the screen
 */
-void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
+void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   int height = player->character->height;
   ALLEGRO_COLOR color;
 
@@ -240,26 +257,38 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor) {
                            (player->character->width + player->xPosition),
                            (player->yPosition + height), color);
 
+  SPRITE_LIST currentSprite = player->character->currentSprite;
+  short maxSpriteFrame =
+      player->character->Sprites->movesSprites[currentSprite].numFrames;
+  short currentSpriteFrame =
+      player->character->Sprites->movesSprites[currentSprite].currentFrame;
+
+  // STEADY ANIMATION
+  if (currentSprite == STEADY) {
+    if (!(timerIdle % 10)) {
+      (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
+      player->character->Sprites->movesSprites[currentSprite].currentFrame %=
+          maxSpriteFrame;
+    }
+  }
   // Bette davis eyes
   int playerMaxX = (player->xPosition + player->character->width);
   if (player->facingRight) {
     al_draw_filled_rectangle((playerMaxX - 10), player->yPosition + 5,
                              (playerMaxX + 1), (player->yPosition + 10),
                              al_map_rgb(255, 255, 255));
+    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
+                       .Sprites[currentSpriteFrame],
+                   player->xPosition, player->yPosition, 0);
   } else {
     al_draw_filled_rectangle((player->xPosition - 1), (player->yPosition + 5),
                              (player->xPosition + 10), (player->yPosition + 10),
                              al_map_rgb(255, 255, 255));
+    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
+                       .Sprites[currentSpriteFrame],
+                   player->xPosition, player->yPosition,
+                   ALLEGRO_FLIP_HORIZONTAL);
   }
-
-  SPRITE_LIST currentSprite = player->character->currentSprite;
-  short maxSpriteFrame =
-      player->character->Sprites->movesSprites[currentSprite].numFrames;
-  short currentSpriteFrame =
-      player->character->Sprites->movesSprites[currentSprite].currentFrame;
-  al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
-                     .Sprites[currentSprite],
-                 player->xPosition, player->yPosition, 0);
 
   switch (player->character->currentSprite) {
     case (PUNCHING):
