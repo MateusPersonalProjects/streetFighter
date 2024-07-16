@@ -122,7 +122,7 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
   }
   // if the player is crouching his y position changes
   if (player->crouching) {
-    player->yPosition = FLOOR - player->character->crouchHeight;
+    player->yPosition = FLOOR - player->character->height;
   }
 }
 
@@ -194,8 +194,12 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
   }
   if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
     player->crouching = true;
-    player->character->currentSprite = STEADY;  // CROUNCHING
+    player->character->currentSprite = CROUCHING;  // CROUNCHING
   }
+  currentSprite = player->character->currentSprite;
+  player->character->height =
+      player->character->Sprites->movesSprites[currentSprite].height;
+
   // Changes y position (the head position, because he is croucing right)
   playerCrouch(player, anotherPlayer);
 
@@ -246,53 +250,53 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   int height = player->character->height;
   ALLEGRO_COLOR color;
 
-  if (player->crouching) height = player->character->crouchHeight;
+  // if (player->crouching) height = player->character->crouchHeight;
 
-  if (player->character->currentSprite == GOT_HIT)
-    color = al_map_rgb(255, 255, 255);
-  else if (player->character->currentSprite == DEFENDING)
-    color = al_map_rgb(10, 180, 10);
-  else
-    color = playerColor;
+  color = playerColor;
 
-  al_draw_filled_rectangle(player->xPosition, player->yPosition,
-                           (player->character->width + player->xPosition),
-                           (player->yPosition + height), color);
+  // al_draw_filled_rectangle(player->xPosition, player->yPosition,
+  //                          (player->character->width + player->xPosition),
+  //                          (player->yPosition + height), color);
 
+  // SHORTCUTS FOR ACCESS SOME VARIABLES
   SPRITE_LIST currentSprite = player->character->currentSprite;
+
   short maxSpriteFrame =
       player->character->Sprites->movesSprites[currentSprite].numFrames;
+
   short currentSpriteFrame =
       player->character->Sprites->movesSprites[currentSprite].currentFrame;
 
-  // STEADY ANIMATION
-  if (currentSprite == STEADY) {
-    if (!(timerIdle % 10)) {
-      (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
-      player->character->Sprites->movesSprites[currentSprite].currentFrame %=
-          maxSpriteFrame;
-    }
-  }
-  // Bette davis eyes
   int playerMaxX = (player->xPosition + player->character->width);
-  if (player->facingRight) {
-    al_draw_filled_rectangle((playerMaxX - 10), player->yPosition + 5,
-                             (playerMaxX + 1), (player->yPosition + 10),
-                             al_map_rgb(255, 255, 255));
-    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
-                       .Sprites[currentSpriteFrame],
-                   player->xPosition, player->yPosition, 0);
-  } else {
-    al_draw_filled_rectangle((player->xPosition - 1), (player->yPosition + 5),
-                             (player->xPosition + 10), (player->yPosition + 10),
-                             al_map_rgb(255, 255, 255));
-    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
-                       .Sprites[currentSpriteFrame],
-                   player->xPosition, player->yPosition,
-                   ALLEGRO_FLIP_HORIZONTAL);
-  }
-
+  // ANIMATIONS AND CONFIGURATIONS FOR DRAW SPRITES
   switch (player->character->currentSprite) {
+    // STEADY ANIMATION
+    case (STEADY):
+      if (!(timerIdle % 10)) {
+        (player->character->Sprites->movesSprites[currentSprite]
+             .currentFrame)++;
+        player->character->Sprites->movesSprites[currentSprite].currentFrame %=
+            maxSpriteFrame;
+      }
+      break;
+
+    case (WALKING):
+      break;
+
+    case (JUMPING):
+      break;
+
+    case (CROUCHING):
+      break;
+
+    case (DEFENDING):
+      color = al_map_rgb(10, 180, 10);
+      break;
+
+    case (GOT_HIT):
+      color = al_map_rgb(255, 255, 255);
+      break;
+
     case (PUNCHING):
       if (player->facingRight)
         al_draw_filled_rectangle(playerMaxX, player->yPosition + 15,
@@ -305,10 +309,32 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
       break;
   }
 
+  // DRAW THE PLAYERS
+  // Bette davis eyes
+  if (player->facingRight) {
+    // al_draw_filled_rectangle((playerMaxX - 10), player->yPosition + 5,
+    //                          (playerMaxX + 1), (player->yPosition + 10),
+    //                          al_map_rgb(255, 255, 255));
+    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
+                       .Sprites[currentSpriteFrame],
+                   player->xPosition, player->yPosition, 0);
+  } else {
+    // al_draw_filled_rectangle((player->xPosition - 1), (player->yPosition +
+    // 5),
+    //                          (player->xPosition + 10), (player->yPosition +
+    //                          10), al_map_rgb(255, 255, 255));
+    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
+                       .Sprites[currentSpriteFrame],
+                   player->xPosition, player->yPosition,
+                   ALLEGRO_FLIP_HORIZONTAL);
+  }
+
   // ONDE VOU COLOCAR ESSES RESETS????
   player->character->currentSprite = STEADY;
   player->blocking = false;
   player->crouching = false;
+  player->character->height =
+      player->character->Sprites->movesSprites[STEADY].height;
 }
 
 /*

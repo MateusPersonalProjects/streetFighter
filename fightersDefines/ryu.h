@@ -14,6 +14,9 @@
 #define RYU_IDLE_3_X 104
 #define RYU_IDLE_4_X 153
 
+#define RYU_IDLE_CBOX_W 28
+#define RYU_IDLE_CBOX_H 73
+
 // WALKING LOCALIZATION
 #define RYU_WALK_X_1 205
 #define RYU_WALK_Y_1 24
@@ -40,4 +43,9 @@
 #define RYU_WALK_W_5 43
 #define RYU_WALK_H_5 80
 
+// CROUCHING LOCALIZATION
+#define RYU_CROUCH_X 1160
+#define RYU_CROUCH_Y 44
+#define RYU_CROUCH_W 43
+#define RYU_CROUCH_H 55
 #endif

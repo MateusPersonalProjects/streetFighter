@@ -13,8 +13,8 @@ CHARACTER* characterInit(FIGHTER_SPRITES* fighterSprite) {
   CHARACTER* newChar = (CHARACTER*)malloc(sizeof(CHARACTER));
   if (newChar == NULL) exit(1);
 
-  newChar->width = fighterSprite->movesSprites[0].width;
-  newChar->height = fighterSprite->movesSprites[0].height;
+  newChar->width = fighterSprite->movesSprites[STEADY].width;
+  newChar->height = fighterSprite->movesSprites[STEADY].height;
   newChar->crouchHeight = 0;
   newChar->currentSprite = STEADY;
   newChar->Sprites = fighterSprite;
@@ -72,6 +72,19 @@ FIGHTER_SPRITES* initRyu() {
       ryu->sheet, RYU_WALK_X_4, RYU_WALK_Y_4, RYU_WALK_W_4, RYU_WALK_H_4);
   ryu->movesSprites[WALKING].Sprites[4] = grabSprite(
       ryu->sheet, RYU_WALK_X_5, RYU_WALK_Y_5, RYU_WALK_W_5, RYU_WALK_H_5);
+
+  // CROUCHING THINGS
+  ryu->movesSprites[CROUCHING].width = RYU_CROUCH_W;
+  ryu->movesSprites[CROUCHING].height = RYU_CROUCH_H;
+  ryu->movesSprites[CROUCHING].numFrames = 1;
+  ryu->movesSprites[CROUCHING].currentFrame = 0;
+
+  ryu->movesSprites[CROUCHING].Sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 1);
+  if (ryu->movesSprites[CROUCHING].Sprites == NULL) exit(1);
+
+  ryu->movesSprites[CROUCHING].Sprites[0] = grabSprite(
+      ryu->sheet, RYU_CROUCH_X, RYU_CROUCH_Y, RYU_CROUCH_W, RYU_CROUCH_H);
 
   return ryu;
 }
