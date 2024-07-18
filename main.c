@@ -1,7 +1,7 @@
 // gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
 // environment.c matchInterface.c attacks_SpecialMoves.c characSelecMenu.c
-// $(pkg-config allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5
-// --libs --cflags)
+// ./fightersDefines/ryu.c $(pkg-config allegro-5 allegro_primitives-5
+// allegro_font-5 allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>

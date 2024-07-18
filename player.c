@@ -50,6 +50,24 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
   if (matchEnd) player->roundsWon = 0;
 }
 
+void updateWidthHeight(PLAYER *player) {
+  // Shortcuts
+  SPRITE_LIST currentSpriteP1 = player->character->currentSprite;
+  short currentSpriteFrameP1 =
+      player->character->fighterGraphics->movesSprites[currentSpriteP1]
+          .currentFrame;
+  short currentW =
+      player->character->fighterGraphics->movesSprites[currentSpriteP1]
+          .drawBoxWidth[currentSpriteFrameP1];
+  short currentH =
+      player->character->fighterGraphics->movesSprites[currentSpriteP1]
+          .drawBoxHeight[currentSpriteP1];
+
+  // Assignment
+  player->character->width = currentW;
+  player->character->height = currentH;
+}
+
 /*
   Verify if the player is trying to get out of the bounds of the screen
 */
@@ -158,13 +176,15 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     if (!jumping) player->character->currentSprite = WALKING;  // WALKING
     currentSprite = player->character->currentSprite;
     maxSpriteFrame =
-        player->character->Sprites->movesSprites[currentSprite].numFrames;
+        player->character->fighterGraphics->movesSprites[currentSprite]
+            .numFrames;
 
     player->xPosition += PLAYER_VEL;
     if (!(timerCount % 4))
-      (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
-    player->character->Sprites->movesSprites[currentSprite].currentFrame %=
-        maxSpriteFrame;
+      (player->character->fighterGraphics->movesSprites[currentSprite]
+           .currentFrame)++;
+    player->character->fighterGraphics->movesSprites[currentSprite]
+        .currentFrame %= maxSpriteFrame;
     if (playersCollision(player, anotherPlayer))
       player->xPosition -= PLAYER_VEL;
   }
@@ -176,13 +196,15 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     if (!jumping) player->character->currentSprite = WALKING;  // WALKING
     currentSprite = player->character->currentSprite;
     maxSpriteFrame =
-        player->character->Sprites->movesSprites[currentSprite].numFrames;
+        player->character->fighterGraphics->movesSprites[currentSprite]
+            .numFrames;
 
     player->xPosition -= PLAYER_VEL;
     if (!(timerCount % 4))
-      (player->character->Sprites->movesSprites[currentSprite].currentFrame)++;
-    player->character->Sprites->movesSprites[currentSprite].currentFrame %=
-        maxSpriteFrame;
+      (player->character->fighterGraphics->movesSprites[currentSprite]
+           .currentFrame)++;
+    player->character->fighterGraphics->movesSprites[currentSprite]
+        .currentFrame %= maxSpriteFrame;
 
     if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
@@ -196,9 +218,7 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     player->crouching = true;
     player->character->currentSprite = CROUCHING;  // CROUNCHING
   }
-  currentSprite = player->character->currentSprite;
-  player->character->height =
-      player->character->Sprites->movesSprites[currentSprite].height;
+  updateWidthHeight(player);
 
   // Changes y position (the head position, because he is croucing right)
   playerCrouch(player, anotherPlayer);
@@ -262,10 +282,11 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   SPRITE_LIST currentSprite = player->character->currentSprite;
 
   short maxSpriteFrame =
-      player->character->Sprites->movesSprites[currentSprite].numFrames;
+      player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
 
   short currentSpriteFrame =
-      player->character->Sprites->movesSprites[currentSprite].currentFrame;
+      player->character->fighterGraphics->movesSprites[currentSprite]
+          .currentFrame;
 
   int playerMaxX = (player->xPosition + player->character->width);
   // ANIMATIONS AND CONFIGURATIONS FOR DRAW SPRITES
@@ -273,10 +294,10 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
     // STEADY ANIMATION
     case (STEADY):
       if (!(timerIdle % 10)) {
-        (player->character->Sprites->movesSprites[currentSprite]
+        (player->character->fighterGraphics->movesSprites[currentSprite]
              .currentFrame)++;
-        player->character->Sprites->movesSprites[currentSprite].currentFrame %=
-            maxSpriteFrame;
+        player->character->fighterGraphics->movesSprites[currentSprite]
+            .currentFrame %= maxSpriteFrame;
       }
       break;
 
@@ -315,26 +336,27 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
     // al_draw_filled_rectangle((playerMaxX - 10), player->yPosition + 5,
     //                          (playerMaxX + 1), (player->yPosition + 10),
     //                          al_map_rgb(255, 255, 255));
-    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
-                       .Sprites[currentSpriteFrame],
-                   player->xPosition, player->yPosition, 0);
+    al_draw_bitmap(
+        player->character->fighterGraphics->movesSprites[currentSprite]
+            .sprites[currentSpriteFrame],
+        player->xPosition, player->yPosition, 0);
   } else {
     // al_draw_filled_rectangle((player->xPosition - 1), (player->yPosition +
     // 5),
     //                          (player->xPosition + 10), (player->yPosition +
     //                          10), al_map_rgb(255, 255, 255));
-    al_draw_bitmap(player->character->Sprites->movesSprites[currentSprite]
-                       .Sprites[currentSpriteFrame],
-                   player->xPosition, player->yPosition,
-                   ALLEGRO_FLIP_HORIZONTAL);
+    al_draw_bitmap(
+        player->character->fighterGraphics->movesSprites[currentSprite]
+            .sprites[currentSpriteFrame],
+        player->xPosition, player->yPosition, ALLEGRO_FLIP_HORIZONTAL);
   }
 
   // ONDE VOU COLOCAR ESSES RESETS????
+  // SÓ CHAMO ESSES RESETS QUANDO A ANIMAÇÃO DE UMA SPRITE TERMINAR
   player->character->currentSprite = STEADY;
   player->blocking = false;
   player->crouching = false;
-  player->character->height =
-      player->character->Sprites->movesSprites[STEADY].height;
+  updateWidthHeight(player);
 }
 
 /*

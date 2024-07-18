@@ -19,11 +19,14 @@ typedef enum{
 typedef struct{
   short numFrames;
   short currentFrame;
-  short height;
-  short width;
-  ALLEGRO_BITMAP** Sprites;
+  const short *drawBoxHeight;
+  const short *drawBoxWidth;
+  const short *hurtBoxHeight;
+  const short *hurtBoxWidth;
+  ALLEGRO_BITMAP** sprites;
 } MOVE_SPRITES;
 
+// IDEIA DO ATTACK_SPRITES VOU TER UM STRUCT CHAMA HITBOX ALI DENTRO QUE ARMAZENA AS COORDENADAS BONITAMENTE PRA PASSAR PRAS FUNÇÕES DE ATAQUE
 typedef struct{
   ALLEGRO_BITMAP* sheet;
 
@@ -35,7 +38,7 @@ typedef struct{
   int height;
   int crouchHeight;
   SPRITE_LIST currentSprite;
-  FIGHTER_SPRITES* Sprites;
+  FIGHTER_SPRITES* fighterGraphics;
   // MOVE LIST (array de ponteiro para funções)
   // SPRITES :)
 } CHARACTER;
