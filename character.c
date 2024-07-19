@@ -13,9 +13,11 @@ CHARACTER* characterInit(FIGHTER_SPRITES* fighterSprite) {
   CHARACTER* newChar = (CHARACTER*)malloc(sizeof(CHARACTER));
   if (newChar == NULL) exit(1);
 
-  newChar->width = fighterSprite->movesSprites[STEADY].hurtBoxWidth[0];
-  newChar->height = fighterSprite->movesSprites[STEADY].hurtBoxHeight[0];
-  newChar->crouchHeight = 0;
+  newChar->width = fighterSprite->movesSprites[STEADY].drawBoxWidth[0];
+  newChar->height = fighterSprite->movesSprites[STEADY].drawBoxHeight[0];
+  newChar->hurtWidth = fighterSprite->movesSprites[STEADY].hurtBoxWidth[0];
+  newChar->hurtHeight = fighterSprite->movesSprites[STEADY].hurtBoxHeight[0];
+  // newChar->crouchHeight = 0;
   newChar->currentSprite = STEADY;
   newChar->fighterGraphics = fighterSprite;
   return newChar;

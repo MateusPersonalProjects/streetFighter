@@ -36,7 +36,9 @@ typedef struct{
 typedef struct{
   int width;
   int height;
-  int crouchHeight;
+  int hurtWidth;
+  int hurtHeight;
+  //int crouchHeight;
   SPRITE_LIST currentSprite;
   FIGHTER_SPRITES* fighterGraphics;
   // MOVE LIST (array de ponteiro para funções)

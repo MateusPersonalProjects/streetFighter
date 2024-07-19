@@ -56,16 +56,26 @@ void updateWidthHeight(PLAYER *player) {
   short currentSpriteFrameP1 =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
           .currentFrame;
+
   short currentW =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
           .drawBoxWidth[currentSpriteFrameP1];
   short currentH =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
-          .drawBoxHeight[currentSpriteP1];
+          .drawBoxHeight[currentSpriteFrameP1];
+
+  short currentHurtW =
+      player->character->fighterGraphics->movesSprites[currentSpriteP1]
+          .hurtBoxWidth[currentSpriteFrameP1];
+  short currentHurtH =
+      player->character->fighterGraphics->movesSprites[currentSpriteP1]
+          .hurtBoxHeight[currentSpriteFrameP1];
 
   // Assignment
   player->character->width = currentW;
   player->character->height = currentH;
+  player->character->hurtWidth = currentHurtW;
+  player->character->hurtHeight = currentHurtH;
 }
 
 /*
@@ -239,22 +249,43 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
  */
 void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                          unsigned char *keyboardKeys, unsigned char *whichKey) {
-  int p1MaxX = player->xPosition + player->character->width;
-  int p1MaxY = player->xPosition + player->character->height;
-  int p2MaxX = anotherPlayer->xPosition + anotherPlayer->character->width;
-  int p2MaxY = anotherPlayer->yPosition + anotherPlayer->character->height;
+  SPRITE_LIST currentSprite = player->character->currentSprite;
+
+  int p1MaxX = player->xPosition + player->character->hurtWidth;
+  int p1MaxY = player->xPosition + player->character->hurtHeight;
+  int p2MaxX = anotherPlayer->xPosition + anotherPlayer->character->hurtWidth;
+  int p2MaxY = anotherPlayer->yPosition + anotherPlayer->character->hurtHeight;
+
+  float midX = (player->xPosition + (player->character->width / 2.0));
+  float midY = (player->yPosition + (player->character->height / 2.0));
+
+  float hurtBox_X1 = (midX - (player->character->hurtWidth / 2.0));
+  float hurtBox_X2 = (midX + (player->character->hurtWidth / 2.0));
+  float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
+  float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
+
+  float midX2 =
+      (anotherPlayer->xPosition + anotherPlayer->character->width) / 2.0;
+  float midY2 =
+      (anotherPlayer->yPosition + anotherPlayer->character->height) / 2.0;
+
+  float hurtBox2_X1 = (midX - (anotherPlayer->character->hurtWidth / 2.0));
+  float hurtBox2_X2 = (midX + (anotherPlayer->character->hurtWidth / 2.0));
+  float hurtBox2_Y1 = (midY - (anotherPlayer->character->hurtHeight / 2.0));
+  float hurtBox2_Y2 = (midY + (anotherPlayer->character->hurtHeight / 2.0));
 
   if (keyboardKeys[whichKey[PUNCH]]) {
     player->character->currentSprite = STEADY;  // PUNCHING
-    if (punch(player->xPosition, p1MaxX, player->yPosition, p1MaxY,
-              player->facingRight, anotherPlayer->xPosition, p2MaxX,
-              anotherPlayer->yPosition, p2MaxY)) {
+    if (punch(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+              player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+              hurtBox2_Y2)) {
       if (!anotherPlayer->blocking) {
         anotherPlayer->life -= 1;
         anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
       } else
         anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
 
+      // knock back thing
       if (anotherPlayer->facingRight)
         anotherPlayer->xPosition -= 2;
       else
@@ -267,18 +298,14 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   Draw the player on the screen
 */
 void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
-  int height = player->character->height;
-  ALLEGRO_COLOR color;
-
-  // if (player->crouching) height = player->character->crouchHeight;
-
-  color = playerColor;
+  ALLEGRO_COLOR color = playerColor;
 
   // al_draw_filled_rectangle(player->xPosition, player->yPosition,
   //                          (player->character->width + player->xPosition),
-  //                          (player->yPosition + height), color);
+  //                          (player->yPosition + player->character->height),
+  //                          color);
 
-  // SHORTCUTS FOR ACCESS SOME VARIABLES
+  // SHORTCUTS TO ACCESS SOME VARIABLES
   SPRITE_LIST currentSprite = player->character->currentSprite;
 
   short maxSpriteFrame =
@@ -287,6 +314,18 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   short currentSpriteFrame =
       player->character->fighterGraphics->movesSprites[currentSprite]
           .currentFrame;
+
+  /* ------------------ FOR TESTS ONLY ---------------- */
+  float midX = (player->xPosition + (player->character->width / 2.0));
+  float midY = (player->yPosition + (player->character->height / 2.0));
+
+  float hurtBox_X1 = (midX - (player->character->hurtWidth / 2.0));
+  float hurtBox_X2 = (midX + (player->character->hurtWidth / 2.0));
+  float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
+  float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
+
+  al_draw_rectangle(hurtBox_X1, hurtBox_Y1, hurtBox_X2, hurtBox_Y2, color, 2.0);
+  /* ------------------------------------------------------- */
 
   int playerMaxX = (player->xPosition + player->character->width);
   // ANIMATIONS AND CONFIGURATIONS FOR DRAW SPRITES
@@ -331,26 +370,18 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   }
 
   // DRAW THE PLAYERS
-  // Bette davis eyes
-  if (player->facingRight) {
-    // al_draw_filled_rectangle((playerMaxX - 10), player->yPosition + 5,
-    //                          (playerMaxX + 1), (player->yPosition + 10),
-    //                          al_map_rgb(255, 255, 255));
+  if (player->facingRight)
     al_draw_bitmap(
         player->character->fighterGraphics->movesSprites[currentSprite]
             .sprites[currentSpriteFrame],
         player->xPosition, player->yPosition, 0);
-  } else {
-    // al_draw_filled_rectangle((player->xPosition - 1), (player->yPosition +
-    // 5),
-    //                          (player->xPosition + 10), (player->yPosition +
-    //                          10), al_map_rgb(255, 255, 255));
+  else
     al_draw_bitmap(
         player->character->fighterGraphics->movesSprites[currentSprite]
             .sprites[currentSpriteFrame],
         player->xPosition, player->yPosition, ALLEGRO_FLIP_HORIZONTAL);
-  }
 
+  al_draw_filled_circle(midX, midY, 2.0, color);
   // ONDE VOU COLOCAR ESSES RESETS????
   // SÓ CHAMO ESSES RESETS QUANDO A ANIMAÇÃO DE UMA SPRITE TERMINAR
   player->character->currentSprite = STEADY;
