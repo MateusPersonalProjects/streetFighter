@@ -15,6 +15,7 @@ typedef struct {
   bool blocking;
   short int life;
   short int roundsWon;
+  bool animationDone;
 } PLAYER;
 
 typedef enum{

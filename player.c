@@ -31,6 +31,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
   newPlayer->yAcel = 0;
   newPlayer->life = 150;
   newPlayer->roundsWon = 0;
+  newPlayer->animationDone = true;
 
   return newPlayer;
 }
@@ -47,9 +48,13 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
   player->blocking = false;
   player->yAcel = 0;
   player->life = 150;
+  player->animationDone = true;
   if (matchEnd) player->roundsWon = 0;
 }
 
+/*
+  Updates the width and height of the player
+*/
 void updateWidthHeight(PLAYER *player) {
   // Shortcuts
   SPRITE_LIST currentSpriteP1 = player->character->currentSprite;
@@ -59,17 +64,17 @@ void updateWidthHeight(PLAYER *player) {
 
   short currentW =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
-          .drawBoxWidth[currentSpriteFrameP1];
+          .drawBoxWidth;
   short currentH =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
-          .drawBoxHeight[currentSpriteFrameP1];
+          .drawBoxHeight;
 
   short currentHurtW =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
-          .hurtBoxWidth[currentSpriteFrameP1];
+          .hurtBoxWidth;
   short currentHurtH =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
-          .hurtBoxHeight[currentSpriteFrameP1];
+          .hurtBoxHeight;
 
   // Assignment
   player->character->width = currentW;
@@ -82,20 +87,20 @@ void updateWidthHeight(PLAYER *player) {
   Verify if the player is trying to get out of the bounds of the screen
 */
 void playerScreenBounds(PLAYER *player) {
-  int playerXmax = player->xPosition + player->character->width;
+  int playerXmax = player->xPosition + player->character->hurtWidth;
   if (player->xPosition < 0) player->xPosition = 0;
   if (playerXmax > BUFFER_W)
-    player->xPosition = BUFFER_W - player->character->width;
+    player->xPosition = BUFFER_W - player->character->hurtWidth;
 }
 
 /*
   Dont let the players get inside each other :9
 */
 bool playersCollision(PLAYER *player1, PLAYER *player2) {
-  int p1Xmax = player1->xPosition + player1->character->width;
-  int p2Xmax = player2->xPosition + player2->character->width;
-  int p1Ymax = player1->yPosition + player1->character->height;
-  int p2Ymax = player2->yPosition + player2->character->height;
+  int p1Xmax = player1->xPosition + player1->character->hurtWidth;
+  int p2Xmax = player2->xPosition + player2->character->hurtWidth;
+  int p1Ymax = player1->yPosition + player1->character->hurtHeight;
+  int p2Ymax = player2->yPosition + player2->character->hurtHeight;
 
   return boxCollision(player1->xPosition, player1->yPosition, p1Xmax, p1Ymax,
                       player2->xPosition, player2->yPosition, p2Xmax, p2Ymax);
@@ -106,8 +111,8 @@ bool playersCollision(PLAYER *player1, PLAYER *player2) {
   we can make them look to each other for the entire match and fall in love
 */
 void playerSight(PLAYER *player1, PLAYER *player2) {
-  int p1Mid = (player1->xPosition + player1->character->width) / 2;
-  int p2Mid = (player2->xPosition + player2->character->width) / 2;
+  int p1Mid = (player1->xPosition + player1->character->hurtWidth) / 2;
+  int p2Mid = (player2->xPosition + player2->character->hurtWidth) / 2;
 
   if (p2Mid < p1Mid) {
     player2->facingRight = true;
@@ -251,28 +256,23 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                          unsigned char *keyboardKeys, unsigned char *whichKey) {
   SPRITE_LIST currentSprite = player->character->currentSprite;
 
-  int p1MaxX = player->xPosition + player->character->hurtWidth;
-  int p1MaxY = player->xPosition + player->character->hurtHeight;
-  int p2MaxX = anotherPlayer->xPosition + anotherPlayer->character->hurtWidth;
-  int p2MaxY = anotherPlayer->yPosition + anotherPlayer->character->hurtHeight;
-
+  // Define limits and localization of the hurt box for player 1
   float midX = (player->xPosition + (player->character->width / 2.0));
   float midY = (player->yPosition + (player->character->height / 2.0));
-
   float hurtBox_X1 = (midX - (player->character->hurtWidth / 2.0));
   float hurtBox_X2 = (midX + (player->character->hurtWidth / 2.0));
   float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
   float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
 
+  // Define limits and localization of the hurt box for player 2
   float midX2 =
-      (anotherPlayer->xPosition + anotherPlayer->character->width) / 2.0;
+      (anotherPlayer->xPosition + (anotherPlayer->character->width / 2.0));
   float midY2 =
-      (anotherPlayer->yPosition + anotherPlayer->character->height) / 2.0;
-
-  float hurtBox2_X1 = (midX - (anotherPlayer->character->hurtWidth / 2.0));
-  float hurtBox2_X2 = (midX + (anotherPlayer->character->hurtWidth / 2.0));
-  float hurtBox2_Y1 = (midY - (anotherPlayer->character->hurtHeight / 2.0));
-  float hurtBox2_Y2 = (midY + (anotherPlayer->character->hurtHeight / 2.0));
+      (anotherPlayer->yPosition + (anotherPlayer->character->height / 2.0));
+  float hurtBox2_X1 = (midX2 - (anotherPlayer->character->hurtWidth / 2.0));
+  float hurtBox2_X2 = (midX2 + (anotherPlayer->character->hurtWidth / 2.0));
+  float hurtBox2_Y1 = (midY2 - (anotherPlayer->character->hurtHeight / 2.0));
+  float hurtBox2_Y2 = (midY2 + (anotherPlayer->character->hurtHeight / 2.0));
 
   if (keyboardKeys[whichKey[PUNCH]]) {
     player->character->currentSprite = STEADY;  // PUNCHING
@@ -325,6 +325,10 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
 
   al_draw_rectangle(hurtBox_X1, hurtBox_Y1, hurtBox_X2, hurtBox_Y2, color, 2.0);
+
+  al_draw_rectangle(hurtBox_X2, hurtBox_Y1 + 15, hurtBox_X2 + 10,
+                    hurtBox_Y1 + 15 + 6, al_map_rgb(255, 255, 255), 2);
+
   /* ------------------------------------------------------- */
 
   int playerMaxX = (player->xPosition + player->character->width);

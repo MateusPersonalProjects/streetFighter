@@ -13,10 +13,10 @@ CHARACTER* characterInit(FIGHTER_SPRITES* fighterSprite) {
   CHARACTER* newChar = (CHARACTER*)malloc(sizeof(CHARACTER));
   if (newChar == NULL) exit(1);
 
-  newChar->width = fighterSprite->movesSprites[STEADY].drawBoxWidth[0];
-  newChar->height = fighterSprite->movesSprites[STEADY].drawBoxHeight[0];
-  newChar->hurtWidth = fighterSprite->movesSprites[STEADY].hurtBoxWidth[0];
-  newChar->hurtHeight = fighterSprite->movesSprites[STEADY].hurtBoxHeight[0];
+  newChar->width = fighterSprite->movesSprites[STEADY].drawBoxWidth;
+  newChar->height = fighterSprite->movesSprites[STEADY].drawBoxHeight;
+  newChar->hurtWidth = fighterSprite->movesSprites[STEADY].hurtBoxWidth;
+  newChar->hurtHeight = fighterSprite->movesSprites[STEADY].hurtBoxHeight;
   // newChar->crouchHeight = 0;
   newChar->currentSprite = STEADY;
   newChar->fighterGraphics = fighterSprite;
@@ -53,8 +53,8 @@ FIGHTER_SPRITES* initRyu() {
 
   for (int i = 0; i < 4; i++)
     ryu->movesSprites[STEADY].sprites[i] =
-        grabSprite(ryu->sheet, RYU_IDLE_X[i], RYU_IDLE_Y[i], RYU_IDLE_DRAW_W[i],
-                   RYU_IDLE_DRAW_H[i]);
+        grabSprite(ryu->sheet, RYU_IDLE_X[i], RYU_IDLE_Y[i], RYU_IDLE_DRAW_W,
+                   RYU_IDLE_DRAW_H);
 
   /* ------------------- WALKING THINGS -------------------- */
   ryu->movesSprites[WALKING].numFrames = 5;
@@ -75,8 +75,8 @@ FIGHTER_SPRITES* initRyu() {
 
   for (int i = 0; i < 5; i++)
     ryu->movesSprites[WALKING].sprites[i] =
-        grabSprite(ryu->sheet, RYU_WALK_X[i], RYU_WALK_Y[i], RYU_WALK_DRAW_W[i],
-                   RYU_WALK_DRAW_H[i]);
+        grabSprite(ryu->sheet, RYU_WALK_X[i], RYU_WALK_Y[i], RYU_WALK_DRAW_W,
+                   RYU_WALK_DRAW_H);
 
   /* ------------------- CROUCHING THINGS ------------------- */
   ryu->movesSprites[CROUCHING].numFrames = 1;
@@ -97,7 +97,7 @@ FIGHTER_SPRITES* initRyu() {
 
   ryu->movesSprites[CROUCHING].sprites[0] =
       grabSprite(ryu->sheet, RYU_CROUCH_X[0], RYU_CROUCH_Y[0],
-                 RYU_CROUCH_DRAW_W[0], RYU_CROUCH_DRAW_H[0]);
+                 RYU_CROUCH_DRAW_W, RYU_CROUCH_DRAW_H);
 
   return ryu;
 }

@@ -19,10 +19,14 @@ typedef enum{
 typedef struct{
   short numFrames;
   short currentFrame;
-  const short *drawBoxHeight;
-  const short *drawBoxWidth;
-  const short *hurtBoxHeight;
-  const short *hurtBoxWidth;
+  short drawBoxHeight;
+  short drawBoxWidth;
+  short hurtBoxHeight;
+  short hurtBoxWidth;
+  short hitBox_X;
+  short hitBox_Y;
+  short hitBoxWidth;
+  short hitBoxHeight;
   ALLEGRO_BITMAP** sprites;
 } MOVE_SPRITES;
 
@@ -38,11 +42,8 @@ typedef struct{
   int height;
   int hurtWidth;
   int hurtHeight;
-  //int crouchHeight;
   SPRITE_LIST currentSprite;
   FIGHTER_SPRITES* fighterGraphics;
-  // MOVE LIST (array de ponteiro para funções)
-  // SPRITES :)
 } CHARACTER;
 
 /*
