@@ -83,6 +83,25 @@ void updateWidthHeight(PLAYER *player) {
   player->character->hurtHeight = currentHurtH;
 }
 
+void updateAnimation(PLAYER *player, long timerCount) {
+  SPRITE_LIST currentSprite = player->character->currentSprite;
+  short currentSpriteFrame =
+      player->character->fighterGraphics->movesSprites[currentSprite]
+          .currentFrame;
+  short maxSpriteFrame =
+      player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
+
+  if (!(timerCount % 3))
+    (player->character->fighterGraphics->movesSprites[currentSprite]
+         .currentFrame)++;
+  player->character->fighterGraphics->movesSprites[currentSprite]
+      .currentFrame %= maxSpriteFrame;
+  if (player->character->fighterGraphics->movesSprites[currentSprite]
+          .currentFrame == 0) {
+    player->animationDone = true;
+  }
+}
+
 /*
   Verify if the player is trying to get out of the bounds of the screen
 */
@@ -183,56 +202,59 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     // player->character->currentSprite = STEADY;
   }
 
-  if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
-    // If player is a moonwalker, well the king of pop gives him the power to
-    // block xD
-    if (!player->facingRight) player->blocking = true;
+  if (player->animationDone) {
+    if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
+      // If player is a moonwalker, well the king of pop gives him the power to
+      // block xD
+      if (!player->facingRight) player->blocking = true;
 
-    if (!jumping) player->character->currentSprite = WALKING;  // WALKING
-    currentSprite = player->character->currentSprite;
-    maxSpriteFrame =
-        player->character->fighterGraphics->movesSprites[currentSprite]
-            .numFrames;
+      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+      currentSprite = player->character->currentSprite;
+      maxSpriteFrame =
+          player->character->fighterGraphics->movesSprites[currentSprite]
+              .numFrames;
 
-    player->xPosition += PLAYER_VEL;
-    if (!(timerCount % 4))
-      (player->character->fighterGraphics->movesSprites[currentSprite]
-           .currentFrame)++;
-    player->character->fighterGraphics->movesSprites[currentSprite]
-        .currentFrame %= maxSpriteFrame;
-    if (playersCollision(player, anotherPlayer))
-      player->xPosition -= PLAYER_VEL;
-  }
-  if (keyboardKeys[whichKey[MOVE_LEFT]]) {
-    // If player is a moonwalker, well the king of pop gives him the power to
-    // block xD
-    if (player->facingRight) player->blocking = true;
-
-    if (!jumping) player->character->currentSprite = WALKING;  // WALKING
-    currentSprite = player->character->currentSprite;
-    maxSpriteFrame =
-        player->character->fighterGraphics->movesSprites[currentSprite]
-            .numFrames;
-
-    player->xPosition -= PLAYER_VEL;
-    if (!(timerCount % 4))
-      (player->character->fighterGraphics->movesSprites[currentSprite]
-           .currentFrame)++;
-    player->character->fighterGraphics->movesSprites[currentSprite]
-        .currentFrame %= maxSpriteFrame;
-
-    if (playersCollision(player, anotherPlayer))
       player->xPosition += PLAYER_VEL;
-  }
-  if (keyboardKeys[whichKey[JUMP]] && !jumping) {
-    // Give me some boost to reach the skyies o/
-    player->character->currentSprite = STEADY;  // JUMPING
-    player->yAcel = PLAYER_VEL * 3;
-  }
-  if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
-    player->crouching = true;
-    player->character->currentSprite = CROUCHING;  // CROUNCHING
-  }
+      if (!(timerCount % 4))
+        (player->character->fighterGraphics->movesSprites[currentSprite]
+             .currentFrame)++;
+      player->character->fighterGraphics->movesSprites[currentSprite]
+          .currentFrame %= maxSpriteFrame;
+      if (playersCollision(player, anotherPlayer))
+        player->xPosition -= PLAYER_VEL;
+    }
+    if (keyboardKeys[whichKey[MOVE_LEFT]]) {
+      // If player is a moonwalker, well the king of pop gives him the power to
+      // block xD
+      if (player->facingRight) player->blocking = true;
+
+      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+      currentSprite = player->character->currentSprite;
+      maxSpriteFrame =
+          player->character->fighterGraphics->movesSprites[currentSprite]
+              .numFrames;
+
+      player->xPosition -= PLAYER_VEL;
+      if (!(timerCount % 4))
+        (player->character->fighterGraphics->movesSprites[currentSprite]
+             .currentFrame)++;
+      player->character->fighterGraphics->movesSprites[currentSprite]
+          .currentFrame %= maxSpriteFrame;
+
+      if (playersCollision(player, anotherPlayer))
+        player->xPosition += PLAYER_VEL;
+    }
+    if (keyboardKeys[whichKey[JUMP]] && !jumping) {
+      // Give me some boost to reach the skyies o/
+      player->character->currentSprite = STEADY;  // JUMPING
+      player->yAcel = PLAYER_VEL * 3;
+    }
+    if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
+      player->crouching = true;
+      player->character->currentSprite = CROUCHING;  // CROUNCHING
+    }
+  } else
+    updateAnimation(player, timerCount);
   updateWidthHeight(player);
 
   // Changes y position (the head position, because he is croucing right)
@@ -274,22 +296,25 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   float hurtBox2_Y1 = (midY2 - (anotherPlayer->character->hurtHeight / 2.0));
   float hurtBox2_Y2 = (midY2 + (anotherPlayer->character->hurtHeight / 2.0));
 
-  if (keyboardKeys[whichKey[PUNCH]]) {
-    player->character->currentSprite = STEADY;  // PUNCHING
-    if (punch(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
-              player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
-              hurtBox2_Y2)) {
-      if (!anotherPlayer->blocking) {
-        anotherPlayer->life -= 1;
-        anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
-      } else
-        anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
+  if (player->animationDone) {
+    if (keyboardKeys[whichKey[PUNCH]]) {
+      player->animationDone = false;
+      player->character->currentSprite = PUNCHING;  // PUNCHING
+      if (punch(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+                hurtBox2_Y2)) {
+        if (!anotherPlayer->blocking) {
+          anotherPlayer->life -= 1;
+          anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
+        } else
+          anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
 
-      // knock back thing
-      if (anotherPlayer->facingRight)
-        anotherPlayer->xPosition -= 2;
-      else
-        anotherPlayer->xPosition += 2;
+        // knock back thing
+        if (anotherPlayer->facingRight)
+          anotherPlayer->xPosition -= 2;
+        else
+          anotherPlayer->xPosition += 2;
+      }
     }
   }
 }
@@ -388,10 +413,12 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   al_draw_filled_circle(midX, midY, 2.0, color);
   // ONDE VOU COLOCAR ESSES RESETS????
   // SÓ CHAMO ESSES RESETS QUANDO A ANIMAÇÃO DE UMA SPRITE TERMINAR
-  player->character->currentSprite = STEADY;
-  player->blocking = false;
-  player->crouching = false;
-  updateWidthHeight(player);
+  if (player->animationDone) {
+    player->character->currentSprite = STEADY;
+    player->blocking = false;
+    player->crouching = false;
+    updateWidthHeight(player);
+  }
 }
 
 /*

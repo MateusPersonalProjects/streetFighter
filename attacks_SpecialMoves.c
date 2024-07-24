@@ -16,8 +16,8 @@ bool hitCheck(int p1x1, int p1x2, int p1y1, int p1y2, int hitBoxWidth,
   int hitBoxEndX_FR = p1x2 + hitBoxWidth;
   int hitBoxEndX_FL = p1x2 - hitBoxWidth;
 
-  int hitBoxStartY = hitBox_Y;
-  int hitBoxEndY = hitBox_Y + hitBoxHeight;
+  int hitBoxStartY = p1y1 + hitBox_Y;
+  int hitBoxEndY = hitBoxStartY + hitBoxHeight;
 
   // Facing right tells us where the punch hitbox should appers
   if (facingRight) {

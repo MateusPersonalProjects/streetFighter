@@ -21,3 +21,7 @@ const short RYU_CROUCH_Y[1] = {44};
 // const short RYU_CROUCH_DRAW_H[1] = {55};
 //  const short RYU_CROUCH_HURT_W[1] = {35};
 //  const short RYU_CROUCH_HURT_H[1] = {53};
+
+/* --------------- PUNCHING ------------- */
+const short RYU_PUNCH_X[3] = {3, 52, 117};
+const short RYU_PUNCH_Y[3] = {134, 134, 134};

@@ -99,6 +99,32 @@ FIGHTER_SPRITES* initRyu() {
       grabSprite(ryu->sheet, RYU_CROUCH_X[0], RYU_CROUCH_Y[0],
                  RYU_CROUCH_DRAW_W, RYU_CROUCH_DRAW_H);
 
+  /* ------------------- PUNCHING THINGS -------------------- */
+  ryu->movesSprites[PUNCHING].numFrames = 3;
+  ryu->movesSprites[PUNCHING].currentFrame = 0;
+
+  // Draw box width and height information
+  ryu->movesSprites[PUNCHING].drawBoxHeight = RYU_PUNCH_DRAW_H;
+  ryu->movesSprites[PUNCHING].drawBoxWidth = RYU_PUNCH_DRAW_W;
+
+  // Hurt box width and height information
+  ryu->movesSprites[PUNCHING].hurtBoxHeight = RYU_PUNCH_HURT_H;
+  ryu->movesSprites[PUNCHING].hurtBoxWidth = RYU_PUNCH_HURT_W;
+
+  ryu->movesSprites[PUNCHING].hitBox_Y = 17;
+  ryu->movesSprites[PUNCHING].hitBoxWidth = 19;
+  ryu->movesSprites[PUNCHING].hitBoxHeight = 8;
+
+  // Getting memory for the sprites
+  ryu->movesSprites[PUNCHING].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
+  if (ryu->movesSprites[PUNCHING].sprites == NULL) exit(1);
+
+  for (int i = 0; i < 3; i++)
+    ryu->movesSprites[PUNCHING].sprites[i] =
+        grabSprite(ryu->sheet, RYU_PUNCH_X[i], RYU_PUNCH_Y[i], RYU_PUNCH_DRAW_W,
+                   RYU_PUNCH_DRAW_H);
+
   return ryu;
 }
 

@@ -38,4 +38,14 @@ extern const short RYU_CROUCH_Y[1];
 #define RYU_CROUCH_HURT_W 35
 #define RYU_CROUCH_HURT_H 53
 
+/* -------------- PUNCHING --------------- */
+extern const short RYU_PUNCH_X[3];
+extern const short RYU_PUNCH_Y[3];
+
+#define RYU_PUNCH_DRAW_W 57
+#define RYU_PUNCH_DRAW_H 81
+
+#define RYU_PUNCH_HURT_W 37
+#define RYU_PUNCH_HURT_H 79
+
 #endif
