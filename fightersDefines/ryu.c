@@ -34,6 +34,12 @@ const short RYU_FACE_HIT_Y[4] = {757, 757, 753, 754};
 const short RYU_FACE_HIT_DRAW_W_ARRAY[4] = {48, 52, 58, 43};
 const short RYU_FACE_HIT_DRAW_H_ARRAY[4] = {79, 79, 83, 82};
 
+/* ---------------- DEFENDING -------------- */
+const short RYU_DEFENDING_X[1] = {1211};
+const short RYU_DEFENDING_Y[1] = {16};
+const short RYU_DEFENDING_DRAW_W_ARRAY[1] = {43};
+const short RYU_DEFENDING_DRAW_H_ARRAY[1] = {83};
+
 /* --------------- PUNCHING ------------- */
 const short RYU_PUNCH_X[3] = {3, 52, 117};
 const short RYU_PUNCH_Y[3] = {134, 134, 134};

@@ -63,6 +63,18 @@ extern const short RYU_FACE_HIT_DRAW_H_ARRAY[4];
 #define RYU_FACE_HIT_HURT_W 37
 #define RYU_FACE_HIT_HURT_H 79
 
+/* ---------------- DEFENDING -------------- */
+extern const short RYU_DEFENDING_X[1];
+extern const short RYU_DEFENDING_Y[1];
+extern const short RYU_DEFENDING_DRAW_W_ARRAY[1];
+extern const short RYU_DEFENDING_DRAW_H_ARRAY[1];
+
+
+#define RYU_DEFENDING_DRAW_W 43
+#define RYU_DEFENDING_DRAW_H 83
+
+#define RYU_DEFENDING_HURT_W 37
+#define RYU_DEFENDING_HURT_H 81
 
 /* -------------- PUNCHING --------------- */
 extern const short RYU_PUNCH_X[3];

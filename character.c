@@ -139,6 +139,19 @@ FIGHTER_SPRITES* initRyu() {
                     RYU_FACE_HIT_HURT_W, RYU_FACE_HIT_X, RYU_FACE_HIT_Y, 0, 0,
                     0, RYU_FACE_HIT_DRAW_W_ARRAY, RYU_FACE_HIT_DRAW_H_ARRAY);
 
+  /* --------------------- DEFENDING ------------------- */
+
+  // Getting memory for the sprites
+  ryu->movesSprites[DEFENDING].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 1);
+  if (ryu->movesSprites[DEFENDING].sprites == NULL) exit(1);
+
+  attackSpritesInit(ryu, DEFENDING, 1, 0, RYU_DEFENDING_DRAW_H,
+                    RYU_DEFENDING_DRAW_W, RYU_DEFENDING_HURT_H,
+                    RYU_DEFENDING_HURT_W, RYU_DEFENDING_X, RYU_DEFENDING_Y, 0,
+                    0, 0, RYU_DEFENDING_DRAW_W_ARRAY,
+                    RYU_DEFENDING_DRAW_H_ARRAY);
+
   /* ------------------- PUNCHING THINGS -------------------- */
 
   // Getting memory for the sprites

@@ -314,7 +314,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
           anotherPlayer->animationDone = false;
           anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
         } else
-          anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
+          anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
 
         // knock back thing
         if (anotherPlayer->facingRight)
@@ -341,7 +341,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
           anotherPlayer->animationDone = false;
           anotherPlayer->character->currentSprite = GOT_FACE_HIT;  // GOT_HIT
         } else
-          anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
+          anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
 
         // knock back thing
         if (anotherPlayer->facingRight)
