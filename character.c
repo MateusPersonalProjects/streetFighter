@@ -116,6 +116,29 @@ FIGHTER_SPRITES* initRyu() {
                       RYU_CROUCH_DRAW_W, RYU_CROUCH_HURT_H, RYU_CROUCH_HURT_W,
                       RYU_CROUCH_X, RYU_CROUCH_Y);
 
+  /* --------------------- GOT HIT ------------------- */
+
+  // Getting memory for the sprites
+  ryu->movesSprites[GOT_HIT].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ryu->movesSprites[GOT_HIT].sprites == NULL) exit(1);
+
+  attackSpritesInit(ryu, GOT_HIT, 4, 0, RYU_HIT_DRAW_H, RYU_HIT_DRAW_W,
+                    RYU_HIT_HURT_H, RYU_HIT_HURT_W, RYU_HIT_X, RYU_HIT_Y, 0, 0,
+                    0, RYU_HIT_DRAW_W_ARRAY, RYU_HIT_DRAW_H_ARRAY);
+
+  /* --------------------- GOT FACE HIT ------------------- */
+
+  // Getting memory for the sprites
+  ryu->movesSprites[GOT_FACE_HIT].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ryu->movesSprites[GOT_FACE_HIT].sprites == NULL) exit(1);
+
+  attackSpritesInit(ryu, GOT_FACE_HIT, 4, 0, RYU_FACE_HIT_DRAW_H,
+                    RYU_FACE_HIT_DRAW_W, RYU_FACE_HIT_HURT_H,
+                    RYU_FACE_HIT_HURT_W, RYU_FACE_HIT_X, RYU_FACE_HIT_Y, 0, 0,
+                    0, RYU_FACE_HIT_DRAW_W_ARRAY, RYU_FACE_HIT_DRAW_H_ARRAY);
+
   /* ------------------- PUNCHING THINGS -------------------- */
 
   // Getting memory for the sprites

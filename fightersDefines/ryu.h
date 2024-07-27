@@ -38,6 +38,32 @@ extern const short RYU_CROUCH_Y[1];
 #define RYU_CROUCH_HURT_W 35
 #define RYU_CROUCH_HURT_H 53
 
+/* --------------- GOT HIT ---------------- */
+extern const short RYU_HIT_X[4];
+extern const short RYU_HIT_Y[4];
+extern const short RYU_HIT_DRAW_W_ARRAY[4];
+extern const short RYU_HIT_DRAW_H_ARRAY[4];
+
+#define RYU_HIT_DRAW_W 43
+#define RYU_HIT_DRAW_H 76
+
+#define RYU_HIT_HURT_W 34
+#define RYU_HIT_HURT_H 72
+
+
+/* --------------- GOT FACE HIT ---------------- */
+extern const short RYU_FACE_HIT_X[4];
+extern const short RYU_FACE_HIT_Y[4];
+extern const short RYU_FACE_HIT_DRAW_W_ARRAY[4];
+extern const short RYU_FACE_HIT_DRAW_H_ARRAY[4];
+
+#define RYU_FACE_HIT_DRAW_W 48
+#define RYU_FACE_HIT_DRAW_H 79
+
+#define RYU_FACE_HIT_HURT_W 37
+#define RYU_FACE_HIT_HURT_H 79
+
+
 /* -------------- PUNCHING --------------- */
 extern const short RYU_PUNCH_X[3];
 extern const short RYU_PUNCH_Y[3];

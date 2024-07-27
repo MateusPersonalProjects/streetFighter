@@ -22,6 +22,18 @@ const short RYU_CROUCH_Y[1] = {44};
 //  const short RYU_CROUCH_HURT_W[1] = {35};
 //  const short RYU_CROUCH_HURT_H[1] = {53};
 
+/* --------------- GOT HIT ---------------- */
+const short RYU_HIT_X[4] = {5, 53, 106, 163};
+const short RYU_HIT_Y[4] = {760, 761, 771, 754};
+const short RYU_HIT_DRAW_W_ARRAY[4] = {43, 47, 49, 43};
+const short RYU_HIT_DRAW_H_ARRAY[4] = {76, 75, 65, 82};
+
+/* ---------------- GOT FACE HIT -------------- */
+const short RYU_FACE_HIT_X[4] = {217, 271, 328, 391};
+const short RYU_FACE_HIT_Y[4] = {757, 757, 753, 754};
+const short RYU_FACE_HIT_DRAW_W_ARRAY[4] = {48, 52, 58, 43};
+const short RYU_FACE_HIT_DRAW_H_ARRAY[4] = {79, 79, 83, 82};
+
 /* --------------- PUNCHING ------------- */
 const short RYU_PUNCH_X[3] = {3, 52, 117};
 const short RYU_PUNCH_Y[3] = {134, 134, 134};

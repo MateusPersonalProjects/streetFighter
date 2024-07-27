@@ -104,6 +104,8 @@ void updateAnimation(PLAYER *player, long timerCount) {
   if (currentSprite == PUNCHING || currentSprite == KICKING) modAnimation = 3;
   if (currentSprite == STEADY) modAnimation = 10;
   if (currentSprite == WALKING) modAnimation = 4;
+  if (currentSprite == GOT_HIT || currentSprite == GOT_FACE_HIT)
+    modAnimation = 3;
 
   if (maxSpriteFrame != 1) {
     // Updates the frame for the animation
@@ -309,7 +311,8 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                    hurtBox2_Y2)) {
         if (!anotherPlayer->blocking) {
           anotherPlayer->life -= 1;
-          anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
+          anotherPlayer->animationDone = false;
+          anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
         } else
           anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
 
@@ -335,7 +338,8 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                    hurtBox2_Y2)) {
         if (!anotherPlayer->blocking) {
           anotherPlayer->life -= 1;
-          anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
+          anotherPlayer->animationDone = false;
+          anotherPlayer->character->currentSprite = GOT_FACE_HIT;  // GOT_HIT
         } else
           anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
 
