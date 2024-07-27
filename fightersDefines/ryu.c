@@ -1,4 +1,6 @@
 #include "ryu.h"
+
+/* -------------- STEADY ----------------- */
 const short RYU_IDLE_X[4] = {6, 55, 105, 154};
 const short RYU_IDLE_Y[4] = {18, 19, 18, 17};
 // const short RYU_IDLE_DRAW_W[4] = {43, 43, 43, 43};
@@ -21,6 +23,12 @@ const short RYU_CROUCH_Y[1] = {44};
 // const short RYU_CROUCH_DRAW_H[1] = {55};
 //  const short RYU_CROUCH_HURT_W[1] = {35};
 //  const short RYU_CROUCH_HURT_H[1] = {53};
+
+/* --------------- JUMPING ---------------- */
+const short RYU_JUMP_X[7] = {452, 503, 545, 582, 619, 656, 696};
+const short RYU_JUMP_Y[7] = {24, 9, 17, 19, 17, 9, 24};
+const short RYU_JUMP_DRAW_W_ARRAY[7] = {43, 33, 29, 31, 29, 33, 43};
+const short RYU_JUMP_DRAW_H_ARRAY[7] = {75, 90, 78, 67, 78, 90, 75};
 
 /* --------------- GOT HIT ---------------- */
 const short RYU_HIT_X[4] = {5, 53, 106, 163};

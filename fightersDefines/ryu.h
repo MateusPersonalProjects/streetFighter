@@ -38,6 +38,19 @@ extern const short RYU_CROUCH_Y[1];
 #define RYU_CROUCH_HURT_W 35
 #define RYU_CROUCH_HURT_H 53
 
+
+/* --------------- JUMPING ---------------- */
+extern const short RYU_JUMP_X[7];
+extern const short RYU_JUMP_Y[7];
+extern const short RYU_JUMP_DRAW_W_ARRAY[7];
+extern const short RYU_JUMP_DRAW_H_ARRAY[7];
+
+#define RYU_JUMP_DRAW_W 33
+#define RYU_JUMP_DRAW_H 90
+
+#define RYU_JUMP_HURT_W 30
+#define RYU_JUMP_HURT_H 73
+
 /* --------------- GOT HIT ---------------- */
 extern const short RYU_HIT_X[4];
 extern const short RYU_HIT_Y[4];

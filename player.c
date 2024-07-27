@@ -107,17 +107,31 @@ void updateAnimation(PLAYER *player, long timerCount) {
   if (currentSprite == GOT_HIT || currentSprite == GOT_FACE_HIT)
     modAnimation = 3;
 
-  if (maxSpriteFrame != 1) {
-    // Updates the frame for the animation
-    if (!(timerCount % modAnimation))
+  // JUMP must be treated in another way
+  if (currentSprite == JUMPING) {
+    if (!((player->yAcel) % 5))
       (player->character->fighterGraphics->movesSprites[currentSprite]
            .currentFrame)++;
     // If the animation reaches zero again it is done and turned off
     player->character->fighterGraphics->movesSprites[currentSprite]
         .currentFrame %= maxSpriteFrame;
-    if (player->character->fighterGraphics->movesSprites[currentSprite]
-            .currentFrame == 0) {
-      player->animationDone = true;
+
+    player->animationDone = true;
+  }
+
+  else {
+    if (maxSpriteFrame != 1) {
+      // Updates the frame for the animation
+      if (!(timerCount % modAnimation))
+        (player->character->fighterGraphics->movesSprites[currentSprite]
+             .currentFrame)++;
+      // If the animation reaches zero again it is done and turned off
+      player->character->fighterGraphics->movesSprites[currentSprite]
+          .currentFrame %= maxSpriteFrame;
+      if (player->character->fighterGraphics->movesSprites[currentSprite]
+              .currentFrame == 0) {
+        player->animationDone = true;
+      }
     }
   }
 }
@@ -167,12 +181,14 @@ void playerSight(PLAYER *player1, PLAYER *player2) {
 */
 void playerJump(PLAYER *player, PLAYER *anotherPlayer, bool jumping) {
   // If the player is jumping gravity starts to desacelerate him
+  if (jumping) player->character->currentSprite = JUMPING;
   player->yPosition -= player->yAcel;
   if (playersCollision(player, anotherPlayer)) {
     player->yPosition += player->yAcel;
     // if (jumping && ((anotherPlayer->yPosition +
     //                  anotherPlayer->character->height) < FLOOR)) {
     player->yAcel = 0;
+    player->character->currentSprite = STEADY;
     //  player->yAcel -= GRAVITY_COEF;
     //}
     //} else
@@ -208,7 +224,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
   int difPlayerFloor;
 
   // If the player is not on the ground, well he is jumping xD
-  jumping = ((player->yPosition + player->character->height) < FLOOR);
+  jumping = ((player->yPosition + player->character->height) <
+             (FLOOR - PLAYER_VEL - 2));
   // player->crouching = false;
   // player->blocking = false;
 
@@ -224,8 +241,10 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
   if (player->animationDone) {
     if (keyboardKeys[whichKey[JUMP]] && !jumping) {
       // Give me some boost to reach the skyies o/
-      player->character->currentSprite = STEADY;  // JUMPING
+      player->character->currentSprite = JUMPING;  // JUMPING
       player->yAcel = PLAYER_VEL * 3;
+      player->character->fighterGraphics->movesSprites[JUMPING].currentFrame =
+          0;
     }
 
     if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
@@ -378,10 +397,11 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
   float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
 
-  al_draw_rectangle(hurtBox_X1, hurtBox_Y1, hurtBox_X2, hurtBox_Y2, color, 2.0);
+  // al_draw_rectangle(hurtBox_X1, hurtBox_Y1, hurtBox_X2, hurtBox_Y2,
+  // color, 2.0);
 
-  al_draw_rectangle(hurtBox_X2, hurtBox_Y1 + 15, hurtBox_X2 + 10,
-                    hurtBox_Y1 + 15 + 6, al_map_rgb(255, 255, 255), 2);
+  // al_draw_rectangle(hurtBox_X2, hurtBox_Y1 + 15, hurtBox_X2 + 10,
+  //                   hurtBox_Y1 + 15 + 6, al_map_rgb(255, 255, 255), 2);
 
   /* ------------------------------------------------------- */
 
@@ -398,7 +418,7 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
         player->xPosition, player->yPosition, ALLEGRO_FLIP_HORIZONTAL);
 
   // SHOWS ME THE MID POINT OF THE DRAW BOX
-  al_draw_filled_circle(midX, midY, 2.0, color);
+  // al_draw_filled_circle(midX, midY, 2.0, color);
 
   // ONDE VOU COLOCAR ESSES RESETS????
   // SÓ CHAMO ESSES RESETS QUANDO A ANIMAÇÃO DE UMA SPRITE TERMINAR

@@ -105,6 +105,17 @@ FIGHTER_SPRITES* initRyu() {
   movimentSpritesInit(ryu, WALKING, 5, 0, RYU_WALK_DRAW_H, RYU_WALK_DRAW_W,
                       RYU_WALK_HURT_H, RYU_WALK_HURT_W, RYU_WALK_X, RYU_WALK_Y);
 
+  /* -------------------- JUMPING --------------------- */
+
+  // Getting memory for the sprites
+  ryu->movesSprites[JUMPING].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 7);
+  if (ryu->movesSprites[JUMPING].sprites == NULL) exit(1);
+
+  attackSpritesInit(ryu, JUMPING, 7, 0, RYU_JUMP_DRAW_H, RYU_JUMP_DRAW_W,
+                    RYU_JUMP_HURT_H, RYU_JUMP_HURT_W, RYU_JUMP_X, RYU_JUMP_Y, 0,
+                    0, 0, RYU_JUMP_DRAW_W_ARRAY, RYU_JUMP_DRAW_H_ARRAY);
+
   /* ------------------- CROUCHING THINGS ------------------- */
 
   // Getting memory for the sprites
