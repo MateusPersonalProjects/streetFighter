@@ -54,6 +54,7 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
 
 /*
   Updates the width and height of the player
+  This function must be called every time a fighter changes sprites
 */
 void updateWidthHeight(PLAYER *player) {
   // Shortcuts
@@ -83,22 +84,39 @@ void updateWidthHeight(PLAYER *player) {
   player->character->hurtHeight = currentHurtH;
 }
 
+/*
+  This function updates the state of an attack animation going to the next
+  frame,and if the frames return to 0 the animation is turned off
+*/
 void updateAnimation(PLAYER *player, long timerCount) {
+  // Get the current sprite
   SPRITE_LIST currentSprite = player->character->currentSprite;
+  // Get the current frame the sprite is at
   short currentSpriteFrame =
       player->character->fighterGraphics->movesSprites[currentSprite]
           .currentFrame;
+  // Get the max frame the animation can reach out
   short maxSpriteFrame =
       player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
 
-  if (!(timerCount % 3))
-    (player->character->fighterGraphics->movesSprites[currentSprite]
-         .currentFrame)++;
-  player->character->fighterGraphics->movesSprites[currentSprite]
-      .currentFrame %= maxSpriteFrame;
-  if (player->character->fighterGraphics->movesSprites[currentSprite]
-          .currentFrame == 0) {
-    player->animationDone = true;
+  int modAnimation;
+
+  if (currentSprite == PUNCHING || currentSprite == KICKING) modAnimation = 3;
+  if (currentSprite == STEADY) modAnimation = 10;
+  if (currentSprite == WALKING) modAnimation = 4;
+
+  if (maxSpriteFrame != 1) {
+    // Updates the frame for the animation
+    if (!(timerCount % modAnimation))
+      (player->character->fighterGraphics->movesSprites[currentSprite]
+           .currentFrame)++;
+    // If the animation reaches zero again it is done and turned off
+    player->character->fighterGraphics->movesSprites[currentSprite]
+        .currentFrame %= maxSpriteFrame;
+    if (player->character->fighterGraphics->movesSprites[currentSprite]
+            .currentFrame == 0) {
+      player->animationDone = true;
+    }
   }
 }
 
@@ -186,8 +204,6 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
                            long timerCount) {
   bool jumping;
   int difPlayerFloor;
-  SPRITE_LIST currentSprite;
-  short maxSpriteFrame;
 
   // If the player is not on the ground, well he is jumping xD
   jumping = ((player->yPosition + player->character->height) < FLOOR);
@@ -202,59 +218,39 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     // player->character->currentSprite = STEADY;
   }
 
+  // IF THERE IS AN ATTACK ANIMATION ROLLING HE CANNOT CHANGE POSITION
   if (player->animationDone) {
-    if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
-      // If player is a moonwalker, well the king of pop gives him the power to
-      // block xD
-      if (!player->facingRight) player->blocking = true;
-
-      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
-      currentSprite = player->character->currentSprite;
-      maxSpriteFrame =
-          player->character->fighterGraphics->movesSprites[currentSprite]
-              .numFrames;
-
-      player->xPosition += PLAYER_VEL;
-      if (!(timerCount % 4))
-        (player->character->fighterGraphics->movesSprites[currentSprite]
-             .currentFrame)++;
-      player->character->fighterGraphics->movesSprites[currentSprite]
-          .currentFrame %= maxSpriteFrame;
-      if (playersCollision(player, anotherPlayer))
-        player->xPosition -= PLAYER_VEL;
-    }
-    if (keyboardKeys[whichKey[MOVE_LEFT]]) {
-      // If player is a moonwalker, well the king of pop gives him the power to
-      // block xD
-      if (player->facingRight) player->blocking = true;
-
-      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
-      currentSprite = player->character->currentSprite;
-      maxSpriteFrame =
-          player->character->fighterGraphics->movesSprites[currentSprite]
-              .numFrames;
-
-      player->xPosition -= PLAYER_VEL;
-      if (!(timerCount % 4))
-        (player->character->fighterGraphics->movesSprites[currentSprite]
-             .currentFrame)++;
-      player->character->fighterGraphics->movesSprites[currentSprite]
-          .currentFrame %= maxSpriteFrame;
-
-      if (playersCollision(player, anotherPlayer))
-        player->xPosition += PLAYER_VEL;
-    }
     if (keyboardKeys[whichKey[JUMP]] && !jumping) {
       // Give me some boost to reach the skyies o/
       player->character->currentSprite = STEADY;  // JUMPING
       player->yAcel = PLAYER_VEL * 3;
     }
+
     if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
       player->crouching = true;
       player->character->currentSprite = CROUCHING;  // CROUNCHING
     }
-  } else
-    updateAnimation(player, timerCount);
+
+    if (!player->crouching && keyboardKeys[whichKey[MOVE_RIGHT]]) {
+      // If player is a moonwalker, well the king of pop gives him the power to
+      // block xD
+      if (!player->facingRight) player->blocking = true;
+      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+      player->xPosition += PLAYER_VEL;
+      if (playersCollision(player, anotherPlayer))
+        player->xPosition -= PLAYER_VEL;
+    }
+
+    if (!player->crouching && keyboardKeys[whichKey[MOVE_LEFT]]) {
+      // If player is a moonwalker, well the king of pop gives him the power to
+      // block xD
+      if (player->facingRight) player->blocking = true;
+      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+      player->xPosition -= PLAYER_VEL;
+      if (playersCollision(player, anotherPlayer))
+        player->xPosition += PLAYER_VEL;
+    }
+  }
   updateWidthHeight(player);
 
   // Changes y position (the head position, because he is croucing right)
@@ -296,13 +292,47 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   float hurtBox2_Y1 = (midY2 - (anotherPlayer->character->hurtHeight / 2.0));
   float hurtBox2_Y2 = (midY2 + (anotherPlayer->character->hurtHeight / 2.0));
 
+  // IF THERE IS AN ATTACK ANIMATION ROLLING HE CANNOT CHANGE ATTACK UNTIL IT
+  // FINISHES OFF
   if (player->animationDone) {
     if (keyboardKeys[whichKey[PUNCH]]) {
       player->animationDone = false;
       player->character->currentSprite = PUNCHING;  // PUNCHING
-      if (punch(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
-                player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
-                hurtBox2_Y2)) {
+      if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                   player->character->fighterGraphics->movesSprites[PUNCHING]
+                       .hitBoxWidth,
+                   player->character->fighterGraphics->movesSprites[PUNCHING]
+                       .hitBox_Y,
+                   player->character->fighterGraphics->movesSprites[PUNCHING]
+                       .hitBoxHeight,
+                   player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+                   hurtBox2_Y2)) {
+        if (!anotherPlayer->blocking) {
+          anotherPlayer->life -= 1;
+          anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
+        } else
+          anotherPlayer->character->currentSprite = STEADY;  // DEFENDING
+
+        // knock back thing
+        if (anotherPlayer->facingRight)
+          anotherPlayer->xPosition -= 2;
+        else
+          anotherPlayer->xPosition += 2;
+      }
+    }
+
+    if (keyboardKeys[whichKey[KICK]]) {
+      player->animationDone = false;
+      player->character->currentSprite = KICKING;  // PUNCHING
+      if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                   player->character->fighterGraphics->movesSprites[KICKING]
+                       .hitBoxWidth,
+                   player->character->fighterGraphics->movesSprites[KICKING]
+                       .hitBox_Y,
+                   player->character->fighterGraphics->movesSprites[KICKING]
+                       .hitBoxHeight,
+                   player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+                   hurtBox2_Y2)) {
         if (!anotherPlayer->blocking) {
           anotherPlayer->life -= 1;
           anotherPlayer->character->currentSprite = STEADY;  // GOT_HIT
@@ -325,20 +355,15 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
 void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   ALLEGRO_COLOR color = playerColor;
 
-  // al_draw_filled_rectangle(player->xPosition, player->yPosition,
-  //                          (player->character->width + player->xPosition),
-  //                          (player->yPosition + player->character->height),
-  //                          color);
-
-  // SHORTCUTS TO ACCESS SOME VARIABLES
+  // Get the current sprite
   SPRITE_LIST currentSprite = player->character->currentSprite;
-
-  short maxSpriteFrame =
-      player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
-
+  // Get the current frame the sprite is at
   short currentSpriteFrame =
       player->character->fighterGraphics->movesSprites[currentSprite]
           .currentFrame;
+  // Get the max frame the animation can reach out
+  short maxSpriteFrame =
+      player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
 
   /* ------------------ FOR TESTS ONLY ---------------- */
   float midX = (player->xPosition + (player->character->width / 2.0));
@@ -356,48 +381,6 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
 
   /* ------------------------------------------------------- */
 
-  int playerMaxX = (player->xPosition + player->character->width);
-  // ANIMATIONS AND CONFIGURATIONS FOR DRAW SPRITES
-  switch (player->character->currentSprite) {
-    // STEADY ANIMATION
-    case (STEADY):
-      if (!(timerIdle % 10)) {
-        (player->character->fighterGraphics->movesSprites[currentSprite]
-             .currentFrame)++;
-        player->character->fighterGraphics->movesSprites[currentSprite]
-            .currentFrame %= maxSpriteFrame;
-      }
-      break;
-
-    case (WALKING):
-      break;
-
-    case (JUMPING):
-      break;
-
-    case (CROUCHING):
-      break;
-
-    case (DEFENDING):
-      color = al_map_rgb(10, 180, 10);
-      break;
-
-    case (GOT_HIT):
-      color = al_map_rgb(255, 255, 255);
-      break;
-
-    case (PUNCHING):
-      if (player->facingRight)
-        al_draw_filled_rectangle(playerMaxX, player->yPosition + 15,
-                                 playerMaxX + 10, player->yPosition + 21,
-                                 al_map_rgb(255, 255, 255));
-      else
-        al_draw_filled_rectangle(player->xPosition - 10, player->yPosition + 15,
-                                 player->xPosition + 1, player->yPosition + 21,
-                                 al_map_rgb(255, 255, 255));
-      break;
-  }
-
   // DRAW THE PLAYERS
   if (player->facingRight)
     al_draw_bitmap(
@@ -410,7 +393,9 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
             .sprites[currentSpriteFrame],
         player->xPosition, player->yPosition, ALLEGRO_FLIP_HORIZONTAL);
 
+  // SHOWS ME THE MID POINT OF THE DRAW BOX
   al_draw_filled_circle(midX, midY, 2.0, color);
+
   // ONDE VOU COLOCAR ESSES RESETS????
   // SÓ CHAMO ESSES RESETS QUANDO A ANIMAÇÃO DE UMA SPRITE TERMINAR
   if (player->animationDone) {

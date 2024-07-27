@@ -24,6 +24,7 @@ typedef enum{
   MOVE_LEFT,
   MOVE_RIGHT,
   PUNCH,
+  KICK
 } BASIC_MOVE;
 
 /*
@@ -36,6 +37,12 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
  Reset the player
 */
 void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight, bool matchEnd);
+
+/*
+  This function updates the state of an attack animation going to the next
+  frame,and if the frames return to 0 the animation is turned off
+*/
+void updateAnimation(PLAYER *player, long timerCount);
 
 /*
   Update things for player

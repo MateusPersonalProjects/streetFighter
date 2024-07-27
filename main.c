@@ -86,12 +86,13 @@ int main(void) {
   initSelectionBoxes(characSelectBoxes, characSelectSprites);
 
   PLAYER *player1;
-  unsigned char p1Keys[5] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
-                             ALLEGRO_KEY_D, ALLEGRO_KEY_G};
+  unsigned char p1Keys[6] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
+                             ALLEGRO_KEY_D, ALLEGRO_KEY_G, ALLEGRO_KEY_H};
   player1 = initPlayer(NULL, PLAYER_1_INIT_POSIT_X, 0, true);
   PLAYER *player2;
-  unsigned char p2Keys[5] = {ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_LEFT,
-                             ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_U};
+  unsigned char p2Keys[6] = {ALLEGRO_KEY_UP,   ALLEGRO_KEY_DOWN,
+                             ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT,
+                             ALLEGRO_KEY_U,    ALLEGRO_KEY_I};
   player2 = initPlayer(NULL, PLAYER_2_INIT_POSIT_X, 0, false);
 
   // STAGE THINGS
@@ -258,10 +259,12 @@ int main(void) {
 
             playerUpdateAttacks(player1, player2, keyboardKeys, p1Keys);
             playerUpdateAttacks(player2, player1, keyboardKeys, p2Keys);
-            matchInterfaceUpdate(matchInterface, player1, player2);
             controlON = matchUpdate(matchInterface, player1, player2);
           }
 
+          updateAnimation(player1, al_get_timer_count(timer));
+          updateAnimation(player2, al_get_timer_count(timer));
+          matchInterfaceUpdate(matchInterface, player1, player2);
           if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
           redraw = true;
           break;

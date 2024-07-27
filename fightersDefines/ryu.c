@@ -25,3 +25,11 @@ const short RYU_CROUCH_Y[1] = {44};
 /* --------------- PUNCHING ------------- */
 const short RYU_PUNCH_X[3] = {3, 52, 117};
 const short RYU_PUNCH_Y[3] = {134, 134, 134};
+const short RYU_PUNCH_DRAW_W_ARRAY[3] = {43, 57, 43};
+const short RYU_PUNCH_DRAW_H_ARRAY[3] = {81, 81, 81};
+
+/* --------------- KICKING --------------- */
+const short RYU_KICK_X[3] = {6, 62, 135};
+const short RYU_KICK_Y[3] = {261, 259, 261};
+const short RYU_KICK_DRAW_W_ARRAY[3] = {49, 67, 49};
+const short RYU_KICK_DRAW_H_ARRAY[3] = {85, 87, 85};

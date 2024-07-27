@@ -12,9 +12,9 @@ bool hitCheck(int p1x1, int p1x2, int p1y1, int p1y2, int hitBoxWidth,
 
   // The next variables are relationed with the hitbox position
   int hitBoxStartX_FR = p1x2;
-  int hitBoxStartX_FL = p1x2 - hitBoxWidth;
+  int hitBoxStartX_FL = p1x1 - hitBoxWidth;
   int hitBoxEndX_FR = p1x2 + hitBoxWidth;
-  int hitBoxEndX_FL = p1x2 - hitBoxWidth;
+  int hitBoxEndX_FL = p1x1;
 
   int hitBoxStartY = p1y1 + hitBox_Y;
   int hitBoxEndY = hitBoxStartY + hitBoxHeight;

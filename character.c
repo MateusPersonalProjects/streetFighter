@@ -23,6 +23,57 @@ CHARACTER* characterInit(FIGHTER_SPRITES* fighterSprite) {
   return newChar;
 }
 
+void movimentSpritesInit(FIGHTER_SPRITES* fighter, SPRITE_LIST sprite,
+                         short numFrames, short currentFrame, short draw_h,
+                         short draw_w, short hurt_h, short hurt_w,
+                         const short* idle_x, const short* idle_y) {
+  // Gets information for animations
+  fighter->movesSprites[sprite].numFrames = numFrames;
+  fighter->movesSprites[sprite].currentFrame = currentFrame;
+
+  // Gets information for the draw box
+  fighter->movesSprites[sprite].drawBoxHeight = draw_h;
+  fighter->movesSprites[sprite].drawBoxWidth = draw_w;
+
+  // Gets information for the hurt box
+  fighter->movesSprites[sprite].hurtBoxHeight = hurt_h;
+  fighter->movesSprites[sprite].hurtBoxWidth = hurt_w;
+
+  // Loop to grab the sprites
+  for (int i = 0; i < numFrames; i++)
+    fighter->movesSprites[sprite].sprites[i] =
+        grabSprite(fighter->sheet, idle_x[i], idle_y[i], draw_w, draw_h);
+}
+
+void attackSpritesInit(FIGHTER_SPRITES* fighter, SPRITE_LIST sprite,
+                       short numFrames, short currentFrame, short draw_h,
+                       short draw_w, short hurt_h, short hurt_w,
+                       const short* idle_x, const short* idle_y, short hit_w,
+                       short hit_h, short hit_y, const short* draw_w_array,
+                       const short* draw_h_array) {
+  // Gets information for animations
+  fighter->movesSprites[sprite].numFrames = numFrames;
+  fighter->movesSprites[sprite].currentFrame = currentFrame;
+
+  // Gets information for the draw box
+  fighter->movesSprites[sprite].drawBoxHeight = draw_h;
+  fighter->movesSprites[sprite].drawBoxWidth = draw_w;
+
+  // Gets information for the hurt box
+  fighter->movesSprites[sprite].hurtBoxHeight = hurt_h;
+  fighter->movesSprites[sprite].hurtBoxWidth = hurt_w;
+
+  // Gets information for the hit box
+  fighter->movesSprites[sprite].hitBoxWidth = hit_w;
+  fighter->movesSprites[sprite].hitBoxHeight = hit_h;
+  fighter->movesSprites[sprite].hitBox_Y = hit_y;
+
+  // Loop to grab the sprites
+  for (int i = 0; i < numFrames; i++)
+    fighter->movesSprites[sprite].sprites[i] = grabSprite(
+        fighter->sheet, idle_x[i], idle_y[i], draw_w_array[i], draw_h_array[i]);
+}
+
 /*
   Initialize RYU
 */
@@ -35,96 +86,58 @@ FIGHTER_SPRITES* initRyu() {
   al_convert_mask_to_alpha(ryu->sheet, al_map_rgb(112, 136, 136));
 
   /* ------------------- IDLE THINGS ---------------------- */
-  ryu->movesSprites[STEADY].numFrames = 4;
-  ryu->movesSprites[STEADY].currentFrame = 0;
-
-  // Draw box width and height information
-  ryu->movesSprites[STEADY].drawBoxHeight = RYU_IDLE_DRAW_H;
-  ryu->movesSprites[STEADY].drawBoxWidth = RYU_IDLE_DRAW_W;
-
-  // Hurt box width and height information
-  ryu->movesSprites[STEADY].hurtBoxHeight = RYU_IDLE_HURT_H;
-  ryu->movesSprites[STEADY].hurtBoxWidth = RYU_IDLE_HURT_W;
 
   // Getting memory for idle bitmaps
   ryu->movesSprites[STEADY].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ryu->movesSprites[STEADY].sprites == NULL) exit(1);
 
-  for (int i = 0; i < 4; i++)
-    ryu->movesSprites[STEADY].sprites[i] =
-        grabSprite(ryu->sheet, RYU_IDLE_X[i], RYU_IDLE_Y[i], RYU_IDLE_DRAW_W,
-                   RYU_IDLE_DRAW_H);
+  movimentSpritesInit(ryu, STEADY, 4, 0, RYU_IDLE_DRAW_H, RYU_IDLE_DRAW_W,
+                      RYU_IDLE_HURT_H, RYU_IDLE_HURT_W, RYU_IDLE_X, RYU_IDLE_Y);
 
   /* ------------------- WALKING THINGS -------------------- */
-  ryu->movesSprites[WALKING].numFrames = 5;
-  ryu->movesSprites[WALKING].currentFrame = 0;
-
-  // Draw box width and height information
-  ryu->movesSprites[WALKING].drawBoxHeight = RYU_WALK_DRAW_H;
-  ryu->movesSprites[WALKING].drawBoxWidth = RYU_WALK_DRAW_W;
-
-  // Hurt box width and height information
-  ryu->movesSprites[WALKING].hurtBoxHeight = RYU_WALK_HURT_H;
-  ryu->movesSprites[WALKING].hurtBoxWidth = RYU_WALK_HURT_W;
 
   // Getting memory for the sprites
   ryu->movesSprites[WALKING].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 5);
   if (ryu->movesSprites[WALKING].sprites == NULL) exit(1);
 
-  for (int i = 0; i < 5; i++)
-    ryu->movesSprites[WALKING].sprites[i] =
-        grabSprite(ryu->sheet, RYU_WALK_X[i], RYU_WALK_Y[i], RYU_WALK_DRAW_W,
-                   RYU_WALK_DRAW_H);
+  movimentSpritesInit(ryu, WALKING, 5, 0, RYU_WALK_DRAW_H, RYU_WALK_DRAW_W,
+                      RYU_WALK_HURT_H, RYU_WALK_HURT_W, RYU_WALK_X, RYU_WALK_Y);
 
   /* ------------------- CROUCHING THINGS ------------------- */
-  ryu->movesSprites[CROUCHING].numFrames = 1;
-  ryu->movesSprites[CROUCHING].currentFrame = 0;
-
-  // Draw box width and height information
-  ryu->movesSprites[CROUCHING].drawBoxHeight = RYU_CROUCH_DRAW_H;
-  ryu->movesSprites[CROUCHING].drawBoxWidth = RYU_CROUCH_DRAW_W;
-
-  // Hurt box width and height information
-  ryu->movesSprites[CROUCHING].hurtBoxHeight = RYU_CROUCH_HURT_H;
-  ryu->movesSprites[CROUCHING].hurtBoxWidth = RYU_CROUCH_HURT_W;
 
   // Getting memory for the sprites
   ryu->movesSprites[CROUCHING].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 1);
   if (ryu->movesSprites[CROUCHING].sprites == NULL) exit(1);
 
-  ryu->movesSprites[CROUCHING].sprites[0] =
-      grabSprite(ryu->sheet, RYU_CROUCH_X[0], RYU_CROUCH_Y[0],
-                 RYU_CROUCH_DRAW_W, RYU_CROUCH_DRAW_H);
+  movimentSpritesInit(ryu, CROUCHING, 1, 0, RYU_CROUCH_DRAW_H,
+                      RYU_CROUCH_DRAW_W, RYU_CROUCH_HURT_H, RYU_CROUCH_HURT_W,
+                      RYU_CROUCH_X, RYU_CROUCH_Y);
 
   /* ------------------- PUNCHING THINGS -------------------- */
-  ryu->movesSprites[PUNCHING].numFrames = 3;
-  ryu->movesSprites[PUNCHING].currentFrame = 0;
-
-  // Draw box width and height information
-  ryu->movesSprites[PUNCHING].drawBoxHeight = RYU_PUNCH_DRAW_H;
-  ryu->movesSprites[PUNCHING].drawBoxWidth = RYU_PUNCH_DRAW_W;
-
-  // Hurt box width and height information
-  ryu->movesSprites[PUNCHING].hurtBoxHeight = RYU_PUNCH_HURT_H;
-  ryu->movesSprites[PUNCHING].hurtBoxWidth = RYU_PUNCH_HURT_W;
-
-  ryu->movesSprites[PUNCHING].hitBox_Y = 17;
-  ryu->movesSprites[PUNCHING].hitBoxWidth = 19;
-  ryu->movesSprites[PUNCHING].hitBoxHeight = 8;
 
   // Getting memory for the sprites
   ryu->movesSprites[PUNCHING].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (ryu->movesSprites[PUNCHING].sprites == NULL) exit(1);
 
-  for (int i = 0; i < 3; i++)
-    ryu->movesSprites[PUNCHING].sprites[i] =
-        grabSprite(ryu->sheet, RYU_PUNCH_X[i], RYU_PUNCH_Y[i], RYU_PUNCH_DRAW_W,
-                   RYU_PUNCH_DRAW_H);
+  attackSpritesInit(ryu, PUNCHING, 3, 0, RYU_PUNCH_DRAW_H, RYU_PUNCH_DRAW_W,
+                    RYU_PUNCH_HURT_H, RYU_PUNCH_HURT_W, RYU_PUNCH_X,
+                    RYU_PUNCH_Y, 19, 8, 17, RYU_PUNCH_DRAW_W_ARRAY,
+                    RYU_PUNCH_DRAW_H_ARRAY);
 
+  /* ------------------- KICKING THINGS ----------------------- */
+
+  // Getting memory for sprites
+  ryu->movesSprites[KICKING].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
+  if (ryu->movesSprites[KICKING].sprites == NULL) exit(1);
+
+  attackSpritesInit(ryu, KICKING, 3, 0, RYU_KICK_DRAW_H, RYU_KICK_DRAW_W,
+                    RYU_KICK_HURT_H, RYU_KICK_HURT_W, RYU_KICK_X, RYU_KICK_Y,
+                    28, 12, 1, RYU_KICK_DRAW_W_ARRAY, RYU_KICK_DRAW_H_ARRAY);
   return ryu;
 }
 

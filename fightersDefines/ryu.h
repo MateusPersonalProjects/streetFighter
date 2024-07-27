@@ -41,11 +41,25 @@ extern const short RYU_CROUCH_Y[1];
 /* -------------- PUNCHING --------------- */
 extern const short RYU_PUNCH_X[3];
 extern const short RYU_PUNCH_Y[3];
+extern const short RYU_PUNCH_DRAW_W_ARRAY[3];
+extern const short RYU_PUNCH_DRAW_H_ARRAY[3];
 
 #define RYU_PUNCH_DRAW_W 57
 #define RYU_PUNCH_DRAW_H 81
 
 #define RYU_PUNCH_HURT_W 37
 #define RYU_PUNCH_HURT_H 79
+
+/* -------------- KICKING --------------- */
+extern const short RYU_KICK_X[3];
+extern const short RYU_KICK_Y[3];
+extern const short RYU_KICK_DRAW_W_ARRAY[3];
+extern const short RYU_KICK_DRAW_H_ARRAY[3];
+
+#define RYU_KICK_DRAW_W 49
+#define RYU_KICK_DRAW_H 85
+
+#define RYU_KICK_HURT_W 39
+#define RYU_KICK_HURT_H 80
 
 #endif
