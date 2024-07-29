@@ -78,6 +78,8 @@ FIGHTER_SPRITES* initRyu() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ryu->movesSprites[STEADY].sprites == NULL) exit(1);
 
+  ryu->movesSprites[STEADY].modAnimation = 10;
+
   movimentSpritesInit(ryu, STEADY, 4, 0, RYU_IDLE_DRAW_H, RYU_IDLE_DRAW_W,
                       RYU_IDLE_HURT_H, RYU_IDLE_HURT_W, RYU_IDLE_X, RYU_IDLE_Y);
 
@@ -88,6 +90,8 @@ FIGHTER_SPRITES* initRyu() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 5);
   if (ryu->movesSprites[WALKING].sprites == NULL) exit(1);
 
+  ryu->movesSprites[WALKING].modAnimation = 4;
+
   movimentSpritesInit(ryu, WALKING, 5, 0, RYU_WALK_DRAW_H, RYU_WALK_DRAW_W,
                       RYU_WALK_HURT_H, RYU_WALK_HURT_W, RYU_WALK_X, RYU_WALK_Y);
 
@@ -97,6 +101,8 @@ FIGHTER_SPRITES* initRyu() {
   ryu->movesSprites[JUMPING].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 7);
   if (ryu->movesSprites[JUMPING].sprites == NULL) exit(1);
+
+  ryu->movesSprites[JUMPING].modAnimation = 5;
 
   attackSpritesInit(ryu, JUMPING, 7, 0, RYU_JUMP_DRAW_H, RYU_JUMP_DRAW_W,
                     RYU_JUMP_HURT_H, RYU_JUMP_HURT_W, RYU_JUMP_X, RYU_JUMP_Y, 0,
@@ -120,6 +126,8 @@ FIGHTER_SPRITES* initRyu() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ryu->movesSprites[GOT_HIT].sprites == NULL) exit(1);
 
+  ryu->movesSprites[GOT_HIT].modAnimation = 3;
+
   attackSpritesInit(ryu, GOT_HIT, 4, 0, RYU_HIT_DRAW_H, RYU_HIT_DRAW_W,
                     RYU_HIT_HURT_H, RYU_HIT_HURT_W, RYU_HIT_X, RYU_HIT_Y, 0, 0,
                     0, RYU_HIT_DRAW_W_ARRAY, RYU_HIT_DRAW_H_ARRAY);
@@ -130,6 +138,8 @@ FIGHTER_SPRITES* initRyu() {
   ryu->movesSprites[GOT_FACE_HIT].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ryu->movesSprites[GOT_FACE_HIT].sprites == NULL) exit(1);
+
+  ryu->movesSprites[GOT_FACE_HIT].modAnimation = 3;
 
   attackSpritesInit(ryu, GOT_FACE_HIT, 4, 0, RYU_FACE_HIT_DRAW_H,
                     RYU_FACE_HIT_DRAW_W, RYU_FACE_HIT_HURT_H,
@@ -156,6 +166,8 @@ FIGHTER_SPRITES* initRyu() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (ryu->movesSprites[PUNCHING].sprites == NULL) exit(1);
 
+  ryu->movesSprites[PUNCHING].modAnimation = 3;
+
   attackSpritesInit(ryu, PUNCHING, 3, 0, RYU_PUNCH_DRAW_H, RYU_PUNCH_DRAW_W,
                     RYU_PUNCH_HURT_H, RYU_PUNCH_HURT_W, RYU_PUNCH_X,
                     RYU_PUNCH_Y, 19, 8, 17, RYU_PUNCH_DRAW_W_ARRAY,
@@ -167,6 +179,8 @@ FIGHTER_SPRITES* initRyu() {
   ryu->movesSprites[KICKING].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (ryu->movesSprites[KICKING].sprites == NULL) exit(1);
+
+  ryu->movesSprites[KICKING].modAnimation = 3;
 
   attackSpritesInit(ryu, KICKING, 3, 0, RYU_KICK_DRAW_H, RYU_KICK_DRAW_W,
                     RYU_KICK_HURT_H, RYU_KICK_HURT_W, RYU_KICK_X, RYU_KICK_Y,

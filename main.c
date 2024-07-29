@@ -1,7 +1,4 @@
-// gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
-// environment.c matchInterface.c attacks_SpecialMoves.c characSelecMenu.c
-// ./fightersDefines/ryu.c $(pkg-config allegro-5 allegro_primitives-5
-// allegro_font-5 allegro_image-5 --libs --cflags)
+// gcc main.c -o teste display.c character.c keyboard.c misc.c player.c environment.c matchInterface.c attacks_SpecialMoves.c characSelecMenu.c ./fightersDefines/ryu.c ./fightersDefines/ken.c ./fightersDefines/chunli.c $(pkg-config allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
@@ -17,6 +14,7 @@
 
 #include "./fightersDefines/ken.h"
 #include "./fightersDefines/ryu.h"
+#include "./fightersDefines/chunli.h"
 #include "characSelecMenu.h"
 #include "character.h"
 #include "display.h"
@@ -64,7 +62,7 @@ int main(void) {
   // Test things
   FIGHTER_SPRITES *ryuSprites = initRyu();
   FIGHTER_SPRITES *kenSprites = initKen();
-  FIGHTER_SPRITES *chunliSprites = initRyu();
+  FIGHTER_SPRITES *chunliSprites = initChunli();
   FIGHTER_SPRITES *guileSprites = initRyu();
 
   CHARACTER *allCharacters[4];

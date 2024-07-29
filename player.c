@@ -98,17 +98,19 @@ void updateAnimation(PLAYER *player, long timerCount) {
   short maxSpriteFrame =
       player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
 
-  int modAnimation;
+  int modAnimation =
+      player->character->fighterGraphics->movesSprites[currentSprite]
+          .modAnimation;
 
-  if (currentSprite == PUNCHING || currentSprite == KICKING) modAnimation = 3;
-  if (currentSprite == STEADY) modAnimation = 10;
-  if (currentSprite == WALKING) modAnimation = 4;
-  if (currentSprite == GOT_HIT || currentSprite == GOT_FACE_HIT)
-    modAnimation = 3;
+  // if (currentSprite == PUNCHING || currentSprite == KICKING) modAnimation =
+  // 3; if (currentSprite == STEADY) modAnimation = 10; if (currentSprite ==
+  // WALKING) modAnimation = 4; if (currentSprite == GOT_HIT || currentSprite ==
+  // GOT_FACE_HIT)
+  //   modAnimation = 3;
 
   // JUMP must be treated in another way
   if (currentSprite == JUMPING) {
-    if (!((player->yAcel) % 5))
+    if (!((player->yAcel) % modAnimation))
       (player->character->fighterGraphics->movesSprites[currentSprite]
            .currentFrame)++;
     // If the animation reaches zero again it is done and turned off

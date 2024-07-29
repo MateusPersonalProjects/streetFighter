@@ -20,6 +20,7 @@ typedef enum{
 typedef struct{
   short numFrames;
   short currentFrame;
+  short modAnimation;
   short drawBoxHeight;
   short drawBoxWidth;
   short hurtBoxHeight;

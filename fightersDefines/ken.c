@@ -78,6 +78,8 @@ FIGHTER_SPRITES* initKen() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ken->movesSprites[STEADY].sprites == NULL) exit(1);
 
+  ken->movesSprites[STEADY].modAnimation = 10;
+
   movimentSpritesInit(ken, STEADY, 4, 0, KEN_IDLE_DRAW_H, KEN_IDLE_DRAW_W,
                       KEN_IDLE_HURT_H, KEN_IDLE_HURT_W, KEN_IDLE_X, KEN_IDLE_Y);
 
@@ -88,6 +90,8 @@ FIGHTER_SPRITES* initKen() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 5);
   if (ken->movesSprites[WALKING].sprites == NULL) exit(1);
 
+  ken->movesSprites[WALKING].modAnimation = 4;
+
   movimentSpritesInit(ken, WALKING, 5, 0, KEN_WALK_DRAW_H, KEN_WALK_DRAW_W,
                       KEN_WALK_HURT_H, KEN_WALK_HURT_W, KEN_WALK_X, KEN_WALK_Y);
 
@@ -97,6 +101,8 @@ FIGHTER_SPRITES* initKen() {
   ken->movesSprites[JUMPING].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 7);
   if (ken->movesSprites[JUMPING].sprites == NULL) exit(1);
+
+  ken->movesSprites[JUMPING].modAnimation = 5;
 
   attackSpritesInit(ken, JUMPING, 7, 0, KEN_JUMP_DRAW_H, KEN_JUMP_DRAW_W,
                     KEN_JUMP_HURT_H, KEN_JUMP_HURT_W, KEN_JUMP_X, KEN_JUMP_Y, 0,
@@ -120,6 +126,8 @@ FIGHTER_SPRITES* initKen() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ken->movesSprites[GOT_HIT].sprites == NULL) exit(1);
 
+  ken->movesSprites[GOT_HIT].modAnimation = 3;
+
   attackSpritesInit(ken, GOT_HIT, 4, 0, KEN_HIT_DRAW_H, KEN_HIT_DRAW_W,
                     KEN_HIT_HURT_H, KEN_HIT_HURT_W, KEN_HIT_X, KEN_HIT_Y, 0, 0,
                     0, KEN_HIT_DRAW_W_ARRAY, KEN_HIT_DRAW_H_ARRAY);
@@ -130,6 +138,8 @@ FIGHTER_SPRITES* initKen() {
   ken->movesSprites[GOT_FACE_HIT].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ken->movesSprites[GOT_FACE_HIT].sprites == NULL) exit(1);
+
+  ken->movesSprites[GOT_FACE_HIT].modAnimation = 3;
 
   attackSpritesInit(ken, GOT_FACE_HIT, 4, 0, KEN_FACE_HIT_DRAW_H,
                     KEN_FACE_HIT_DRAW_W, KEN_FACE_HIT_HURT_H,
@@ -156,6 +166,8 @@ FIGHTER_SPRITES* initKen() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (ken->movesSprites[PUNCHING].sprites == NULL) exit(1);
 
+  ken->movesSprites[PUNCHING].modAnimation = 3;
+
   attackSpritesInit(ken, PUNCHING, 3, 0, KEN_PUNCH_DRAW_H, KEN_PUNCH_DRAW_W,
                     KEN_PUNCH_HURT_H, KEN_PUNCH_HURT_W, KEN_PUNCH_X,
                     KEN_PUNCH_Y, 19, 8, 17, KEN_PUNCH_DRAW_W_ARRAY,
@@ -167,6 +179,8 @@ FIGHTER_SPRITES* initKen() {
   ken->movesSprites[KICKING].sprites =
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (ken->movesSprites[KICKING].sprites == NULL) exit(1);
+
+  ken->movesSprites[KICKING].modAnimation = 3;
 
   attackSpritesInit(ken, KICKING, 3, 0, KEN_KICK_DRAW_H, KEN_KICK_DRAW_W,
                     KEN_KICK_HURT_H, KEN_KICK_HURT_W, KEN_KICK_X, KEN_KICK_Y,

@@ -76,8 +76,11 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (chunli->movesSprites[STEADY].sprites == NULL) exit(1);
 
-  movimentSpritesInit(chunli, STEADY, 4, 0, CHUNLI_IDLE_DRAW_H[2], CHUNLI_IDLE_DRAW_W[0],
-                      CHUNLI_IDLE_HURT_H, CHUNLI_IDLE_HURT_W, CHUNLI_IDLE_X, CHUNLI_IDLE_Y);
+  chunli->movesSprites[STEADY].modAnimation = 10;
+
+  movimentSpritesInit(chunli, STEADY, 4, 0, CHUNLI_IDLE_DRAW_H[2],
+                      CHUNLI_IDLE_DRAW_W[0], CHUNLI_IDLE_HURT_H,
+                      CHUNLI_IDLE_HURT_W, CHUNLI_IDLE_X, CHUNLI_IDLE_Y);
 
   /* ------------------- WALKING THINGS -------------------- */
 
@@ -86,8 +89,11 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 8);
   if (chunli->movesSprites[WALKING].sprites == NULL) exit(1);
 
-  movimentSpritesInit(chunli, WALKING, 8, 0, CHUNLI_WALK_DRAW_H[2], CHUNLI_WALK_DRAW_W[3],
-                      CHUNLI_WALK_HURT_H, CHUNLI_WALK_HURT_W, CHUNLI_WALK_X, CHUNLI_WALK_Y);
+  chunli->movesSprites[WALKING].modAnimation = 4;
+
+  movimentSpritesInit(chunli, WALKING, 8, 0, CHUNLI_WALK_DRAW_H[2],
+                      CHUNLI_WALK_DRAW_W[3], CHUNLI_WALK_HURT_H,
+                      CHUNLI_WALK_HURT_W, CHUNLI_WALK_X, CHUNLI_WALK_Y);
 
   /* -------------------- JUMPING --------------------- */
 
@@ -96,9 +102,12 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 7);
   if (chunli->movesSprites[JUMPING].sprites == NULL) exit(1);
 
-  attackSpritesInit(chunli, JUMPING, 7, 0, CHUNLI_JUMP_DRAW_H, CHUNLI_JUMP_DRAW_W,
-                    CHUNLI_JUMP_HURT_H, CHUNLI_JUMP_HURT_W, CHUNLI_JUMP_X, CHUNLI_JUMP_Y, 0,
-                    0, 0, CHUNLI_JUMP_DRAW_W_ARRAY, CHUNLI_JUMP_DRAW_H_ARRAY);
+  chunli->movesSprites[JUMPING].modAnimation = 5;
+
+  attackSpritesInit(chunli, JUMPING, 7, 0, CHUNLI_JUMP_DRAW_H,
+                    CHUNLI_JUMP_DRAW_W, CHUNLI_JUMP_HURT_H, CHUNLI_JUMP_HURT_W,
+                    CHUNLI_JUMP_X, CHUNLI_JUMP_Y, 0, 0, 0,
+                    CHUNLI_JUMP_DRAW_W_ARRAY, CHUNLI_JUMP_DRAW_H_ARRAY);
 
   /* ------------------- CROUCHING THINGS ------------------- */
 
@@ -108,8 +117,8 @@ FIGHTER_SPRITES* initChunli() {
   if (chunli->movesSprites[CROUCHING].sprites == NULL) exit(1);
 
   movimentSpritesInit(chunli, CROUCHING, 1, 0, CHUNLI_CROUCH_DRAW_H,
-                      CHUNLI_CROUCH_DRAW_W, CHUNLI_CROUCH_HURT_H, CHUNLI_CROUCH_HURT_W,
-                      CHUNLI_CROUCH_X, CHUNLI_CROUCH_Y);
+                      CHUNLI_CROUCH_DRAW_W, CHUNLI_CROUCH_HURT_H,
+                      CHUNLI_CROUCH_HURT_W, CHUNLI_CROUCH_X, CHUNLI_CROUCH_Y);
 
   /* --------------------- GOT HIT ------------------- */
 
@@ -118,21 +127,27 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 2);
   if (chunli->movesSprites[GOT_HIT].sprites == NULL) exit(1);
 
+  chunli->movesSprites[GOT_HIT].modAnimation = 5;
+
   attackSpritesInit(chunli, GOT_HIT, 2, 0, CHUNLI_HIT_DRAW_H, CHUNLI_HIT_DRAW_W,
-                    CHUNLI_HIT_HURT_H, CHUNLI_HIT_HURT_W, CHUNLI_HIT_X, CHUNLI_HIT_Y, 0, 0,
-                    0, CHUNLI_HIT_DRAW_W_ARRAY, CHUNLI_HIT_DRAW_H_ARRAY);
+                    CHUNLI_HIT_HURT_H, CHUNLI_HIT_HURT_W, CHUNLI_HIT_X,
+                    CHUNLI_HIT_Y, 0, 0, 0, CHUNLI_HIT_DRAW_W_ARRAY,
+                    CHUNLI_HIT_DRAW_H_ARRAY);
 
   /* --------------------- GOT FACE HIT ------------------- */
 
   // Getting memory for the sprites
   chunli->movesSprites[GOT_FACE_HIT].sprites =
-      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 2);
   if (chunli->movesSprites[GOT_FACE_HIT].sprites == NULL) exit(1);
 
-  attackSpritesInit(chunli, GOT_FACE_HIT, 4, 0, CHUNLI_FACE_HIT_DRAW_H,
+  chunli->movesSprites[GOT_FACE_HIT].modAnimation = 5;
+
+  attackSpritesInit(chunli, GOT_FACE_HIT, 2, 0, CHUNLI_FACE_HIT_DRAW_H,
                     CHUNLI_FACE_HIT_DRAW_W, CHUNLI_FACE_HIT_HURT_H,
-                    CHUNLI_FACE_HIT_HURT_W, CHUNLI_FACE_HIT_X, CHUNLI_FACE_HIT_Y, 0, 0,
-                    0, CHUNLI_FACE_HIT_DRAW_W_ARRAY, CHUNLI_FACE_HIT_DRAW_H_ARRAY);
+                    CHUNLI_FACE_HIT_HURT_W, CHUNLI_FACE_HIT_X,
+                    CHUNLI_FACE_HIT_Y, 0, 0, 0, CHUNLI_FACE_HIT_DRAW_W_ARRAY,
+                    CHUNLI_FACE_HIT_DRAW_H_ARRAY);
 
   /* --------------------- DEFENDING ------------------- */
 
@@ -143,8 +158,8 @@ FIGHTER_SPRITES* initChunli() {
 
   attackSpritesInit(chunli, DEFENDING, 1, 0, CHUNLI_DEFENDING_DRAW_H,
                     CHUNLI_DEFENDING_DRAW_W, CHUNLI_DEFENDING_HURT_H,
-                    CHUNLI_DEFENDING_HURT_W, CHUNLI_DEFENDING_X, CHUNLI_DEFENDING_Y, 0,
-                    0, 0, CHUNLI_DEFENDING_DRAW_W_ARRAY,
+                    CHUNLI_DEFENDING_HURT_W, CHUNLI_DEFENDING_X,
+                    CHUNLI_DEFENDING_Y, 0, 0, 0, CHUNLI_DEFENDING_DRAW_W_ARRAY,
                     CHUNLI_DEFENDING_DRAW_H_ARRAY);
 
   /* ------------------- PUNCHING THINGS -------------------- */
@@ -154,10 +169,10 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (chunli->movesSprites[PUNCHING].sprites == NULL) exit(1);
 
-  attackSpritesInit(chunli, PUNCHING, 3, 0, CHUNLI_PUNCH_DRAW_H, CHUNLI_PUNCH_DRAW_W,
-                    CHUNLI_PUNCH_HURT_H, CHUNLI_PUNCH_HURT_W, CHUNLI_PUNCH_X,
-                    CHUNLI_PUNCH_Y, 19, 8, 17, CHUNLI_PUNCH_DRAW_W_ARRAY,
-                    CHUNLI_PUNCH_DRAW_H_ARRAY);
+  attackSpritesInit(chunli, PUNCHING, 3, 0, CHUNLI_PUNCH_DRAW_H,
+                    CHUNLI_PUNCH_DRAW_W, CHUNLI_PUNCH_HURT_H,
+                    CHUNLI_PUNCH_HURT_W, CHUNLI_PUNCH_X, CHUNLI_PUNCH_Y, 19, 8,
+                    17, CHUNLI_PUNCH_DRAW_W_ARRAY, CHUNLI_PUNCH_DRAW_H_ARRAY);
 
   /* ------------------- KICKING THINGS ----------------------- */
 
@@ -166,8 +181,9 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (chunli->movesSprites[KICKING].sprites == NULL) exit(1);
 
-  attackSpritesInit(chunli, KICKING, 3, 0, CHUNLI_KICK_DRAW_H, CHUNLI_KICK_DRAW_W,
-                    CHUNLI_KICK_HURT_H, CHUNLI_KICK_HURT_W, CHUNLI_KICK_X, CHUNLI_KICK_Y,
-                    28, 12, 1, CHUNLI_KICK_DRAW_W_ARRAY, CHUNLI_KICK_DRAW_H_ARRAY);
+  attackSpritesInit(chunli, KICKING, 3, 0, CHUNLI_KICK_DRAW_H,
+                    CHUNLI_KICK_DRAW_W, CHUNLI_KICK_HURT_H, CHUNLI_KICK_HURT_W,
+                    CHUNLI_KICK_X, CHUNLI_KICK_Y, 28, 12, 1,
+                    CHUNLI_KICK_DRAW_W_ARRAY, CHUNLI_KICK_DRAW_H_ARRAY);
   return chunli;
 }
