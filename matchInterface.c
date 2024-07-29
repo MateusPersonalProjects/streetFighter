@@ -16,10 +16,10 @@ MATCH_INTERFACE* initMatchInterface(PLAYER* player1, PLAYER* player2) {
       (MATCH_INTERFACE*)malloc(sizeof(MATCH_INTERFACE));
   if (newMatchInterface == NULL) exit(1);
 
-  newMatchInterface->lifebarP1X = 10;
-  newMatchInterface->lifebarP2Width = BUFFER_W - 10;
-  newMatchInterface->lifebarY = 5;
-  newMatchInterface->lifebarHeight = 15;
+  newMatchInterface->lifebarP1X = 40;
+  newMatchInterface->lifebarP2Width = BUFFER_W;
+  newMatchInterface->lifebarY = 9;
+  newMatchInterface->lifebarHeight = 9;
 
   newMatchInterface->lifebarColor = al_map_rgb(243, 243, 0);
 
@@ -47,6 +47,22 @@ MATCH_INTERFACE* initMatchInterface(PLAYER* player1, PLAYER* player2) {
   // Loading counting rounds
   newMatchInterface->countWonSprite =
       grabSprite(newMatchInterface->sheet, RC_S_X, RC_S_Y, RC_S_W, RC_S_H);
+
+  // Loading player wins
+  newMatchInterface->p1Wins = grabSprite(newMatchInterface->sheet, P1_WINS_X,
+                                         P1_WINS_Y, P1_WINS_W, P1_WINS_H);
+  newMatchInterface->p2Wins = grabSprite(newMatchInterface->sheet, P2_WINS_X,
+                                         P2_WINS_Y, P2_WINS_W, P2_WINS_H);
+
+  // Loading K.O
+  newMatchInterface->ko =
+      grabSprite(newMatchInterface->sheet, KO_X, KO_Y, KO_W, KO_H);
+
+  // Loading life bar things
+  newMatchInterface->lifeBarBackground =
+      grabSprite(newMatchInterface->sheet, LB_X, LB_Y, LB_W, LB_H);
+  newMatchInterface->lifeBarAnimation =
+      grabSprite(newMatchInterface->sheet, LB_A_X, LB_A_Y, LB_A_W, LB_A_H);
   return newMatchInterface;
 }
 
@@ -56,7 +72,7 @@ MATCH_INTERFACE* initMatchInterface(PLAYER* player1, PLAYER* player2) {
 void matchInterfaceUpdate(MATCH_INTERFACE* matchInterface, PLAYER* player1,
                           PLAYER* player2) {
   matchInterface->lifebarP1Width = player1->life;
-  matchInterface->lifebarP2X = BUFFER_W - player2->life - 10;
+  matchInterface->lifebarP2X = BUFFER_W - player2->life - 40;
 }
 
 /*
@@ -83,7 +99,19 @@ bool matchUpdate(MATCH_INTERFACE* matchInterface, PLAYER* player1,
   Draw the match interface
 */
 void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
-                        PLAYER* player2) {
+                        PLAYER* player2, long timerCount, short* twinkle) {
+  al_draw_bitmap(matchInterface->lifeBarBackground,
+                 (BUFFER_W / 2.0) - (LB_W / 2.0), 5, 0);
+  int timerDelay;
+  if (*twinkle)
+    timerDelay = 30;
+  else
+    timerDelay = 50;
+  if (!(timerCount % timerDelay)) (*twinkle) ^= 1;
+  if (!(*twinkle))
+    al_draw_bitmap(matchInterface->lifeBarAnimation,
+                   (BUFFER_W / 2.0) - (LB_A_W / 2.0), 5, 0);
+
   // Draw the lifebars
   al_draw_filled_rectangle(
       matchInterface->lifebarP1X, matchInterface->lifebarY,
@@ -91,10 +119,9 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
       (matchInterface->lifebarY + matchInterface->lifebarHeight),
       matchInterface->lifebarColor);
   al_draw_filled_rectangle(
-      matchInterface->lifebarP2X, matchInterface->lifebarY, BUFFER_W - 10,
+      matchInterface->lifebarP2X, matchInterface->lifebarY, BUFFER_W - 40,
       (matchInterface->lifebarY + matchInterface->lifebarHeight),
       matchInterface->lifebarColor);
-
   // Draw the rounds won for p1
   if (player1->roundsWon >= 1) {
     al_draw_bitmap(matchInterface->countWonSprite, 140,
@@ -173,8 +200,8 @@ bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
   bool done = false;
   (*frames)++;
   if (*frames <= 90) {
-    al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0, BUFFER_H / 2.0,
-                 ALLEGRO_ALIGN_CENTER, "K . O");
+    al_draw_bitmap(matchInterface->ko, (BUFFER_W / 2.0) - (KO_W / 2.0),
+                   (BUFFER_H / 2.0) - (KO_H / 2.0), 0);
 
   } else if (*frames > 90 && matchInterface->matchUP) {
     done = true;
@@ -197,13 +224,13 @@ bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned short* frames,
   if (*frames <= 180) {
     if (*frames > 90) {
       if (playerOneWon)
-        al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                     BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                     "P L A Y E R   O N E   W I N S  !");
+        al_draw_bitmap(matchInterface->p1Wins,
+                       (BUFFER_W / 2.0) - (P1_WINS_W / 2.0),
+                       (BUFFER_H / 2.0) - (P1_WINS_H / 2.0), 0);
       else
-        al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0,
-                     BUFFER_H / 2.0, ALLEGRO_ALIGN_CENTER,
-                     "P L A Y E R   T W O   W I N S  !");
+        al_draw_bitmap(matchInterface->p2Wins,
+                       (BUFFER_W / 2.0) - (P2_WINS_W / 2.0),
+                       (BUFFER_H / 2.0) - (P2_WINS_H / 2.0), 0);
     }
   } else
     turnOnMatchLoop = false;
@@ -220,6 +247,9 @@ void matchInterfaceDestroyer(MATCH_INTERFACE* matchInterface) {
   al_destroy_bitmap(matchInterface->fRoundSprite);
   al_destroy_bitmap(matchInterface->fightSprite);
   al_destroy_bitmap(matchInterface->countWonSprite);
+  al_destroy_bitmap(matchInterface->p1Wins);
+  al_destroy_bitmap(matchInterface->p2Wins);
+  al_destroy_bitmap(matchInterface->ko);
   al_destroy_bitmap(matchInterface->sheet);
   free(matchInterface);
 }

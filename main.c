@@ -157,6 +157,8 @@ int main(void) {
     // CHARACTER SELECTION MENU VARIABLES
     short selectP1 = 0;
     short selectP2 = 1;
+    player1->roundsWon = 0;
+    player2->roundsWon = 0;
     bool p1Selected = false;
     bool p2Selected = false;
     bool chacSelecLoop = true;
@@ -222,10 +224,11 @@ int main(void) {
     while (versusLoop) {
       if (event.type == ALLEGRO_EVENT_TIMER) {
         dispPreDraw(bufferBitmap);
-        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_clear_to_color(al_map_rgb(15, 30, 86));
 
         drawVersusScreen(characSelectBoxes[selectP1].portraitImage,
-                         characSelectBoxes[selectP2].portraitImage, font);
+                         characSelectBoxes[selectP2].portraitImage,
+                         characSelectSprites->vs_sprite);
         dispPostDraw(disp, bufferBitmap);
         frames++;
         if (frames > 120) versusLoop = false;
@@ -287,7 +290,8 @@ int main(void) {
         drawStage(guileStage, al_get_timer_count(timer));
         drawPlayer(player1, boxColors[selectP1], al_get_timer_count(timer));
         drawPlayer(player2, boxColors[selectP2], al_get_timer_count(timer));
-        drawMatchInterface(matchInterface, player1, player2);
+        drawMatchInterface(matchInterface, player1, player2,
+                           al_get_timer_count(timer), &twinkle);
 
         // If the players are not able to control and the round is up, well it
         // just started so lets draw the things
@@ -310,8 +314,7 @@ int main(void) {
         // If the match ended, we have a winner so lets show him
         if (!matchInterface->matchUP)
           matchLoop = drawWinnerGreater(matchInterface, &frames, font,
-                                        (player1->roundsWon == 2));
-
+                                        player2->roundsWon != 2);
         dispPostDraw(disp, bufferBitmap);
         redraw = false;
       }

@@ -41,6 +41,36 @@
 #define RC_S_X 343
 #define RC_S_Y 15
 
+// PLAYER WINS DEFINES
+#define P1_WINS_X 341
+#define P1_WINS_Y 147
+#define P1_WINS_W 151
+#define P1_WINS_H 10
+
+#define P2_WINS_X 341
+#define P2_WINS_Y 163
+#define P2_WINS_W 151
+#define P2_WINS_H 10
+
+// K.O DEFINES
+#define KO_X 410
+#define KO_Y 180
+#define KO_W 28
+#define KO_H 10
+
+// LIFE BAR BACKGROUND DEFINES
+#define LB_X 16
+#define LB_Y 1
+#define LB_W 322
+#define LB_H 14
+
+// LIFE BAR ANIMATION 
+#define LB_A_X 161
+#define LB_A_Y 16
+#define LB_A_W 32
+#define LB_A_H 14
+
+
 typedef struct{
 
   // Lifebar things
@@ -54,12 +84,17 @@ typedef struct{
 
   // Sprites
   ALLEGRO_BITMAP* sheet;
+  ALLEGRO_BITMAP* lifeBarBackground;
+  ALLEGRO_BITMAP* lifeBarAnimation;
   ALLEGRO_BITMAP* roundSprite;
   ALLEGRO_BITMAP* fRoundSprite;
   ALLEGRO_BITMAP* numOneSprite;
   ALLEGRO_BITMAP* numTwoSprite;
   ALLEGRO_BITMAP* fightSprite;
   ALLEGRO_BITMAP* countWonSprite;
+  ALLEGRO_BITMAP* p1Wins;
+  ALLEGRO_BITMAP* p2Wins;
+  ALLEGRO_BITMAP* ko;
 
   bool matchUP;
   bool roundUP;
@@ -90,7 +125,7 @@ bool matchUpdate(MATCH_INTERFACE* matchInterface, PLAYER* player1,
 /*
   Draw the match interface
 */
-void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER *player1, PLAYER *player2);
+void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER *player1, PLAYER *player2, long timerCount, short* twinkle);
 
 /*
   Draw the initial text of the fight

@@ -94,6 +94,8 @@ CHARAC_SELECT_SPRITES* initCharacSelectSprites() {
   characSelecSprites->chunliPortrait =
       grabSprite(characSelecSprites->sheetPortrait, PORTRAIT_X,
                  PORTRAIT_Y_CHUNLI, PORTRAIT_W, PORTRAIT_H);
+  characSelecSprites->vs_sprite =
+      grabSprite(characSelecSprites->sheetPortrait, VS_X, VS_Y, VS_W, VS_H);
   return characSelecSprites;
 }
 
@@ -180,7 +182,10 @@ void drawMainMenu(ALLEGRO_BITMAP* logo, ALLEGRO_FONT* font, long timer,
   if (!(timer % timerDelay)) (*twinkle) ^= 1;
   if (!(*twinkle)) {
     al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0, 210,
-                 ALLEGRO_ALIGN_CENTER, "P R E S S  G  T O  S T A R T");
+                 ALLEGRO_ALIGN_CENTER, "P R E S S   G   T O  S T A R T");
+
+    al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0, 245,
+                 ALLEGRO_ALIGN_CENTER, "P R E S S   E S C   T O  Q U I T");
   }
 }
 
@@ -239,7 +244,7 @@ void drawCharacterCursorOver(SELECTION_BOX* allSelectionBoxes, short p1Over,
   Draw the versus screen
 */
 void drawVersusScreen(ALLEGRO_BITMAP* p1, ALLEGRO_BITMAP* p2,
-                      ALLEGRO_FONT* font) {
+                      ALLEGRO_BITMAP* vsImage) {
   float p1X = 10;
   float p2X = BUFFER_W - (PORTRAIT_W * 2) - 10;
   float pY = (BUFFER_H / 2.0) - (PORTRAIT_H / 2.0);
@@ -249,8 +254,9 @@ void drawVersusScreen(ALLEGRO_BITMAP* p1, ALLEGRO_BITMAP* p2,
                         PORTRAIT_W * 2, PORTRAIT_H * 2,
                         ALLEGRO_FLIP_HORIZONTAL);
 
-  al_draw_text(font, al_map_rgb_f(1, 1, 1), BUFFER_W / 2.0, BUFFER_H / 2.0,
-               ALLEGRO_ALIGN_CENTER, "V . S");
+  al_draw_scaled_bitmap(vsImage, 0, 0, VS_W, VS_H,
+                        (BUFFER_W / 2.0) - (VS_W / 2.0), BUFFER_H / 2.0,
+                        VS_W * 0.75, VS_H * 0.75, 0);
 }
 
 /*
@@ -267,6 +273,7 @@ void destroyCharacSelectSprites(CHARAC_SELECT_SPRITES* characSelectSprites) {
   al_destroy_bitmap(characSelectSprites->guilePortrait);
   al_destroy_bitmap(characSelectSprites->ryuPortrait);
   al_destroy_bitmap(characSelectSprites->kenPortrait);
+  al_destroy_bitmap(characSelectSprites->vs_sprite);
   al_destroy_bitmap(characSelectSprites->sheetPortrait);
   free(characSelectSprites);
 }

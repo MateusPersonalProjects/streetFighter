@@ -40,6 +40,11 @@
 #define LOGO_Y 565
 #define LOGO_X 276
 
+#define VS_X 123
+#define VS_Y 21
+#define VS_W 94
+#define VS_H 56
+
 typedef struct{
   int xPosit;
   int yPosit;
@@ -62,6 +67,7 @@ typedef struct{
   ALLEGRO_BITMAP* kenPortrait;
   ALLEGRO_BITMAP* chunliPortrait;
   ALLEGRO_BITMAP* guilePortrait;
+  ALLEGRO_BITMAP* vs_sprite;
 
 } CHARAC_SELECT_SPRITES;
 
@@ -109,7 +115,7 @@ void drawCharacterCursorOver(SELECTION_BOX* allSelectionBoxes, short p1Over,
                              short p2Over, ALLEGRO_FONT* font, bool p1selected,
                              bool p2selected, long timer, short* twinkle);
  
-void drawVersusScreen(ALLEGRO_BITMAP* p1, ALLEGRO_BITMAP* p2, ALLEGRO_FONT* font);
+void drawVersusScreen(ALLEGRO_BITMAP* p1, ALLEGRO_BITMAP* p2, ALLEGRO_BITMAP* vsImage);
 
 /*
   Destroy all the charact select sprites

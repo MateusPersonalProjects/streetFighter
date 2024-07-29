@@ -13,7 +13,7 @@
 #include "misc.h"
 
 #define PLAYER_VEL 5
-
+#define PLAYER_LIFE 145
 /*
   Initialize a new player
 */
@@ -29,7 +29,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
   newPlayer->crouching = false;
   newPlayer->blocking = false;
   newPlayer->yAcel = 0;
-  newPlayer->life = 150;
+  newPlayer->life = PLAYER_LIFE;
   newPlayer->roundsWon = 0;
   newPlayer->animationDone = true;
 
@@ -47,9 +47,8 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
   player->crouching = false;
   player->blocking = false;
   player->yAcel = 0;
-  player->life = 150;
+  player->life = PLAYER_LIFE;
   player->animationDone = true;
-  if (matchEnd) player->roundsWon = 0;
 }
 
 /*
