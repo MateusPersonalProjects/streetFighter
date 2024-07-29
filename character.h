@@ -4,7 +4,6 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/bitmap.h>
-#include "fightersDefines/ryu.h"
 
 typedef enum{
   STEADY = 0,
@@ -54,9 +53,22 @@ typedef struct{
 CHARACTER* characterInit(FIGHTER_SPRITES* fighterSprite);
 
 /*
-  Initialize RYU
+  Load moviment sprites
 */
-FIGHTER_SPRITES* initRyu();
+void movimentSpritesInit(FIGHTER_SPRITES* fighter, SPRITE_LIST sprite,
+                         short numFrames, short currentFrame, short draw_h,
+                         short draw_w, short hurt_h, short hurt_w,
+                         const short* idle_x, const short* idle_y);
+
+/*
+  Load sprites with arrays for draw w and draw h
+*/
+void attackSpritesInit(FIGHTER_SPRITES* fighter, SPRITE_LIST sprite,
+                       short numFrames, short currentFrame, short draw_h,
+                       short draw_w, short hurt_h, short hurt_w,
+                       const short* idle_x, const short* idle_y, short hit_w,
+                       short hit_h, short hit_y, const short* draw_w_array,
+                       const short* draw_h_array);
 
 /*
   Free the memory that a character was being utilized by a character

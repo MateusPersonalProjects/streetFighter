@@ -125,20 +125,20 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
   // Draw the rounds won for p1
   if (player1->roundsWon >= 1) {
     al_draw_bitmap(matchInterface->countWonSprite, 140,
-                   matchInterface->lifebarY + 22, 0);
+                   matchInterface->lifebarY + 10, 0);
     if (player1->roundsWon == 2)
       al_draw_bitmap(matchInterface->countWonSprite, 120,
-                     matchInterface->lifebarY + 22, 0);
+                     matchInterface->lifebarY + 10, 0);
   }
 
   // Draw the rounds won for p2
   if (player2->roundsWon >= 1) {
     al_draw_bitmap(matchInterface->countWonSprite, BUFFER_W - 160,
-                   matchInterface->lifebarY + 22, 0);
+                   matchInterface->lifebarY + 10, 0);
 
     if (player2->roundsWon == 2)
       al_draw_bitmap(matchInterface->countWonSprite, BUFFER_W - 140,
-                     matchInterface->lifebarY + 22, 0);
+                     matchInterface->lifebarY + 10, 0);
   }
 }
 

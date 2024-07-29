@@ -1,6 +1,6 @@
 #ifndef __RYU__
 #define __RYU__
-
+#include "../character.h"
 
 /* -------------- IDLE ----------------- */
 extern const short RYU_IDLE_X[4];
@@ -112,5 +112,10 @@ extern const short RYU_KICK_DRAW_H_ARRAY[3];
 
 #define RYU_KICK_HURT_W 39
 #define RYU_KICK_HURT_H 80
+
+/*
+  Initialize RYU
+*/
+FIGHTER_SPRITES* initRyu();
 
 #endif

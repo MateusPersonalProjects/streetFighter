@@ -15,6 +15,8 @@
 #include <allegro5/keycodes.h>
 #include <allegro5/timer.h>
 
+#include "./fightersDefines/ken.h"
+#include "./fightersDefines/ryu.h"
 #include "characSelecMenu.h"
 #include "character.h"
 #include "display.h"
@@ -61,7 +63,7 @@ int main(void) {
 
   // Test things
   FIGHTER_SPRITES *ryuSprites = initRyu();
-  FIGHTER_SPRITES *kenSprites = initRyu();
+  FIGHTER_SPRITES *kenSprites = initKen();
   FIGHTER_SPRITES *chunliSprites = initRyu();
   FIGHTER_SPRITES *guileSprites = initRyu();
 

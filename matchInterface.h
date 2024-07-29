@@ -25,7 +25,7 @@
 #define N_ONE_S_X 106
 #define N_TWO_S_X 120
 #define N_ONE_S_W 9
-#define N_TWO_S_W 19
+#define N_TWO_S_W 14
 
 // FIGHT DEFINES
 #define FIGHT_S_W 63
