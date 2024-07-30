@@ -58,9 +58,9 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
 void updateWidthHeight(PLAYER *player) {
   // Shortcuts
   SPRITE_LIST currentSpriteP1 = player->character->currentSprite;
-  short currentSpriteFrameP1 =
-      player->character->fighterGraphics->movesSprites[currentSpriteP1]
-          .currentFrame;
+  // short currentSpriteFrameP1 =
+  //     player->character->fighterGraphics->movesSprites[currentSpriteP1]
+  //         .currentFrame;
 
   short currentW =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
@@ -90,10 +90,12 @@ void updateWidthHeight(PLAYER *player) {
 void updateAnimation(PLAYER *player, long timerCount) {
   // Get the current sprite
   SPRITE_LIST currentSprite = player->character->currentSprite;
+
   // Get the current frame the sprite is at
-  short currentSpriteFrame =
-      player->character->fighterGraphics->movesSprites[currentSprite]
-          .currentFrame;
+  // short currentSpriteFrame =
+  //     player->character->fighterGraphics->movesSprites[currentSprite]
+  //         .currentFrame;
+
   // Get the max frame the animation can reach out
   short maxSpriteFrame =
       player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
@@ -294,7 +296,7 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
  */
 void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                          unsigned char *keyboardKeys, unsigned char *whichKey) {
-  SPRITE_LIST currentSprite = player->character->currentSprite;
+  // SPRITE_LIST currentSprite = player->character->currentSprite;
 
   // Define limits and localization of the hurt box for player 1
   float midX = (player->xPosition + (player->character->width / 2.0));
@@ -381,7 +383,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   Draw the player on the screen
 */
 void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
-  ALLEGRO_COLOR color = playerColor;
+  // ALLEGRO_COLOR color = playerColor;
 
   // Get the current sprite
   SPRITE_LIST currentSprite = player->character->currentSprite;
@@ -390,17 +392,17 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
       player->character->fighterGraphics->movesSprites[currentSprite]
           .currentFrame;
   // Get the max frame the animation can reach out
-  short maxSpriteFrame =
-      player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
+  // short maxSpriteFrame =
+  //     player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
 
   /* ------------------ FOR TESTS ONLY ---------------- */
-  float midX = (player->xPosition + (player->character->width / 2.0));
-  float midY = (player->yPosition + (player->character->height / 2.0));
+  // float midX = (player->xPosition + (player->character->width / 2.0));
+  // float midY = (player->yPosition + (player->character->height / 2.0));
 
-  float hurtBox_X1 = (midX - (player->character->hurtWidth / 2.0));
-  float hurtBox_X2 = (midX + (player->character->hurtWidth / 2.0));
-  float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
-  float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
+  // float hurtBox_X1 = (midX - (player->character->hurtWidth / 2.0));
+  // float hurtBox_X2 = (midX + (player->character->hurtWidth / 2.0));
+  // float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
+  // float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
 
   // al_draw_rectangle(hurtBox_X1, hurtBox_Y1, hurtBox_X2, hurtBox_Y2,
   // color, 2.0);

@@ -56,10 +56,51 @@ typedef struct {
 
 } GUILE_STAGE ;
 
+#define MAIN_FLOOR_X 0
+#define MAIN_FLOOR_Y 232
+#define MAIN_FLOOR_W 512
+#define MAIN_FLOOR_H 256
+
+#define LITTLE_BALLS_X 96
+#define LITTLE_BALLS_Y 672
+#define LITTLE_BALLS_W 328
+#define LITTLE_BALLS_H 8
+
+extern const short carsAndDudes_x[2];
+extern const short carsAndDudes_y[2];
+extern const short carsAndDudes_w[2];
+extern const short carsAndDudes_h[2];
+
+extern const short redWoman_x[4];
+extern const short redWoman_y[4];
+extern const short redWoman_w[4];
+extern const short redWoman_h[4];
+
+extern const short blueWoman_x[4];
+extern const short blueWoman_y[4];
+extern const short blueWoman_w[4];
+extern const short blueWoman_h[4];
+
+typedef struct{
+  ALLEGRO_BITMAP* sheet;
+
+  ALLEGRO_BITMAP* mainFloor;
+  ALLEGRO_BITMAP* littleBals;
+  ALLEGRO_BITMAP* carsAndDudes[2];
+  ALLEGRO_BITMAP* redWoman[4];
+  ALLEGRO_BITMAP* blueWoman[4];
+
+} VEGAS_STAGE;
+
 /*
-  Initialize a stage
+  Initialize guile stage
 */
 GUILE_STAGE* initGuileStage();
+
+/*
+  Initialize vegas stage
+*/
+VEGAS_STAGE* initVegasStage();
 
 /*
   Draw the stage on the screen

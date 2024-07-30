@@ -103,8 +103,6 @@ CHARAC_SELECT_SPRITES* initCharacSelectSprites() {
   Reset all the boxes to the white color
 */
 void resetSelectionBoxes(SELECTION_BOX* allSelectionBoxes) {
-  ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-
   for (int i = 0; i < 4; i++) {
     allSelectionBoxes[i].selected = false;
   }
