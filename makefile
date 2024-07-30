@@ -1,11 +1,11 @@
-# Definindo o compilador
+# Compilador
 CC = gcc
 
-# Definindo as flags de compilação
-CFLAGS = -Wall -Wextra -std=c11 $(shell pkg-config allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 --cflags)
+# Flags de compilação
+CFLAGS = -Wall 
 
-# Definindo as bibliotecas
-LIBS = $(shell pkg-config allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 --libs)
+# Definindo as bibliotecas do Allegro
+LIBS = $(shell pkg-config allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 --libs --cflags)
 
 # Nome do executável
 TARGET = teste
@@ -23,11 +23,11 @@ all: $(TARGET)
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LIBS)
 
-# Regra para compilar arquivos .c em .o
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Limpa os arquivos gerados
+# Remove arquivos temporarios
 clean:
-	rm -f $(TARGET) $(OBJ)
+	rm -f *~ $(OBJ)
+
+# Remove temporarios e o executavel
+purge: clean
+	rm -f $(TARGET)
 
