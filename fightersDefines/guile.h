@@ -84,11 +84,11 @@ extern const short GUILE_DEFENDING_DRAW_W_ARRAY[1];
 extern const short GUILE_DEFENDING_DRAW_H_ARRAY[1];
 
 
-#define GUILE_DEFENDING_DRAW_W 43
-#define GUILE_DEFENDING_DRAW_H 83
+#define GUILE_DEFENDING_DRAW_W 51
+#define GUILE_DEFENDING_DRAW_H 72
 
-#define GUILE_DEFENDING_HURT_W 37
-#define GUILE_DEFENDING_HURT_H 81
+#define GUILE_DEFENDING_HURT_W 35
+#define GUILE_DEFENDING_HURT_H 71
 
 /* -------------- PUNCHING --------------- */
 extern const short GUILE_PUNCH_X[3];
@@ -96,10 +96,10 @@ extern const short GUILE_PUNCH_Y[3];
 extern const short GUILE_PUNCH_DRAW_W_ARRAY[3];
 extern const short GUILE_PUNCH_DRAW_H_ARRAY[3];
 
-#define GUILE_PUNCH_DRAW_W 57
-#define GUILE_PUNCH_DRAW_H 81
+#define GUILE_PUNCH_DRAW_W 67
+#define GUILE_PUNCH_DRAW_H 82
 
-#define GUILE_PUNCH_HURT_W 37
+#define GUILE_PUNCH_HURT_W 32
 #define GUILE_PUNCH_HURT_H 79
 
 /* -------------- KICKING --------------- */
@@ -108,11 +108,11 @@ extern const short GUILE_KICK_Y[3];
 extern const short GUILE_KICK_DRAW_W_ARRAY[3];
 extern const short GUILE_KICK_DRAW_H_ARRAY[3];
 
-#define GUILE_KICK_DRAW_W 49
-#define GUILE_KICK_DRAW_H 85
+#define GUILE_KICK_DRAW_W 80
+#define GUILE_KICK_DRAW_H 84
 
-#define GUILE_KICK_HURT_W 39
-#define GUILE_KICK_HURT_H 80
+#define GUILE_KICK_HURT_W 23
+#define GUILE_KICK_HURT_H 82
 
 /*
   Initialize GUILE

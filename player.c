@@ -318,56 +318,60 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   // FINISHES OFF
   if (player->animationDone) {
     if (keyboardKeys[whichKey[PUNCH]]) {
-      player->animationDone = false;
-      player->character->currentSprite = PUNCHING;  // PUNCHING
-      if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
-                   player->character->fighterGraphics->movesSprites[PUNCHING]
-                       .hitBoxWidth,
-                   player->character->fighterGraphics->movesSprites[PUNCHING]
-                       .hitBox_Y,
-                   player->character->fighterGraphics->movesSprites[PUNCHING]
-                       .hitBoxHeight,
-                   player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
-                   hurtBox2_Y2)) {
-        if (!anotherPlayer->blocking) {
-          anotherPlayer->life -= 1;
-          anotherPlayer->animationDone = false;
-          anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
-        } else
-          anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+      if (!(player->character->currentSprite == JUMPING)) {
+        player->animationDone = false;
+        player->character->currentSprite = PUNCHING;  // PUNCHING
+        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                     player->character->fighterGraphics->movesSprites[PUNCHING]
+                         .hitBoxWidth,
+                     player->character->fighterGraphics->movesSprites[PUNCHING]
+                         .hitBox_Y,
+                     player->character->fighterGraphics->movesSprites[PUNCHING]
+                         .hitBoxHeight,
+                     player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+                     hurtBox2_Y2)) {
+          if (!anotherPlayer->blocking) {
+            anotherPlayer->life -= 1;
+            anotherPlayer->animationDone = false;
+            anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
+          } else
+            anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
 
-        // knock back thing
-        if (anotherPlayer->facingRight)
-          anotherPlayer->xPosition -= 2;
-        else
-          anotherPlayer->xPosition += 2;
+          // knock back thing
+          if (anotherPlayer->facingRight)
+            anotherPlayer->xPosition -= 2;
+          else
+            anotherPlayer->xPosition += 2;
+        }
       }
     }
 
     if (keyboardKeys[whichKey[KICK]]) {
-      player->animationDone = false;
-      player->character->currentSprite = KICKING;  // PUNCHING
-      if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
-                   player->character->fighterGraphics->movesSprites[KICKING]
-                       .hitBoxWidth,
-                   player->character->fighterGraphics->movesSprites[KICKING]
-                       .hitBox_Y,
-                   player->character->fighterGraphics->movesSprites[KICKING]
-                       .hitBoxHeight,
-                   player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
-                   hurtBox2_Y2)) {
-        if (!anotherPlayer->blocking) {
-          anotherPlayer->life -= 1;
-          anotherPlayer->animationDone = false;
-          anotherPlayer->character->currentSprite = GOT_FACE_HIT;  // GOT_HIT
-        } else
-          anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+      if (!(player->character->currentSprite == JUMPING)) {
+        player->animationDone = false;
+        player->character->currentSprite = KICKING;  // PUNCHING
+        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                     player->character->fighterGraphics->movesSprites[KICKING]
+                         .hitBoxWidth,
+                     player->character->fighterGraphics->movesSprites[KICKING]
+                         .hitBox_Y,
+                     player->character->fighterGraphics->movesSprites[KICKING]
+                         .hitBoxHeight,
+                     player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+                     hurtBox2_Y2)) {
+          if (!anotherPlayer->blocking) {
+            anotherPlayer->life -= 1;
+            anotherPlayer->animationDone = false;
+            anotherPlayer->character->currentSprite = GOT_FACE_HIT;  // GOT_HIT
+          } else
+            anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
 
-        // knock back thing
-        if (anotherPlayer->facingRight)
-          anotherPlayer->xPosition -= 2;
-        else
-          anotherPlayer->xPosition += 2;
+          // knock back thing
+          if (anotherPlayer->facingRight)
+            anotherPlayer->xPosition -= 2;
+          else
+            anotherPlayer->xPosition += 2;
+        }
       }
     }
   }

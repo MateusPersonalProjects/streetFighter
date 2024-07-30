@@ -43,22 +43,22 @@ const short GUILE_FACE_HIT_DRAW_W_ARRAY[3] = {56, 60, 66};
 const short GUILE_FACE_HIT_DRAW_H_ARRAY[3] = {81, 73, 75};
 
 /* ---------------- DEFENDING -------------- */
-const short GUILE_DEFENDING_X[1] = {1211};
-const short GUILE_DEFENDING_Y[1] = {16};
-const short GUILE_DEFENDING_DRAW_W_ARRAY[1] = {43};
-const short GUILE_DEFENDING_DRAW_H_ARRAY[1] = {83};
+const short GUILE_DEFENDING_X[1] = {1178};
+const short GUILE_DEFENDING_Y[1] = {32};
+const short GUILE_DEFENDING_DRAW_W_ARRAY[1] = {51};
+const short GUILE_DEFENDING_DRAW_H_ARRAY[1] = {72};
 
 /* --------------- PUNCHING ------------- */
-const short GUILE_PUNCH_X[3] = {3, 52, 117};
-const short GUILE_PUNCH_Y[3] = {134, 134, 134};
-const short GUILE_PUNCH_DRAW_W_ARRAY[3] = {43, 57, 43};
-const short GUILE_PUNCH_DRAW_H_ARRAY[3] = {81, 81, 81};
+const short GUILE_PUNCH_X[3] = {2, 62, 134};
+const short GUILE_PUNCH_Y[3] = {148, 148, 148};
+const short GUILE_PUNCH_DRAW_W_ARRAY[3] = {54, 67, 54};
+const short GUILE_PUNCH_DRAW_H_ARRAY[3] = {82, 82, 82};
 
 /* --------------- KICKING --------------- */
-const short GUILE_KICK_X[3] = {6, 62, 135};
-const short GUILE_KICK_Y[3] = {261, 259, 261};
-const short GUILE_KICK_DRAW_W_ARRAY[3] = {49, 67, 49};
-const short GUILE_KICK_DRAW_H_ARRAY[3] = {85, 87, 85};
+const short GUILE_KICK_X[3] = {3, 55, 140};
+const short GUILE_KICK_Y[3] = {271, 271, 271};
+const short GUILE_KICK_DRAW_W_ARRAY[3] = {43, 80, 43};
+const short GUILE_KICK_DRAW_H_ARRAY[3] = {84, 84, 84};
 
 /*
   Initialize GUILE
@@ -175,7 +175,7 @@ FIGHTER_SPRITES* initGuile() {
 
   attackSpritesInit(guile, PUNCHING, 3, 0, GUILE_PUNCH_DRAW_H,
                     GUILE_PUNCH_DRAW_W, GUILE_PUNCH_HURT_H, GUILE_PUNCH_HURT_W,
-                    GUILE_PUNCH_X, GUILE_PUNCH_Y, 19, 8, 17,
+                    GUILE_PUNCH_X, GUILE_PUNCH_Y, 27, 11, 10,
                     GUILE_PUNCH_DRAW_W_ARRAY, GUILE_PUNCH_DRAW_H_ARRAY);
 
   /* ------------------- KICKING THINGS ----------------------- */
@@ -189,7 +189,7 @@ FIGHTER_SPRITES* initGuile() {
 
   attackSpritesInit(guile, KICKING, 3, 0, GUILE_KICK_DRAW_H, GUILE_KICK_DRAW_W,
                     GUILE_KICK_HURT_H, GUILE_KICK_HURT_W, GUILE_KICK_X,
-                    GUILE_KICK_Y, 28, 12, 1, GUILE_KICK_DRAW_W_ARRAY,
+                    GUILE_KICK_Y, 37, 25, 30, GUILE_KICK_DRAW_W_ARRAY,
                     GUILE_KICK_DRAW_H_ARRAY);
   return guile;
 }
