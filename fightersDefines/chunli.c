@@ -41,22 +41,22 @@ const short CHUNLI_FACE_HIT_DRAW_W_ARRAY[2] = {46, 59};
 const short CHUNLI_FACE_HIT_DRAW_H_ARRAY[2] = {83, 75};
 
 /* ---------------- DEFENDING -------------- */
-const short CHUNLI_DEFENDING_X[1] = {1211};
-const short CHUNLI_DEFENDING_Y[1] = {16};
-const short CHUNLI_DEFENDING_DRAW_W_ARRAY[1] = {43};
-const short CHUNLI_DEFENDING_DRAW_H_ARRAY[1] = {83};
+const short CHUNLI_DEFENDING_X[1] = {1011};
+const short CHUNLI_DEFENDING_Y[1] = {148};
+const short CHUNLI_DEFENDING_DRAW_W_ARRAY[1] = {49};
+const short CHUNLI_DEFENDING_DRAW_H_ARRAY[1] = {76};
 
 /* --------------- PUNCHING ------------- */
-const short CHUNLI_PUNCH_X[3] = {3, 52, 117};
-const short CHUNLI_PUNCH_Y[3] = {134, 134, 134};
-const short CHUNLI_PUNCH_DRAW_W_ARRAY[3] = {43, 57, 43};
-const short CHUNLI_PUNCH_DRAW_H_ARRAY[3] = {81, 81, 81};
+const short CHUNLI_PUNCH_X[3] = {3, 71, 131};
+const short CHUNLI_PUNCH_Y[3] = {144, 137, 144};
+const short CHUNLI_PUNCH_DRAW_W_ARRAY[3] = {61, 52, 61};
+const short CHUNLI_PUNCH_DRAW_H_ARRAY[3] = {80, 87, 80};
 
 /* --------------- KICKING --------------- */
-const short CHUNLI_KICK_X[3] = {6, 62, 135};
-const short CHUNLI_KICK_Y[3] = {261, 259, 261};
-const short CHUNLI_KICK_DRAW_W_ARRAY[3] = {49, 67, 49};
-const short CHUNLI_KICK_DRAW_H_ARRAY[3] = {85, 87, 85};
+const short CHUNLI_KICK_X[5] = {2, 55, 205, 282, 343};
+const short CHUNLI_KICK_Y[5] = {261, 257, 256, 257, 261};
+const short CHUNLI_KICK_DRAW_W_ARRAY[5] = {48, 54, 69, 54, 48};
+const short CHUNLI_KICK_DRAW_H_ARRAY[5] = {80, 84, 85, 84, 80};
 
 /*
   Initialize CHUNLI
@@ -169,10 +169,12 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (chunli->movesSprites[PUNCHING].sprites == NULL) exit(1);
 
+  chunli->movesSprites[PUNCHING].modAnimation = 3;
+
   attackSpritesInit(chunli, PUNCHING, 3, 0, CHUNLI_PUNCH_DRAW_H,
                     CHUNLI_PUNCH_DRAW_W, CHUNLI_PUNCH_HURT_H,
-                    CHUNLI_PUNCH_HURT_W, CHUNLI_PUNCH_X, CHUNLI_PUNCH_Y, 19, 8,
-                    17, CHUNLI_PUNCH_DRAW_W_ARRAY, CHUNLI_PUNCH_DRAW_H_ARRAY);
+                    CHUNLI_PUNCH_HURT_W, CHUNLI_PUNCH_X, CHUNLI_PUNCH_Y, 24, 11,
+                    11, CHUNLI_PUNCH_DRAW_W_ARRAY, CHUNLI_PUNCH_DRAW_H_ARRAY);
 
   /* ------------------- KICKING THINGS ----------------------- */
 
@@ -181,9 +183,11 @@ FIGHTER_SPRITES* initChunli() {
       (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
   if (chunli->movesSprites[KICKING].sprites == NULL) exit(1);
 
+  chunli->movesSprites[KICKING].modAnimation = 4;
+
   attackSpritesInit(chunli, KICKING, 3, 0, CHUNLI_KICK_DRAW_H,
                     CHUNLI_KICK_DRAW_W, CHUNLI_KICK_HURT_H, CHUNLI_KICK_HURT_W,
-                    CHUNLI_KICK_X, CHUNLI_KICK_Y, 28, 12, 1,
+                    CHUNLI_KICK_X, CHUNLI_KICK_Y, 31, 12, 9,
                     CHUNLI_KICK_DRAW_W_ARRAY, CHUNLI_KICK_DRAW_H_ARRAY);
   return chunli;
 }
