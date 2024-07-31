@@ -230,6 +230,26 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
 }
 
 /*
+ * What is going on here get out now!
+ */
+void getOutCrazy(PLAYER *player, PLAYER *anotherPlayer) {
+  int boundP1 = player->xPosition + player->character->width - 10;
+  int bound2P1 = player->xPosition + 10;
+
+  int centerP2 =
+      anotherPlayer->xPosition + (anotherPlayer->character->width / 2);
+
+  if (centerP2 >= boundP1 && centerP2 <= bound2P1) {
+    if (anotherPlayer->xPosition <= 75)
+      anotherPlayer->xPosition += anotherPlayer->character->width;
+    else if (anotherPlayer->xPosition >= (BUFFER_W - 75))
+      anotherPlayer->xPosition -= anotherPlayer->character->width;
+    else
+      anotherPlayer->xPosition += anotherPlayer->character->width;
+  }
+}
+
+/*
   Update things for player movements
 */
 void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
@@ -305,6 +325,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
 
   // Who is looking to the right side
   playerSight(player, anotherPlayer);
+
+  getOutCrazy(player, anotherPlayer);
 }
 
 /*
