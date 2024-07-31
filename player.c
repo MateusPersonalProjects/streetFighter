@@ -444,16 +444,19 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
   /* ------------------------------------------------------- */
 
   // DRAW THE PLAYERS
+  int offset = 0;
   if (player->facingRight)
     al_draw_bitmap(
         player->character->fighterGraphics->movesSprites[currentSprite]
             .sprites[currentSpriteFrame],
         player->xPosition, player->yPosition, 0);
-  else
+  else {
+    if (currentSprite == PUNCHING || currentSprite == KICKING) offset = -15;
     al_draw_bitmap(
         player->character->fighterGraphics->movesSprites[currentSprite]
             .sprites[currentSpriteFrame],
-        player->xPosition, player->yPosition, ALLEGRO_FLIP_HORIZONTAL);
+        player->xPosition + offset, player->yPosition, ALLEGRO_FLIP_HORIZONTAL);
+  }
 
   // SHOWS ME THE MID POINT OF THE DRAW BOX
   // al_draw_filled_circle(midX, midY, 2.0, color);
