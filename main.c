@@ -102,7 +102,7 @@ int main(void) {
 
   // STAGE THINGS
 
-  short stageChoice = 1;
+  short stageChoice = 0;
 
   GUILE_STAGE *guileStage;
   guileStage = initGuileStage();
@@ -228,6 +228,8 @@ int main(void) {
     player1->yPosition = FLOOR - player1->character->height;
     player2->character = allCharacters[selectP2];
     player2->yPosition = FLOOR - player2->character->height;
+    // And get the stage, if even guile stage if its odd las vegas stage
+    stageChoice = al_get_timer_count(timer) % 2;
 
     bool versusLoop = true;
     unsigned short frames = 0;
