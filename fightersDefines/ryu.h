@@ -77,10 +77,10 @@ extern const short RYU_FACE_HIT_DRAW_H_ARRAY[4];
 #define RYU_FACE_HIT_HURT_H 79
 
 /* ---------------- DEFENDING -------------- */
-extern const short RYU_DEFENDING_X[1];
-extern const short RYU_DEFENDING_Y[1];
-extern const short RYU_DEFENDING_DRAW_W_ARRAY[1];
-extern const short RYU_DEFENDING_DRAW_H_ARRAY[1];
+extern const short RYU_DEFENDING_X[4];
+extern const short RYU_DEFENDING_Y[4];
+extern const short RYU_DEFENDING_DRAW_W_ARRAY[4];
+extern const short RYU_DEFENDING_DRAW_H_ARRAY[4];
 
 
 #define RYU_DEFENDING_DRAW_W 43

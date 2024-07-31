@@ -333,12 +333,13 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                      player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
                      hurtBox2_Y2)) {
           if (!anotherPlayer->blocking) {
-            anotherPlayer->life -= 1;
+            anotherPlayer->life -= 3;
             anotherPlayer->animationDone = false;
             anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
-          } else
+          } else {
+            anotherPlayer->animationDone = false;
             anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
-
+          }
           // knock back thing
           if (anotherPlayer->facingRight)
             anotherPlayer->xPosition -= 2;
@@ -362,7 +363,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                      player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
                      hurtBox2_Y2)) {
           if (!anotherPlayer->blocking) {
-            anotherPlayer->life -= 1;
+            anotherPlayer->life -= 5;
             anotherPlayer->animationDone = false;
             anotherPlayer->character->currentSprite = GOT_FACE_HIT;  // GOT_HIT
           } else

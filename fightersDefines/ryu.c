@@ -43,10 +43,10 @@ const short RYU_FACE_HIT_DRAW_W_ARRAY[4] = {48, 52, 58, 43};
 const short RYU_FACE_HIT_DRAW_H_ARRAY[4] = {79, 79, 83, 82};
 
 /* ---------------- DEFENDING -------------- */
-const short RYU_DEFENDING_X[1] = {1211};
-const short RYU_DEFENDING_Y[1] = {16};
-const short RYU_DEFENDING_DRAW_W_ARRAY[1] = {43};
-const short RYU_DEFENDING_DRAW_H_ARRAY[1] = {83};
+const short RYU_DEFENDING_X[4] = {1211, 1211, 1211, 1211};
+const short RYU_DEFENDING_Y[4] = {16, 16, 16, 16};
+const short RYU_DEFENDING_DRAW_W_ARRAY[4] = {43, 43, 43, 43};
+const short RYU_DEFENDING_DRAW_H_ARRAY[4] = {83, 83, 83, 83};
 
 /* --------------- PUNCHING ------------- */
 const short RYU_PUNCH_X[3] = {3, 52, 117};
@@ -150,10 +150,12 @@ FIGHTER_SPRITES* initRyu() {
 
   // Getting memory for the sprites
   ryu->movesSprites[DEFENDING].sprites =
-      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 1);
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ryu->movesSprites[DEFENDING].sprites == NULL) exit(1);
 
-  attackSpritesInit(ryu, DEFENDING, 1, 0, RYU_DEFENDING_DRAW_H,
+  ryu->movesSprites[DEFENDING].modAnimation = 3;
+
+  attackSpritesInit(ryu, DEFENDING, 4, 0, RYU_DEFENDING_DRAW_H,
                     RYU_DEFENDING_DRAW_W, RYU_DEFENDING_HURT_H,
                     RYU_DEFENDING_HURT_W, RYU_DEFENDING_X, RYU_DEFENDING_Y, 0,
                     0, 0, RYU_DEFENDING_DRAW_W_ARRAY,
