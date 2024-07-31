@@ -192,6 +192,13 @@ void playerJump(PLAYER *player, PLAYER *anotherPlayer, bool jumping) {
     //                  anotherPlayer->character->height) < FLOOR)) {
     player->yAcel = 0;
     player->character->currentSprite = STEADY;
+
+    if (player->xPosition <= 75)
+      player->xPosition += PLAYER_VEL * 4;
+    else if (player->xPosition >= (BUFFER_W - 75))
+      player->xPosition -= PLAYER_VEL * 4;
+    else
+      player->xPosition -= PLAYER_VEL * 4;
     //  player->yAcel -= GRAVITY_COEF;
     //}
     //} else
@@ -208,8 +215,13 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
   // if the player in crouching and the other player jumped on him, he cannot
   // stand and the other player is going to slip away
   if (playersCollision(player, anotherPlayer)) {
-    anotherPlayer->xPosition += PLAYER_VEL;
     player->crouching = true;
+    if (anotherPlayer->xPosition <= 75)
+      anotherPlayer->xPosition += PLAYER_VEL * 4;
+    else if (anotherPlayer->xPosition >= (BUFFER_W - 75))
+      anotherPlayer->xPosition -= PLAYER_VEL * 4;
+    else
+      anotherPlayer->xPosition += PLAYER_VEL * 4;
   }
   // if the player is crouching his y position changes
   if (player->crouching) {
