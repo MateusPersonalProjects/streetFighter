@@ -101,8 +101,14 @@ int main(void) {
   player2 = initPlayer(NULL, PLAYER_2_INIT_POSIT_X, 0, false);
 
   // STAGE THINGS
+
+  short stageChoice = 1;
+
   GUILE_STAGE *guileStage;
   guileStage = initGuileStage();
+
+  VEGAS_STAGE *vegasStage;
+  vegasStage = initVegasStage();
 
   MATCH_INTERFACE *matchInterface;
   matchInterface = initMatchInterface(player1, player2);
@@ -292,7 +298,8 @@ int main(void) {
         dispPreDraw(bufferBitmap);
         al_clear_to_color(al_map_rgb(80, 136, 200));
 
-        drawStage(guileStage, al_get_timer_count(timer));
+        drawStage(guileStage, vegasStage, al_get_timer_count(timer),
+                  stageChoice);
         drawPlayer(player1, boxColors[selectP1], al_get_timer_count(timer));
         drawPlayer(player2, boxColors[selectP2], al_get_timer_count(timer));
         drawMatchInterface(matchInterface, player1, player2,
@@ -332,7 +339,7 @@ int main(void) {
   playerDestroyer(player2);
   matchInterfaceDestroyer(matchInterface);
   destroyCharacSelectSprites(characSelectSprites);
-  destroyStage(guileStage);
+  destroyStage(guileStage, vegasStage);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
   return 0;

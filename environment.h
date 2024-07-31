@@ -40,6 +40,7 @@
 #define GUILE_STAGE_ANIM_THREE_W 80
 #define GUILE_STAGE_ANIM_THREE_X_F1 347
 #define GUILE_STAGE_ANIM_THREE_X_F2 432
+
 typedef struct {
   ALLEGRO_BITMAP* sheet;
 
@@ -57,14 +58,19 @@ typedef struct {
 } GUILE_STAGE ;
 
 #define MAIN_FLOOR_X 0
-#define MAIN_FLOOR_Y 232
+#define MAIN_FLOOR_Y 127
 #define MAIN_FLOOR_W 512
-#define MAIN_FLOOR_H 256
+#define MAIN_FLOOR_H 330
 
 #define LITTLE_BALLS_X 96
 #define LITTLE_BALLS_Y 672
 #define LITTLE_BALLS_W 328
 #define LITTLE_BALLS_H 8
+
+#define BACK_SPARKLES_X 96
+#define BACK_SPARKLES_Y 496
+#define BACK_SPARKLES_W 289
+#define BACK_SPARKLES_H 80
 
 extern const short carsAndDudes_x[2];
 extern const short carsAndDudes_y[2];
@@ -86,10 +92,20 @@ typedef struct{
 
   ALLEGRO_BITMAP* mainFloor;
   ALLEGRO_BITMAP* littleBals;
+  ALLEGRO_BITMAP* backSparkles;
+  
   ALLEGRO_BITMAP* carsAndDudes[2];
+  short carsAndDudesFrames;
+  
   ALLEGRO_BITMAP* redWoman[4];
+  short redWomanFrames;
+  int redWomanPosition;
+  bool redGoing;
+  
   ALLEGRO_BITMAP* blueWoman[4];
-
+  short blueWomanFrames;
+  int blueWomanPosition;
+  bool blueGoing;
 } VEGAS_STAGE;
 
 /*
@@ -105,10 +121,10 @@ VEGAS_STAGE* initVegasStage();
 /*
   Draw the stage on the screen
 */
-void drawStage(GUILE_STAGE* stage, long int timer);
+void drawStage(GUILE_STAGE* guileStage, VEGAS_STAGE* vegasStage, long int timer, short choice);
 
 /*
   Destroy a stage
 */
-void destroyStage(GUILE_STAGE* stage);
+void destroyStage(GUILE_STAGE* stage, VEGAS_STAGE* vegasStage);
 #endif // !__GAME_ENVIRONMENT__
