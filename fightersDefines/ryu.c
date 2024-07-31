@@ -42,11 +42,23 @@ const short RYU_FACE_HIT_Y[4] = {757, 757, 753, 754};
 const short RYU_FACE_HIT_DRAW_W_ARRAY[4] = {48, 52, 58, 43};
 const short RYU_FACE_HIT_DRAW_H_ARRAY[4] = {79, 79, 83, 82};
 
+/* ---------------- GOT CROUCH HIT -------------- */
+const short RYU_CROUCH_HIT_X[4] = {451, 451, 451, 451};
+const short RYU_CROUCH_HIT_Y[4] = {774, 774, 774, 774};
+const short RYU_CROUCH_HIT_DRAW_W_ARRAY[4] = {45, 45, 45, 45};
+const short RYU_CROUCH_HIT_DRAW_H_ARRAY[4] = {62, 62, 62, 62};
+
 /* ---------------- DEFENDING -------------- */
 const short RYU_DEFENDING_X[4] = {1211, 1211, 1211, 1211};
 const short RYU_DEFENDING_Y[4] = {16, 16, 16, 16};
 const short RYU_DEFENDING_DRAW_W_ARRAY[4] = {43, 43, 43, 43};
 const short RYU_DEFENDING_DRAW_H_ARRAY[4] = {83, 83, 83, 83};
+
+/* ---------------- CROUCH BLOCK -------------- */
+const short RYU_CROUCH_BLOCK_X[4] = {1260, 1260, 1260, 1260};
+const short RYU_CROUCH_BLOCK_Y[4] = {38, 38, 38, 38};
+const short RYU_CROUCH_BLOCK_DRAW_W_ARRAY[4] = {43, 43, 43, 43};
+const short RYU_CROUCH_BLOCK_DRAW_H_ARRAY[4] = {61, 61, 61, 61};
 
 /* --------------- PUNCHING ------------- */
 const short RYU_PUNCH_X[3] = {3, 52, 117};
@@ -146,6 +158,21 @@ FIGHTER_SPRITES* initRyu() {
                     RYU_FACE_HIT_HURT_W, RYU_FACE_HIT_X, RYU_FACE_HIT_Y, 0, 0,
                     0, RYU_FACE_HIT_DRAW_W_ARRAY, RYU_FACE_HIT_DRAW_H_ARRAY);
 
+  /* --------------------- GOT CROUCH HIT ------------------- */
+
+  // Getting memory for the sprites
+  ryu->movesSprites[GOT_CROUCH_HIT].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ryu->movesSprites[GOT_CROUCH_HIT].sprites == NULL) exit(1);
+
+  ryu->movesSprites[GOT_CROUCH_HIT].modAnimation = 3;
+
+  attackSpritesInit(ryu, GOT_CROUCH_HIT, 4, 0, RYU_CROUCH_HIT_DRAW_H,
+                    RYU_CROUCH_HIT_DRAW_W, RYU_CROUCH_HIT_HURT_H,
+                    RYU_CROUCH_HIT_HURT_W, RYU_CROUCH_HIT_X, RYU_CROUCH_HIT_Y,
+                    0, 0, 0, RYU_CROUCH_HIT_DRAW_W_ARRAY,
+                    RYU_CROUCH_HIT_DRAW_H_ARRAY);
+
   /* --------------------- DEFENDING ------------------- */
 
   // Getting memory for the sprites
@@ -160,6 +187,21 @@ FIGHTER_SPRITES* initRyu() {
                     RYU_DEFENDING_HURT_W, RYU_DEFENDING_X, RYU_DEFENDING_Y, 0,
                     0, 0, RYU_DEFENDING_DRAW_W_ARRAY,
                     RYU_DEFENDING_DRAW_H_ARRAY);
+
+  /* --------------------- CROUCH_BLOCK ------------------- */
+
+  // Getting memory for the sprites
+  ryu->movesSprites[CROUCH_BLOCK].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ryu->movesSprites[CROUCH_BLOCK].sprites == NULL) exit(1);
+
+  ryu->movesSprites[CROUCH_BLOCK].modAnimation = 3;
+
+  attackSpritesInit(ryu, CROUCH_BLOCK, 4, 0, RYU_CROUCH_BLOCK_DRAW_H,
+                    RYU_CROUCH_BLOCK_DRAW_W, RYU_CROUCH_BLOCK_HURT_H,
+                    RYU_CROUCH_BLOCK_HURT_W, RYU_CROUCH_BLOCK_X,
+                    RYU_CROUCH_BLOCK_Y, 0, 0, 0, RYU_CROUCH_BLOCK_DRAW_W_ARRAY,
+                    RYU_CROUCH_BLOCK_DRAW_H_ARRAY);
 
   /* ------------------- PUNCHING THINGS -------------------- */
 

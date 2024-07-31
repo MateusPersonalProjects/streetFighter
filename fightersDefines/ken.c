@@ -42,11 +42,23 @@ const short KEN_FACE_HIT_Y[4] = {782, 783, 777, 779};
 const short KEN_FACE_HIT_DRAW_W_ARRAY[4] = {48, 53, 60, 43};
 const short KEN_FACE_HIT_DRAW_H_ARRAY[4] = {79, 77, 83, 81};
 
+/* ---------------- GOT CROUCH HIT -------------- */
+const short KEN_CROUCH_HIT_X[4] = {449, 449, 449, 449};
+const short KEN_CROUCH_HIT_Y[4] = {798, 798, 798, 798};
+const short KEN_CROUCH_HIT_DRAW_W_ARRAY[4] = {47, 47, 47, 47};
+const short KEN_CROUCH_HIT_DRAW_H_ARRAY[4] = {62, 62, 62, 62};
+
 /* ---------------- DEFENDING -------------- */
-const short KEN_DEFENDING_X[1] = {1211};
-const short KEN_DEFENDING_Y[1] = {16};
-const short KEN_DEFENDING_DRAW_W_ARRAY[1] = {43};
-const short KEN_DEFENDING_DRAW_H_ARRAY[1] = {83};
+const short KEN_DEFENDING_X[4] = {1211, 1211, 1211, 1211};
+const short KEN_DEFENDING_Y[4] = {16, 16, 16, 16};
+const short KEN_DEFENDING_DRAW_W_ARRAY[4] = {43, 43, 43, 43};
+const short KEN_DEFENDING_DRAW_H_ARRAY[4] = {83, 83, 83, 83};
+
+/* ---------------- CROUCH BLOCK -------------- */
+const short KEN_CROUCH_BLOCK_X[4] = {1260, 1260, 1260, 1260};
+const short KEN_CROUCH_BLOCK_Y[4] = {38, 38, 38, 38};
+const short KEN_CROUCH_BLOCK_DRAW_W_ARRAY[4] = {43, 43, 43, 43};
+const short KEN_CROUCH_BLOCK_DRAW_H_ARRAY[4] = {61, 61, 61, 61};
 
 /* --------------- PUNCHING ------------- */
 const short KEN_PUNCH_X[3] = {3, 52, 117};
@@ -146,18 +158,50 @@ FIGHTER_SPRITES* initKen() {
                     KEN_FACE_HIT_HURT_W, KEN_FACE_HIT_X, KEN_FACE_HIT_Y, 0, 0,
                     0, KEN_FACE_HIT_DRAW_W_ARRAY, KEN_FACE_HIT_DRAW_H_ARRAY);
 
+  /* --------------------- GOT CROUCH HIT ------------------- */
+
+  // Getting memory for the sprites
+  ken->movesSprites[GOT_CROUCH_HIT].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ken->movesSprites[GOT_CROUCH_HIT].sprites == NULL) exit(1);
+
+  ken->movesSprites[GOT_CROUCH_HIT].modAnimation = 3;
+
+  attackSpritesInit(ken, GOT_CROUCH_HIT, 4, 0, KEN_CROUCH_HIT_DRAW_H,
+                    KEN_CROUCH_HIT_DRAW_W, KEN_CROUCH_HIT_HURT_H,
+                    KEN_CROUCH_HIT_HURT_W, KEN_CROUCH_HIT_X, KEN_CROUCH_HIT_Y,
+                    0, 0, 0, KEN_CROUCH_HIT_DRAW_W_ARRAY,
+                    KEN_CROUCH_HIT_DRAW_H_ARRAY);
+
   /* --------------------- DEFENDING ------------------- */
 
   // Getting memory for the sprites
   ken->movesSprites[DEFENDING].sprites =
-      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 1);
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (ken->movesSprites[DEFENDING].sprites == NULL) exit(1);
 
-  attackSpritesInit(ken, DEFENDING, 1, 0, KEN_DEFENDING_DRAW_H,
+  ken->movesSprites[DEFENDING].modAnimation = 3;
+
+  attackSpritesInit(ken, DEFENDING, 4, 0, KEN_DEFENDING_DRAW_H,
                     KEN_DEFENDING_DRAW_W, KEN_DEFENDING_HURT_H,
                     KEN_DEFENDING_HURT_W, KEN_DEFENDING_X, KEN_DEFENDING_Y, 0,
                     0, 0, KEN_DEFENDING_DRAW_W_ARRAY,
                     KEN_DEFENDING_DRAW_H_ARRAY);
+
+  /* --------------------- CROUCH_BLOCK ------------------- */
+
+  // Getting memory for the sprites
+  ken->movesSprites[CROUCH_BLOCK].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ken->movesSprites[CROUCH_BLOCK].sprites == NULL) exit(1);
+
+  ken->movesSprites[CROUCH_BLOCK].modAnimation = 3;
+
+  attackSpritesInit(ken, CROUCH_BLOCK, 4, 0, KEN_CROUCH_BLOCK_DRAW_H,
+                    KEN_CROUCH_BLOCK_DRAW_W, KEN_CROUCH_BLOCK_HURT_H,
+                    KEN_CROUCH_BLOCK_HURT_W, KEN_CROUCH_BLOCK_X,
+                    KEN_CROUCH_BLOCK_Y, 0, 0, 0, KEN_CROUCH_BLOCK_DRAW_W_ARRAY,
+                    KEN_CROUCH_BLOCK_DRAW_H_ARRAY);
 
   /* ------------------- PUNCHING THINGS -------------------- */
 

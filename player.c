@@ -242,7 +242,7 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
 
   // IF THERE IS AN ATTACK ANIMATION ROLLING HE CANNOT CHANGE POSITION
   if (player->animationDone) {
-    if (keyboardKeys[whichKey[JUMP]] && !jumping) {
+    if (!player->crouching && !jumping && keyboardKeys[whichKey[JUMP]]) {
       // Give me some boost to reach the skyies o/
       player->character->currentSprite = JUMPING;  // JUMPING
       player->yAcel = PLAYER_VEL * 3;
@@ -250,29 +250,33 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
           0;
     }
 
-    if (keyboardKeys[whichKey[CROUCH]] && !jumping) {
+    if (!jumping && keyboardKeys[whichKey[CROUCH]]) {
       player->crouching = true;
       player->character->currentSprite = CROUCHING;  // CROUNCHING
     }
 
-    if (!player->crouching && keyboardKeys[whichKey[MOVE_RIGHT]]) {
+    if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
       // If player is a moonwalker, well the king of pop gives him the power to
       // block xD
       if (!player->facingRight) player->blocking = true;
-      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
-      player->xPosition += PLAYER_VEL;
-      if (playersCollision(player, anotherPlayer))
-        player->xPosition -= PLAYER_VEL;
+      if (!player->crouching) {
+        if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+        player->xPosition += PLAYER_VEL;
+        if (playersCollision(player, anotherPlayer))
+          player->xPosition -= PLAYER_VEL;
+      }
     }
 
-    if (!player->crouching && keyboardKeys[whichKey[MOVE_LEFT]]) {
+    if (keyboardKeys[whichKey[MOVE_LEFT]]) {
       // If player is a moonwalker, well the king of pop gives him the power to
       // block xD
       if (player->facingRight) player->blocking = true;
-      if (!jumping) player->character->currentSprite = WALKING;  // WALKING
-      player->xPosition -= PLAYER_VEL;
-      if (playersCollision(player, anotherPlayer))
-        player->xPosition += PLAYER_VEL;
+      if (!player->crouching) {
+        if (!jumping) player->character->currentSprite = WALKING;  // WALKING
+        player->xPosition -= PLAYER_VEL;
+        if (playersCollision(player, anotherPlayer))
+          player->xPosition += PLAYER_VEL;
+      }
     }
   }
   updateWidthHeight(player);
@@ -335,10 +339,16 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
           if (!anotherPlayer->blocking) {
             anotherPlayer->life -= 3;
             anotherPlayer->animationDone = false;
-            anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
+            else
+              anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
           } else {
             anotherPlayer->animationDone = false;
-            anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+            else
+              anotherPlayer->character->currentSprite = CROUCH_BLOCK;
           }
           // knock back thing
           if (anotherPlayer->facingRight)
@@ -365,10 +375,18 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
           if (!anotherPlayer->blocking) {
             anotherPlayer->life -= 5;
             anotherPlayer->animationDone = false;
-            anotherPlayer->character->currentSprite = GOT_FACE_HIT;  // GOT_HIT
-          } else
-            anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
-
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite =
+                  GOT_FACE_HIT;  // GOT_HIT
+            else
+              anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
+          } else {
+            anotherPlayer->animationDone = false;
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+            else
+              anotherPlayer->character->currentSprite = CROUCH_BLOCK;
+          }
           // knock back thing
           if (anotherPlayer->facingRight)
             anotherPlayer->xPosition -= 2;

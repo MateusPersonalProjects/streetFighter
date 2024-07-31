@@ -40,11 +40,23 @@ const short CHUNLI_FACE_HIT_Y[2] = {852, 860};
 const short CHUNLI_FACE_HIT_DRAW_W_ARRAY[2] = {46, 59};
 const short CHUNLI_FACE_HIT_DRAW_H_ARRAY[2] = {83, 75};
 
+/* ---------------- GOT CROUCH HIT -------------- */
+const short CHUNLI_CROUCH_HIT_X[4] = {254, 254, 254, 254};
+const short CHUNLI_CROUCH_HIT_Y[4] = {880, 880, 880, 880};
+const short CHUNLI_CROUCH_HIT_DRAW_W_ARRAY[4] = {53, 53, 53, 53};
+const short CHUNLI_CROUCH_HIT_DRAW_H_ARRAY[4] = {55, 55, 55, 55};
+
 /* ---------------- DEFENDING -------------- */
-const short CHUNLI_DEFENDING_X[1] = {1011};
-const short CHUNLI_DEFENDING_Y[1] = {148};
-const short CHUNLI_DEFENDING_DRAW_W_ARRAY[1] = {49};
-const short CHUNLI_DEFENDING_DRAW_H_ARRAY[1] = {76};
+const short CHUNLI_DEFENDING_X[4] = {1011, 1011, 1011, 1011};
+const short CHUNLI_DEFENDING_Y[4] = {148, 148, 148, 148};
+const short CHUNLI_DEFENDING_DRAW_W_ARRAY[4] = {49, 49, 49, 49};
+const short CHUNLI_DEFENDING_DRAW_H_ARRAY[4] = {76, 76, 76, 76};
+
+/* ---------------- CROUCH BLOCK -------------- */
+const short CHUNLI_CROUCH_BLOCK_X[4] = {1068, 1068, 1068, 1068};
+const short CHUNLI_CROUCH_BLOCK_Y[4] = {163, 163, 163, 163};
+const short CHUNLI_CROUCH_BLOCK_DRAW_W_ARRAY[4] = {45, 45, 45, 45};
+const short CHUNLI_CROUCH_BLOCK_DRAW_H_ARRAY[4] = {61, 61, 61, 61};
 
 /* --------------- PUNCHING ------------- */
 const short CHUNLI_PUNCH_X[3] = {3, 71, 131};
@@ -149,18 +161,51 @@ FIGHTER_SPRITES* initChunli() {
                     CHUNLI_FACE_HIT_Y, 0, 0, 0, CHUNLI_FACE_HIT_DRAW_W_ARRAY,
                     CHUNLI_FACE_HIT_DRAW_H_ARRAY);
 
+  /* --------------------- GOT CROUCH HIT ------------------- */
+
+  // Getting memory for the sprites
+  chunli->movesSprites[GOT_CROUCH_HIT].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (chunli->movesSprites[GOT_CROUCH_HIT].sprites == NULL) exit(1);
+
+  chunli->movesSprites[GOT_CROUCH_HIT].modAnimation = 3;
+
+  attackSpritesInit(chunli, GOT_CROUCH_HIT, 4, 0, CHUNLI_CROUCH_HIT_DRAW_H,
+                    CHUNLI_CROUCH_HIT_DRAW_W, CHUNLI_CROUCH_HIT_HURT_H,
+                    CHUNLI_CROUCH_HIT_HURT_W, CHUNLI_CROUCH_HIT_X, CHUNLI_CROUCH_HIT_Y,
+                    0, 0, 0, CHUNLI_CROUCH_HIT_DRAW_W_ARRAY,
+                    CHUNLI_CROUCH_HIT_DRAW_H_ARRAY);
+
   /* --------------------- DEFENDING ------------------- */
 
   // Getting memory for the sprites
   chunli->movesSprites[DEFENDING].sprites =
-      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 1);
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (chunli->movesSprites[DEFENDING].sprites == NULL) exit(1);
 
-  attackSpritesInit(chunli, DEFENDING, 1, 0, CHUNLI_DEFENDING_DRAW_H,
+  chunli->movesSprites[DEFENDING].modAnimation = 3;
+
+  attackSpritesInit(chunli, DEFENDING, 4, 0, CHUNLI_DEFENDING_DRAW_H,
                     CHUNLI_DEFENDING_DRAW_W, CHUNLI_DEFENDING_HURT_H,
                     CHUNLI_DEFENDING_HURT_W, CHUNLI_DEFENDING_X,
                     CHUNLI_DEFENDING_Y, 0, 0, 0, CHUNLI_DEFENDING_DRAW_W_ARRAY,
                     CHUNLI_DEFENDING_DRAW_H_ARRAY);
+
+  /* --------------------- CROUCH_BLOCK ------------------- */
+
+  // Getting memory for the sprites
+  chunli->movesSprites[CROUCH_BLOCK].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (chunli->movesSprites[CROUCH_BLOCK].sprites == NULL) exit(1);
+
+  chunli->movesSprites[CROUCH_BLOCK].modAnimation = 3;
+
+  attackSpritesInit(chunli, CROUCH_BLOCK, 4, 0, CHUNLI_CROUCH_BLOCK_DRAW_H,
+                    CHUNLI_CROUCH_BLOCK_DRAW_W, CHUNLI_CROUCH_BLOCK_HURT_H,
+                    CHUNLI_CROUCH_BLOCK_HURT_W, CHUNLI_CROUCH_BLOCK_X,
+                    CHUNLI_CROUCH_BLOCK_Y, 0, 0, 0,
+                    CHUNLI_CROUCH_BLOCK_DRAW_W_ARRAY,
+                    CHUNLI_CROUCH_BLOCK_DRAW_H_ARRAY);
 
   /* ------------------- PUNCHING THINGS -------------------- */
 

@@ -11,8 +11,10 @@ typedef enum{
   JUMPING,
   CROUCHING,
   DEFENDING,
+  CROUCH_BLOCK,
   GOT_HIT,
   GOT_FACE_HIT,
+  GOT_CROUCH_HIT,
   PUNCHING,
   KICKING
 } SPRITE_LIST;
@@ -36,7 +38,7 @@ typedef struct{
 typedef struct{
   ALLEGRO_BITMAP* sheet;
 
-  MOVE_SPRITES movesSprites[9];
+  MOVE_SPRITES movesSprites[11];
 } FIGHTER_SPRITES;
 
 typedef struct{

@@ -76,6 +76,19 @@ extern const short RYU_FACE_HIT_DRAW_H_ARRAY[4];
 #define RYU_FACE_HIT_HURT_W 37
 #define RYU_FACE_HIT_HURT_H 79
 
+/* --------------- GOT CROUCH HIT ---------------- */
+extern const short RYU_CROUCH_HIT_X[4];
+extern const short RYU_CROUCH_HIT_Y[4];
+extern const short RYU_CROUCH_HIT_DRAW_W_ARRAY[4];
+extern const short RYU_CROUCH_HIT_DRAW_H_ARRAY[4];
+
+#define RYU_CROUCH_HIT_DRAW_W 45
+#define RYU_CROUCH_HIT_DRAW_H 62
+
+#define RYU_CROUCH_HIT_HURT_W 39
+#define RYU_CROUCH_HIT_HURT_H 61
+
+
 /* ---------------- DEFENDING -------------- */
 extern const short RYU_DEFENDING_X[4];
 extern const short RYU_DEFENDING_Y[4];
@@ -88,6 +101,18 @@ extern const short RYU_DEFENDING_DRAW_H_ARRAY[4];
 
 #define RYU_DEFENDING_HURT_W 37
 #define RYU_DEFENDING_HURT_H 81
+
+/* ---------------- CROUCH BLOCK -------------- */
+extern const short RYU_CROUCH_BLOCK_X[4];
+extern const short RYU_CROUCH_BLOCK_Y[4];
+extern const short RYU_CROUCH_CLOCK_DRAW_W_ARRAY[4];
+extern const short RYU_CROUCH_BLOCK_DRAW_H_ARRAY[4];
+
+#define RYU_CROUCH_BLOCK_DRAW_W 43
+#define RYU_CROUCH_BLOCK_DRAW_H 61
+
+#define RYU_CROUCH_BLOCK_HURT_W 35
+#define RYU_CROUCH_BLOCK_HURT_H 59
 
 /* -------------- PUNCHING --------------- */
 extern const short RYU_PUNCH_X[3];

@@ -77,11 +77,24 @@ extern const short GUILE_FACE_HIT_DRAW_H_ARRAY[3];
 #define GUILE_FACE_HIT_HURT_W 37
 #define GUILE_FACE_HIT_HURT_H 78
 
+/* --------------- GOT CROUCH HIT ---------------- */
+extern const short GUILE_CROUCH_HIT_X[4];
+extern const short GUILE_CROUCH_HIT_Y[4];
+extern const short GUILE_CROUCH_HIT_DRAW_W_ARRAY[4];
+extern const short GUILE_CROUCH_HIT_DRAW_H_ARRAY[4];
+
+#define GUILE_CROUCH_HIT_DRAW_W 51
+#define GUILE_CROUCH_HIT_DRAW_H 57
+
+#define GUILE_CROUCH_HIT_HURT_W 42
+#define GUILE_CROUCH_HIT_HURT_H 55
+
+
 /* ---------------- DEFENDING -------------- */
-extern const short GUILE_DEFENDING_X[1];
-extern const short GUILE_DEFENDING_Y[1];
-extern const short GUILE_DEFENDING_DRAW_W_ARRAY[1];
-extern const short GUILE_DEFENDING_DRAW_H_ARRAY[1];
+extern const short GUILE_DEFENDING_X[4];
+extern const short GUILE_DEFENDING_Y[4];
+extern const short GUILE_DEFENDING_DRAW_W_ARRAY[4];
+extern const short GUILE_DEFENDING_DRAW_H_ARRAY[4];
 
 
 #define GUILE_DEFENDING_DRAW_W 51
@@ -89,6 +102,18 @@ extern const short GUILE_DEFENDING_DRAW_H_ARRAY[1];
 
 #define GUILE_DEFENDING_HURT_W 35
 #define GUILE_DEFENDING_HURT_H 71
+
+/* ---------------- CROUCH BLOCK -------------- */
+extern const short GUILE_CROUCH_BLOCK_X[4];
+extern const short GUILE_CROUCH_BLOCK_Y[4];
+extern const short GUILE_CROUCH_CLOCK_DRAW_W_ARRAY[4];
+extern const short GUILE_CROUCH_BLOCK_DRAW_H_ARRAY[4];
+
+#define GUILE_CROUCH_BLOCK_DRAW_W 43
+#define GUILE_CROUCH_BLOCK_DRAW_H 59
+
+#define GUILE_CROUCH_BLOCK_HURT_W 31
+#define GUILE_CROUCH_BLOCK_HURT_H 58
 
 /* -------------- PUNCHING --------------- */
 extern const short GUILE_PUNCH_X[3];

@@ -76,11 +76,24 @@ extern const short KEN_FACE_HIT_DRAW_H_ARRAY[4];
 #define KEN_FACE_HIT_HURT_W 37
 #define KEN_FACE_HIT_HURT_H 79
 
+/* --------------- GOT CROUCH HIT ---------------- */
+extern const short KEN_CROUCH_HIT_X[4];
+extern const short KEN_CROUCH_HIT_Y[4];
+extern const short KEN_CROUCH_HIT_DRAW_W_ARRAY[4];
+extern const short KEN_CROUCH_HIT_DRAW_H_ARRAY[4];
+
+#define KEN_CROUCH_HIT_DRAW_W 47
+#define KEN_CROUCH_HIT_DRAW_H 62
+
+#define KEN_CROUCH_HIT_HURT_W 39
+#define KEN_CROUCH_HIT_HURT_H 62
+
+
 /* ---------------- DEFENDING -------------- */
-extern const short KEN_DEFENDING_X[1];
-extern const short KEN_DEFENDING_Y[1];
-extern const short KEN_DEFENDING_DRAW_W_ARRAY[1];
-extern const short KEN_DEFENDING_DRAW_H_ARRAY[1];
+extern const short KEN_DEFENDING_X[4];
+extern const short KEN_DEFENDING_Y[4];
+extern const short KEN_DEFENDING_DRAW_W_ARRAY[4];
+extern const short KEN_DEFENDING_DRAW_H_ARRAY[4];
 
 
 #define KEN_DEFENDING_DRAW_W 43
@@ -88,6 +101,18 @@ extern const short KEN_DEFENDING_DRAW_H_ARRAY[1];
 
 #define KEN_DEFENDING_HURT_W 37
 #define KEN_DEFENDING_HURT_H 81
+
+/* ---------------- CROUCH BLOCK -------------- */
+extern const short KEN_CROUCH_BLOCK_X[4];
+extern const short KEN_CROUCH_BLOCK_Y[4];
+extern const short KEN_CROUCH_CLOCK_DRAW_W_ARRAY[4];
+extern const short KEN_CROUCH_BLOCK_DRAW_H_ARRAY[4];
+
+#define KEN_CROUCH_BLOCK_DRAW_W 43
+#define KEN_CROUCH_BLOCK_DRAW_H 61
+
+#define KEN_CROUCH_BLOCK_HURT_W 35
+#define KEN_CROUCH_BLOCK_HURT_H 59
 
 /* -------------- PUNCHING --------------- */
 extern const short KEN_PUNCH_X[3];

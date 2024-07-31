@@ -70,11 +70,24 @@ extern const short CHUNLI_FACE_HIT_DRAW_H_ARRAY[2];
 #define CHUNLI_FACE_HIT_HURT_W 37
 #define CHUNLI_FACE_HIT_HURT_H 79
 
+/* --------------- GOT CROUCH HIT ---------------- */
+extern const short CHUNLI_CROUCH_HIT_X[4];
+extern const short CHUNLI_CROUCH_HIT_Y[4];
+extern const short CHUNLI_CROUCH_HIT_DRAW_W_ARRAY[4];
+extern const short CHUNLI_CROUCH_HIT_DRAW_H_ARRAY[4];
+
+#define CHUNLI_CROUCH_HIT_DRAW_W 53
+#define CHUNLI_CROUCH_HIT_DRAW_H 55
+
+#define CHUNLI_CROUCH_HIT_HURT_W 47
+#define CHUNLI_CROUCH_HIT_HURT_H 53
+
+
 /* ---------------- DEFENDING -------------- */
-extern const short CHUNLI_DEFENDING_X[1];
-extern const short CHUNLI_DEFENDING_Y[1];
-extern const short CHUNLI_DEFENDING_DRAW_W_ARRAY[1];
-extern const short CHUNLI_DEFENDING_DRAW_H_ARRAY[1];
+extern const short CHUNLI_DEFENDING_X[4];
+extern const short CHUNLI_DEFENDING_Y[4];
+extern const short CHUNLI_DEFENDING_DRAW_W_ARRAY[4];
+extern const short CHUNLI_DEFENDING_DRAW_H_ARRAY[4];
 
 
 #define CHUNLI_DEFENDING_DRAW_W 49
@@ -82,6 +95,19 @@ extern const short CHUNLI_DEFENDING_DRAW_H_ARRAY[1];
 
 #define CHUNLI_DEFENDING_HURT_W 29
 #define CHUNLI_DEFENDING_HURT_H 74
+
+/* ---------------- CROUCH BLOCK -------------- */
+extern const short CHUNLI_CROUCH_BLOCK_X[4];
+extern const short CHUNLI_CROUCH_BLOCK_Y[4];
+extern const short CHUNLI_CROUCH_CLOCK_DRAW_W_ARRAY[4];
+extern const short CHUNLI_CROUCH_BLOCK_DRAW_H_ARRAY[4];
+
+#define CHUNLI_CROUCH_BLOCK_DRAW_W 45
+#define CHUNLI_CROUCH_BLOCK_DRAW_H 61
+
+#define CHUNLI_CROUCH_BLOCK_HURT_W 40
+#define CHUNLI_CROUCH_BLOCK_HURT_H 59
+
 
 /* -------------- PUNCHING --------------- */
 extern const short CHUNLI_PUNCH_X[3];

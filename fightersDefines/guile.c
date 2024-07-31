@@ -42,11 +42,23 @@ const short GUILE_FACE_HIT_Y[3] = {838, 846, 844};
 const short GUILE_FACE_HIT_DRAW_W_ARRAY[3] = {56, 60, 66};
 const short GUILE_FACE_HIT_DRAW_H_ARRAY[3] = {81, 73, 75};
 
+/* ---------------- GOT CROUCH HIT -------------- */
+const short GUILE_CROUCH_HIT_X[4] = {373, 373, 373, 373};
+const short GUILE_CROUCH_HIT_Y[4] = {862, 862, 862, 862};
+const short GUILE_CROUCH_HIT_DRAW_W_ARRAY[4] = {51, 51, 51, 51};
+const short GUILE_CROUCH_HIT_DRAW_H_ARRAY[4] = {57, 57, 57, 57};
+
 /* ---------------- DEFENDING -------------- */
-const short GUILE_DEFENDING_X[1] = {1178};
-const short GUILE_DEFENDING_Y[1] = {32};
-const short GUILE_DEFENDING_DRAW_W_ARRAY[1] = {51};
-const short GUILE_DEFENDING_DRAW_H_ARRAY[1] = {72};
+const short GUILE_DEFENDING_X[4] = {1178, 1178, 1178, 1178};
+const short GUILE_DEFENDING_Y[4] = {32, 32, 32, 32};
+const short GUILE_DEFENDING_DRAW_W_ARRAY[4] = {51, 51, 51, 51};
+const short GUILE_DEFENDING_DRAW_H_ARRAY[4] = {72, 72, 72, 72};
+
+/* ---------------- CROUCH BLOCK -------------- */
+const short GUILE_CROUCH_BLOCK_X[4] = {1238, 1238, 1238, 1238};
+const short GUILE_CROUCH_BLOCK_Y[4] = {45, 45, 45, 45};
+const short GUILE_CROUCH_BLOCK_DRAW_W_ARRAY[4] = {43, 43, 43, 43};
+const short GUILE_CROUCH_BLOCK_DRAW_H_ARRAY[4] = {59, 59, 59, 59};
 
 /* --------------- PUNCHING ------------- */
 const short GUILE_PUNCH_X[3] = {2, 62, 134};
@@ -151,18 +163,50 @@ FIGHTER_SPRITES* initGuile() {
                     0, 0, 0, GUILE_FACE_HIT_DRAW_W_ARRAY,
                     GUILE_FACE_HIT_DRAW_H_ARRAY);
 
+  /* --------------------- GOT CROUCH HIT ------------------- */
+
+  // Getting memory for the sprites
+  guile->movesSprites[GOT_CROUCH_HIT].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (guile->movesSprites[GOT_CROUCH_HIT].sprites == NULL) exit(1);
+
+  guile->movesSprites[GOT_CROUCH_HIT].modAnimation = 3;
+
+  attackSpritesInit(guile, GOT_CROUCH_HIT, 4, 0, GUILE_CROUCH_HIT_DRAW_H,
+                    GUILE_CROUCH_HIT_DRAW_W, GUILE_CROUCH_HIT_HURT_H,
+                    GUILE_CROUCH_HIT_HURT_W, GUILE_CROUCH_HIT_X, GUILE_CROUCH_HIT_Y,
+                    0, 0, 0, GUILE_CROUCH_HIT_DRAW_W_ARRAY,
+                    GUILE_CROUCH_HIT_DRAW_H_ARRAY);
+
   /* --------------------- DEFENDING ------------------- */
 
   // Getting memory for the sprites
   guile->movesSprites[DEFENDING].sprites =
-      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 1);
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
   if (guile->movesSprites[DEFENDING].sprites == NULL) exit(1);
 
-  attackSpritesInit(guile, DEFENDING, 1, 0, GUILE_DEFENDING_DRAW_H,
+  guile->movesSprites[DEFENDING].modAnimation = 3;
+
+  attackSpritesInit(guile, DEFENDING, 4, 0, GUILE_DEFENDING_DRAW_H,
                     GUILE_DEFENDING_DRAW_W, GUILE_DEFENDING_HURT_H,
                     GUILE_DEFENDING_HURT_W, GUILE_DEFENDING_X,
                     GUILE_DEFENDING_Y, 0, 0, 0, GUILE_DEFENDING_DRAW_W_ARRAY,
                     GUILE_DEFENDING_DRAW_H_ARRAY);
+
+  /* --------------------- CROUCH_BLOCK ------------------- */
+
+  // Getting memory for the sprites
+  guile->movesSprites[CROUCH_BLOCK].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (guile->movesSprites[CROUCH_BLOCK].sprites == NULL) exit(1);
+
+  guile->movesSprites[CROUCH_BLOCK].modAnimation = 3;
+
+  attackSpritesInit(
+      guile, CROUCH_BLOCK, 4, 0, GUILE_CROUCH_BLOCK_DRAW_H,
+      GUILE_CROUCH_BLOCK_DRAW_W, GUILE_CROUCH_BLOCK_HURT_H,
+      GUILE_CROUCH_BLOCK_HURT_W, GUILE_CROUCH_BLOCK_X, GUILE_CROUCH_BLOCK_Y, 0,
+      0, 0, GUILE_CROUCH_BLOCK_DRAW_W_ARRAY, GUILE_CROUCH_BLOCK_DRAW_H_ARRAY);
 
   /* ------------------- PUNCHING THINGS -------------------- */
 
