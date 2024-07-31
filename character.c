@@ -1,5 +1,6 @@
 #include "character.h"
 
+#include <allegro5/bitmap.h>
 #include <allegro5/bitmap_io.h>
 #include <stdlib.h>
 #include <time.h>
@@ -81,4 +82,16 @@ void attackSpritesInit(FIGHTER_SPRITES* fighter, SPRITE_LIST sprite,
 /*
   Free the memory that a character was being utilized by a character
 */
-void characterDestroyer(CHARACTER* character) { free(character); }
+void characterDestroyer(CHARACTER* character) {
+  for (int i = 0; i < SPRITE_LIST_NUM; i++) {
+    int numSprites = character->fighterGraphics->movesSprites[i].numFrames;
+    for (int j = 0; j < numSprites; j++) {
+      al_destroy_bitmap(character->fighterGraphics->movesSprites[i].sprites[j]);
+    }
+
+    free(character->fighterGraphics->movesSprites[i].sprites);
+  }
+  al_destroy_bitmap(character->fighterGraphics->sheet);
+  free(character->fighterGraphics);
+  free(character);
+}

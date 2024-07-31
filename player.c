@@ -496,7 +496,4 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
 /*
   Free up the space that were being utilized by a Player instance
 */
-void playerDestroyer(PLAYER *player) {
-  characterDestroyer(player->character);
-  free(player);
-}
+void playerDestroyer(PLAYER *player) { free(player); }

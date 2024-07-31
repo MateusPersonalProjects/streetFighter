@@ -65,5 +65,4 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle);
   Free up the space that were being utilized by a Player instance
 */
 void playerDestroyer(PLAYER *player);
-
 #endif // !__PLAYER__

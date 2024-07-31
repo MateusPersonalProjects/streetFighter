@@ -345,6 +345,7 @@ int main(void) {
   dispDestroyer(disp, bufferBitmap);
   playerDestroyer(player1);
   playerDestroyer(player2);
+  for (int i = 0; i < 4; i++) characterDestroyer(allCharacters[i]);
   matchInterfaceDestroyer(matchInterface);
   destroyCharacSelectSprites(characSelectSprites);
   destroyStage(guileStage, vegasStage);
