@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/events.h>
 #include "display.h"
 #include "misc.h"
 
@@ -91,12 +92,19 @@ void resetSelectionBoxes(SELECTION_BOX* allSelectionBoxes);
   Reset all the boxes to the white color
 */
 void resetSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes);
+
+/*
+  Update the selection boxes color
+*/
+void updateSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
+                               ALLEGRO_COLOR color) ;
+ 
 /*
   Update the selection boxes
 */
 bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
                           unsigned char* keyboardKeys,
-                          unsigned char* playerKeys, ALLEGRO_COLOR color);
+                          unsigned char* playerKeys, ALLEGRO_EVENT event);
 /*
   Draw the main menu
 */

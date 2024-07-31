@@ -6,6 +6,7 @@
 #include <allegro5/bitmap_draw.h>
 #include <allegro5/bitmap_io.h>
 #include <allegro5/color.h>
+#include <allegro5/events.h>
 
 /*
   Initialize all the four selection boxes
@@ -120,28 +121,41 @@ void resetSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes) {
 }
 
 /*
+  Update the selection boxes color
+*/
+void updateSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
+                               ALLEGRO_COLOR color) {
+  /*
+    if the box was not selected turn it into the color of the player
+  */
+  if (!allSelectionBoxes[(*idSelcP)].selected)
+    allSelectionBoxes[(*idSelcP)].color = color;
+}
+
+/*
   Update the selection boxes
 */
 bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
                           unsigned char* keyboardKeys,
-                          unsigned char* playerKeys, ALLEGRO_COLOR color) {
+                          unsigned char* playerKeys, ALLEGRO_EVENT event) {
   bool playerSelected = false;
-  if (keyboardKeys[playerKeys[0]]) {
+
+  if (event.keyboard.keycode == playerKeys[0]) {
     (*idSelcP) -= 2;
     if ((*idSelcP) < 0) (*idSelcP) += 2;
   }
 
-  if (keyboardKeys[playerKeys[1]]) {
+  if (event.keyboard.keycode == playerKeys[1]) {
     (*idSelcP) += 2;
     if ((*idSelcP) > 3) (*idSelcP) -= 2;
   }
 
-  if (keyboardKeys[playerKeys[2]]) {
+  if (event.keyboard.keycode == playerKeys[2]) {
     (*idSelcP) -= 1;
     if ((*idSelcP) < 0) (*idSelcP) += 1;
   }
 
-  if (keyboardKeys[playerKeys[3]]) {
+  if (event.keyboard.keycode == playerKeys[3]) {
     (*idSelcP) += 1;
     if ((*idSelcP) > 3) (*idSelcP) -= 1;
   }
@@ -149,19 +163,13 @@ bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
   /*
     if the box was not selected yet select it and turn it green
   */
-  if (keyboardKeys[playerKeys[4]]) {
+  if (event.keyboard.keycode == playerKeys[4]) {
     if (!allSelectionBoxes[(*idSelcP)].selected) {
       playerSelected = true;
       allSelectionBoxes[(*idSelcP)].color = al_map_rgb(0, 255, 0);
       allSelectionBoxes[(*idSelcP)].selected = true;
     }
   }
-
-  /*
-    if the box was not selected turn it into the color of the player
-  */
-  if (!allSelectionBoxes[(*idSelcP)].selected)
-    allSelectionBoxes[(*idSelcP)].color = color;
 
   return playerSelected;
 }

@@ -134,10 +134,11 @@ int main(void) {
     while (mainMenuLoop) {
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
-
-          if (keyboardKeys[ALLEGRO_KEY_G]) mainMenuLoop = false;
-          if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
           redraw = true;
+          break;
+
+        case ALLEGRO_EVENT_KEY_DOWN:
+          if (event.keyboard.keycode == ALLEGRO_KEY_G) mainMenuLoop = false;
           break;
 
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -148,7 +149,7 @@ int main(void) {
       // If the user wants to close the game break the loop
       if (done) break;
 
-      keyboardUpdate(&event, keyboardKeys);
+      // keyboardUpdate(&event, keyboardKeys);
 
       // ------------ REDRAW PHASE ------------
       if (redraw && al_event_queue_is_empty(queue)) {
@@ -179,21 +180,26 @@ int main(void) {
         case ALLEGRO_EVENT_TIMER:
           resetSelectionBoxesColor(characSelectBoxes);
 
-          if (!p1Selected)
-            p1Selected =
-                updateSelectionBoxes(characSelectBoxes, &selectP1, keyboardKeys,
-                                     p1Keys, al_map_rgb(0, 0, 255));
-          if (!p2Selected)
-            p2Selected =
-                updateSelectionBoxes(characSelectBoxes, &selectP2, keyboardKeys,
-                                     p2Keys, al_map_rgb(255, 0, 0));
-
-          chacSelecLoop = (!p1Selected || !p2Selected);
-
-          if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
+          updateSelectionBoxesColor(characSelectBoxes, &selectP1,
+                                    al_map_rgb(0, 0, 255));
+          updateSelectionBoxesColor(characSelectBoxes, &selectP2,
+                                    al_map_rgb(255, 0, 0));
           redraw = true;
           break;
 
+        case ALLEGRO_EVENT_KEY_DOWN:
+          if (!p1Selected)
+            p1Selected = updateSelectionBoxes(characSelectBoxes, &selectP1,
+                                              keyboardKeys, p1Keys, event);
+          if (!p2Selected)
+            p2Selected = updateSelectionBoxes(characSelectBoxes, &selectP2,
+                                              keyboardKeys, p2Keys, event);
+
+          chacSelecLoop = (!p1Selected || !p2Selected);
+
+          if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) done = true;
+
+          break;
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
           done = true;
           break;
@@ -202,7 +208,7 @@ int main(void) {
       // If the user wants to close the game break the loop
       if (done) break;
 
-      keyboardUpdate(&event, keyboardKeys);
+      // keyboardUpdate(&event, keyboardKeys);
 
       // ------------ REDRAW PHASE ------------
       if (redraw && al_event_queue_is_empty(queue)) {
