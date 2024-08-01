@@ -184,7 +184,9 @@ void playerSight(PLAYER *player1, PLAYER *player2) {
 */
 void playerJump(PLAYER *player, PLAYER *anotherPlayer, bool jumping) {
   // If the player is jumping gravity starts to desacelerate him
-  if (jumping) player->character->currentSprite = JUMPING;
+  if (jumping) {
+    if (player->animationDone) player->character->currentSprite = JUMPING;
+  }
   player->yPosition -= player->yAcel;
   if (playersCollision(player, anotherPlayer)) {
     player->yPosition += player->yAcel;
@@ -358,7 +360,8 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   // FINISHES OFF
   if (player->animationDone) {
     if (keyboardKeys[whichKey[PUNCH]]) {
-      if (!(player->character->currentSprite == JUMPING)) {
+      if (!(player->character->currentSprite == JUMPING) &&
+          !(player->character->currentSprite == CROUCHING)) {
         player->animationDone = false;
         player->character->currentSprite = PUNCHING;  // PUNCHING
         if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
@@ -391,9 +394,44 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition += 2;
         }
       }
+      if (player->character->currentSprite == CROUCHING) {
+        player->animationDone = false;
+        player->character->currentSprite = CROUCH_PUNCH;  // PUNCHING
+        if (hitCheck(
+                hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                player->character->fighterGraphics->movesSprites[CROUCH_PUNCH]
+                    .hitBoxWidth,
+                player->character->fighterGraphics->movesSprites[CROUCH_PUNCH]
+                    .hitBox_Y,
+                player->character->fighterGraphics->movesSprites[CROUCH_PUNCH]
+                    .hitBoxHeight,
+                player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+                hurtBox2_Y2)) {
+          if (!anotherPlayer->blocking) {
+            anotherPlayer->life -= 3;
+            anotherPlayer->animationDone = false;
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
+            else
+              anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
+          } else {
+            anotherPlayer->animationDone = false;
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+            else
+              anotherPlayer->character->currentSprite = CROUCH_BLOCK;
+          }
+          // knock back thing
+          if (anotherPlayer->facingRight)
+            anotherPlayer->xPosition -= 2;
+          else
+            anotherPlayer->xPosition += 2;
+        }
+      }
     }
 
-    if (keyboardKeys[whichKey[KICK]]) {
+    if (!(player->character->currentSprite == CROUCHING) &&
+        keyboardKeys[whichKey[KICK]]) {
       if (!(player->character->currentSprite == JUMPING)) {
         player->animationDone = false;
         player->character->currentSprite = KICKING;  // PUNCHING
@@ -403,6 +441,41 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                      player->character->fighterGraphics->movesSprites[KICKING]
                          .hitBox_Y,
                      player->character->fighterGraphics->movesSprites[KICKING]
+                         .hitBoxHeight,
+                     player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
+                     hurtBox2_Y2)) {
+          if (!anotherPlayer->blocking) {
+            anotherPlayer->life -= 5;
+            anotherPlayer->animationDone = false;
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite =
+                  GOT_FACE_HIT;  // GOT_HIT
+            else
+              anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
+          } else {
+            anotherPlayer->animationDone = false;
+            if (!anotherPlayer->crouching)
+              anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+            else
+              anotherPlayer->character->currentSprite = CROUCH_BLOCK;
+          }
+          // knock back thing
+          if (anotherPlayer->facingRight)
+            anotherPlayer->xPosition -= 2;
+          else
+            anotherPlayer->xPosition += 2;
+        }
+      }
+      // ----------------- JUMP KICK ------------------
+      else {
+        player->animationDone = false;
+        player->character->currentSprite = JUMP_KICK;  // PUNCHING
+        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                     player->character->fighterGraphics->movesSprites[JUMP_KICK]
+                         .hitBoxWidth,
+                     player->character->fighterGraphics->movesSprites[JUMP_KICK]
+                         .hitBox_Y,
+                     player->character->fighterGraphics->movesSprites[JUMP_KICK]
                          .hitBoxHeight,
                      player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
                      hurtBox2_Y2)) {
@@ -473,7 +546,9 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
             .sprites[currentSpriteFrame],
         player->xPosition, player->yPosition, 0);
   else {
-    if (currentSprite == PUNCHING || currentSprite == KICKING) offset = -15;
+    if (currentSprite == PUNCHING || currentSprite == KICKING ||
+        currentSprite == CROUCH_PUNCH)
+      offset = -15;
     al_draw_bitmap(
         player->character->fighterGraphics->movesSprites[currentSprite]
             .sprites[currentSpriteFrame],

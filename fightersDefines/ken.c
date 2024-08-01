@@ -66,11 +66,23 @@ const short KEN_PUNCH_Y[3] = {134, 134, 134};
 const short KEN_PUNCH_DRAW_W_ARRAY[3] = {43, 57, 43};
 const short KEN_PUNCH_DRAW_H_ARRAY[3] = {81, 81, 81};
 
+/* --------------- CROUCH PUNCH ------------- */
+const short KEN_CROUCH_PUNCH_X[3] = {9, 61, 127};
+const short KEN_CROUCH_PUNCH_Y[3] = {420, 420, 420};
+const short KEN_CROUCH_PUNCH_DRAW_W_ARRAY[3] = {47, 62, 47};
+const short KEN_CROUCH_PUNCH_DRAW_H_ARRAY[3] = {54, 54, 54};
+
 /* --------------- KICKING --------------- */
 const short KEN_KICK_X[3] = {6, 62, 135};
 const short KEN_KICK_Y[3] = {261, 259, 261};
 const short KEN_KICK_DRAW_W_ARRAY[3] = {49, 67, 49};
 const short KEN_KICK_DRAW_H_ARRAY[3] = {85, 87, 85};
+
+/* --------------- JUMP KICK --------------- */
+const short KEN_JUMP_KICK_X[4] = {463, 505, 505, 572};
+const short KEN_JUMP_KICK_Y[4] = {551, 557, 557, 551};
+const short KEN_JUMP_KICK_DRAW_W_ARRAY[4] = {37, 63, 63, 37};
+const short KEN_JUMP_KICK_DRAW_H_ARRAY[4] = {63, 51, 51, 63};
 
 /*
   Initialize KEN
@@ -217,6 +229,21 @@ FIGHTER_SPRITES* initKen() {
                     KEN_PUNCH_Y, 19, 8, 17, KEN_PUNCH_DRAW_W_ARRAY,
                     KEN_PUNCH_DRAW_H_ARRAY);
 
+  /* ------------------- CROUCH PUNCH THINGS -------------------- */
+
+  // Getting memory for the sprites
+  ken->movesSprites[CROUCH_PUNCH].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
+  if (ken->movesSprites[CROUCH_PUNCH].sprites == NULL) exit(1);
+
+  ken->movesSprites[CROUCH_PUNCH].modAnimation = 3;
+
+  attackSpritesInit(
+      ken, CROUCH_PUNCH, 3, 0, KEN_CROUCH_PUNCH_DRAW_H, KEN_CROUCH_PUNCH_DRAW_W,
+      KEN_CROUCH_PUNCH_HURT_H, KEN_CROUCH_PUNCH_HURT_W, KEN_CROUCH_PUNCH_X,
+      KEN_CROUCH_PUNCH_Y, 19, 7, 11, KEN_CROUCH_PUNCH_DRAW_W_ARRAY,
+      KEN_CROUCH_PUNCH_DRAW_H_ARRAY);
+
   /* ------------------- KICKING THINGS ----------------------- */
 
   // Getting memory for sprites
@@ -229,5 +256,21 @@ FIGHTER_SPRITES* initKen() {
   attackSpritesInit(ken, KICKING, 3, 0, KEN_KICK_DRAW_H, KEN_KICK_DRAW_W,
                     KEN_KICK_HURT_H, KEN_KICK_HURT_W, KEN_KICK_X, KEN_KICK_Y,
                     28, 12, 1, KEN_KICK_DRAW_W_ARRAY, KEN_KICK_DRAW_H_ARRAY);
+
+  /* ------------------- JUMP KICK THINGS ----------------------- */
+
+  // Getting memory for sprites
+  ken->movesSprites[JUMP_KICK].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ken->movesSprites[JUMP_KICK].sprites == NULL) exit(1);
+
+  ken->movesSprites[JUMP_KICK].modAnimation = 3;
+
+  attackSpritesInit(ken, JUMP_KICK, 4, 0, KEN_JUMP_KICK_DRAW_H,
+                    KEN_JUMP_KICK_DRAW_W, KEN_JUMP_KICK_HURT_H,
+                    KEN_JUMP_KICK_HURT_W, KEN_JUMP_KICK_X, KEN_JUMP_KICK_Y, 27,
+                    18, 32, KEN_JUMP_KICK_DRAW_W_ARRAY,
+                    KEN_JUMP_KICK_DRAW_H_ARRAY);
+
   return ken;
 }

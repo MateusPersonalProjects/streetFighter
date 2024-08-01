@@ -127,6 +127,19 @@ extern const short GUILE_PUNCH_DRAW_H_ARRAY[3];
 #define GUILE_PUNCH_HURT_W 32
 #define GUILE_PUNCH_HURT_H 79
 
+/* -------------- CROUCH PUNCH --------------- */
+extern const short GUILE_CROUCH_PUNCH_X[3];
+extern const short GUILE_CROUCH_PUNCH_Y[3];
+extern const short GUILE_CROUCH_PUNCH_DRAW_W_ARRAY[3];
+extern const short GUILE_CROUCH_PUNCH_DRAW_H_ARRAY[3];
+
+#define GUILE_CROUCH_PUNCH_DRAW_W 64
+#define GUILE_CROUCH_PUNCH_DRAW_H 54
+
+#define GUILE_CROUCH_PUNCH_HURT_W 35
+#define GUILE_CROUCH_PUNCH_HURT_H 52
+
+
 /* -------------- KICKING --------------- */
 extern const short GUILE_KICK_X[3];
 extern const short GUILE_KICK_Y[3];
@@ -138,6 +151,19 @@ extern const short GUILE_KICK_DRAW_H_ARRAY[3];
 
 #define GUILE_KICK_HURT_W 23
 #define GUILE_KICK_HURT_H 82
+
+/* --------------- JUMP KICK --------------- */
+extern const short GUILE_JUMP_KICK_X[4];
+extern const short GUILE_JUMP_KICK_Y[4];
+extern const short GUILE_JUMP_KICK_DRAW_W_ARRAY[4];
+extern const short GUILE_JUMP_KICK_DRAW_H_ARRAY[4];
+
+#define GUILE_JUMP_KICK_DRAW_W 83 
+#define GUILE_JUMP_KICK_DRAW_H 57
+
+#define GUILE_JUMP_KICK_HURT_W 43
+#define GUILE_JUMP_KICK_HURT_H 51
+
 
 /*
   Initialize GUILE

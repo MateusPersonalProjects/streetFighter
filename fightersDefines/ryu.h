@@ -126,6 +126,18 @@ extern const short RYU_PUNCH_DRAW_H_ARRAY[3];
 #define RYU_PUNCH_HURT_W 37
 #define RYU_PUNCH_HURT_H 79
 
+/* -------------- CROUCH PUNCH --------------- */
+extern const short RYU_CROUCH_PUNCH_X[3];
+extern const short RYU_CROUCH_PUNCH_Y[3];
+extern const short RYU_CROUCH_PUNCH_DRAW_W_ARRAY[3];
+extern const short RYU_CROUCH_PUNCH_DRAW_H_ARRAY[3];
+
+#define RYU_CROUCH_PUNCH_DRAW_W 62
+#define RYU_CROUCH_PUNCH_DRAW_H 55
+
+#define RYU_CROUCH_PUNCH_HURT_W 36
+#define RYU_CROUCH_PUNCH_HURT_H 53
+
 /* -------------- KICKING --------------- */
 extern const short RYU_KICK_X[3];
 extern const short RYU_KICK_Y[3];
@@ -137,6 +149,19 @@ extern const short RYU_KICK_DRAW_H_ARRAY[3];
 
 #define RYU_KICK_HURT_W 39
 #define RYU_KICK_HURT_H 80
+
+/* --------------- JUMP KICK --------------- */
+extern const short RYU_JUMP_KICK_X[4];
+extern const short RYU_JUMP_KICK_Y[4];
+extern const short RYU_JUMP_KICK_DRAW_W_ARRAY[4];
+extern const short RYU_JUMP_KICK_DRAW_H_ARRAY[4];
+
+#define RYU_JUMP_KICK_DRAW_W 63 
+#define RYU_JUMP_KICK_DRAW_H 54
+
+#define RYU_JUMP_KICK_HURT_W 35 
+#define RYU_JUMP_KICK_HURT_H 54
+
 
 /*
   Initialize RYU

@@ -66,11 +66,23 @@ const short GUILE_PUNCH_Y[3] = {148, 148, 148};
 const short GUILE_PUNCH_DRAW_W_ARRAY[3] = {54, 67, 54};
 const short GUILE_PUNCH_DRAW_H_ARRAY[3] = {82, 82, 82};
 
+/* --------------- CROUCH PUNCH ------------- */
+const short GUILE_CROUCH_PUNCH_X[3] = {3, 65, 134};
+const short GUILE_CROUCH_PUNCH_Y[3] = {435, 436, 435};
+const short GUILE_CROUCH_PUNCH_DRAW_W_ARRAY[3] = {56, 64, 56};
+const short GUILE_CROUCH_PUNCH_DRAW_H_ARRAY[3] = {55, 54, 55};
+
 /* --------------- KICKING --------------- */
 const short GUILE_KICK_X[3] = {3, 55, 140};
 const short GUILE_KICK_Y[3] = {271, 271, 271};
 const short GUILE_KICK_DRAW_W_ARRAY[3] = {43, 80, 43};
 const short GUILE_KICK_DRAW_H_ARRAY[3] = {84, 84, 84};
+
+/* --------------- JUMP KICK --------------- */
+const short GUILE_JUMP_KICK_X[4] = {510, 557, 557, 659};
+const short GUILE_JUMP_KICK_Y[4] = {532, 531, 531, 527};
+const short GUILE_JUMP_KICK_DRAW_W_ARRAY[4] = {33, 83, 83, 53};
+const short GUILE_JUMP_KICK_DRAW_H_ARRAY[4] = {50, 57, 57, 54};
 
 /*
   Initialize GUILE
@@ -174,8 +186,8 @@ FIGHTER_SPRITES* initGuile() {
 
   attackSpritesInit(guile, GOT_CROUCH_HIT, 4, 0, GUILE_CROUCH_HIT_DRAW_H,
                     GUILE_CROUCH_HIT_DRAW_W, GUILE_CROUCH_HIT_HURT_H,
-                    GUILE_CROUCH_HIT_HURT_W, GUILE_CROUCH_HIT_X, GUILE_CROUCH_HIT_Y,
-                    0, 0, 0, GUILE_CROUCH_HIT_DRAW_W_ARRAY,
+                    GUILE_CROUCH_HIT_HURT_W, GUILE_CROUCH_HIT_X,
+                    GUILE_CROUCH_HIT_Y, 0, 0, 0, GUILE_CROUCH_HIT_DRAW_W_ARRAY,
                     GUILE_CROUCH_HIT_DRAW_H_ARRAY);
 
   /* --------------------- DEFENDING ------------------- */
@@ -222,6 +234,21 @@ FIGHTER_SPRITES* initGuile() {
                     GUILE_PUNCH_X, GUILE_PUNCH_Y, 27, 11, 10,
                     GUILE_PUNCH_DRAW_W_ARRAY, GUILE_PUNCH_DRAW_H_ARRAY);
 
+  /* ------------------- CROUCH PUNCH THINGS -------------------- */
+
+  // Getting memory for the sprites
+  guile->movesSprites[CROUCH_PUNCH].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
+  if (guile->movesSprites[CROUCH_PUNCH].sprites == NULL) exit(1);
+
+  guile->movesSprites[CROUCH_PUNCH].modAnimation = 3;
+
+  attackSpritesInit(
+      guile, CROUCH_PUNCH, 3, 0, GUILE_CROUCH_PUNCH_DRAW_H,
+      GUILE_CROUCH_PUNCH_DRAW_W, GUILE_CROUCH_PUNCH_HURT_H,
+      GUILE_CROUCH_PUNCH_HURT_W, GUILE_CROUCH_PUNCH_X, GUILE_CROUCH_PUNCH_Y, 22,
+      9, 10, GUILE_CROUCH_PUNCH_DRAW_W_ARRAY, GUILE_CROUCH_PUNCH_DRAW_H_ARRAY);
+
   /* ------------------- KICKING THINGS ----------------------- */
 
   // Getting memory for sprites
@@ -235,5 +262,21 @@ FIGHTER_SPRITES* initGuile() {
                     GUILE_KICK_HURT_H, GUILE_KICK_HURT_W, GUILE_KICK_X,
                     GUILE_KICK_Y, 37, 25, 30, GUILE_KICK_DRAW_W_ARRAY,
                     GUILE_KICK_DRAW_H_ARRAY);
+
+  /* ------------------- JUMP KICK THINGS ----------------------- */
+
+  // Getting memory for sprites
+  guile->movesSprites[JUMP_KICK].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (guile->movesSprites[JUMP_KICK].sprites == NULL) exit(1);
+
+  guile->movesSprites[JUMP_KICK].modAnimation = 3;
+
+  attackSpritesInit(guile, JUMP_KICK, 4, 0, GUILE_JUMP_KICK_DRAW_H,
+                    GUILE_JUMP_KICK_DRAW_W, GUILE_JUMP_KICK_HURT_H,
+                    GUILE_JUMP_KICK_HURT_W, GUILE_JUMP_KICK_X,
+                    GUILE_JUMP_KICK_Y, 37, 16, 27, GUILE_JUMP_KICK_DRAW_W_ARRAY,
+                    GUILE_JUMP_KICK_DRAW_H_ARRAY);
+
   return guile;
 }

@@ -66,11 +66,23 @@ const short RYU_PUNCH_Y[3] = {134, 134, 134};
 const short RYU_PUNCH_DRAW_W_ARRAY[3] = {43, 57, 43};
 const short RYU_PUNCH_DRAW_H_ARRAY[3] = {81, 81, 81};
 
+/* --------------- CROUCH PUNCH ------------- */
+const short RYU_CROUCH_PUNCH_X[3] = {9, 61, 127};
+const short RYU_CROUCH_PUNCH_Y[3] = {419, 419, 419};
+const short RYU_CROUCH_PUNCH_DRAW_W_ARRAY[3] = {47, 62, 47};
+const short RYU_CROUCH_PUNCH_DRAW_H_ARRAY[3] = {55, 55, 55};
+
 /* --------------- KICKING --------------- */
 const short RYU_KICK_X[3] = {6, 62, 135};
 const short RYU_KICK_Y[3] = {261, 259, 261};
 const short RYU_KICK_DRAW_W_ARRAY[3] = {49, 67, 49};
 const short RYU_KICK_DRAW_H_ARRAY[3] = {85, 87, 85};
+
+/* --------------- JUMP KICK --------------- */
+const short RYU_JUMP_KICK_X[4] = {468, 510, 510, 577};
+const short RYU_JUMP_KICK_Y[4] = {551, 554, 554, 551};
+const short RYU_JUMP_KICK_DRAW_W_ARRAY[4] = {37, 63, 63, 37};
+const short RYU_JUMP_KICK_DRAW_H_ARRAY[4] = {63, 54, 54, 63};
 
 /*
   Initialize RYU
@@ -217,6 +229,21 @@ FIGHTER_SPRITES* initRyu() {
                     RYU_PUNCH_Y, 19, 8, 17, RYU_PUNCH_DRAW_W_ARRAY,
                     RYU_PUNCH_DRAW_H_ARRAY);
 
+  /* ------------------- CROUCH PUNCH THINGS -------------------- */
+
+  // Getting memory for the sprites
+  ryu->movesSprites[CROUCH_PUNCH].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
+  if (ryu->movesSprites[CROUCH_PUNCH].sprites == NULL) exit(1);
+
+  ryu->movesSprites[CROUCH_PUNCH].modAnimation = 3;
+
+  attackSpritesInit(
+      ryu, CROUCH_PUNCH, 3, 0, RYU_CROUCH_PUNCH_DRAW_H, RYU_CROUCH_PUNCH_DRAW_W,
+      RYU_CROUCH_PUNCH_HURT_H, RYU_CROUCH_PUNCH_HURT_W, RYU_CROUCH_PUNCH_X,
+      RYU_CROUCH_PUNCH_Y, 19, 7, 12, RYU_CROUCH_PUNCH_DRAW_W_ARRAY,
+      RYU_CROUCH_PUNCH_DRAW_H_ARRAY);
+
   /* ------------------- KICKING THINGS ----------------------- */
 
   // Getting memory for sprites
@@ -229,5 +256,21 @@ FIGHTER_SPRITES* initRyu() {
   attackSpritesInit(ryu, KICKING, 3, 0, RYU_KICK_DRAW_H, RYU_KICK_DRAW_W,
                     RYU_KICK_HURT_H, RYU_KICK_HURT_W, RYU_KICK_X, RYU_KICK_Y,
                     28, 12, 1, RYU_KICK_DRAW_W_ARRAY, RYU_KICK_DRAW_H_ARRAY);
+
+  /* ------------------- JUMP KICK THINGS ----------------------- */
+
+  // Getting memory for sprites
+  ryu->movesSprites[JUMP_KICK].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+  if (ryu->movesSprites[JUMP_KICK].sprites == NULL) exit(1);
+
+  ryu->movesSprites[JUMP_KICK].modAnimation = 3;
+
+  attackSpritesInit(ryu, JUMP_KICK, 4, 0, RYU_JUMP_KICK_DRAW_H,
+                    RYU_JUMP_KICK_DRAW_W, RYU_JUMP_KICK_HURT_H,
+                    RYU_JUMP_KICK_HURT_W, RYU_JUMP_KICK_X, RYU_JUMP_KICK_Y, 27,
+                    18, 35, RYU_JUMP_KICK_DRAW_W_ARRAY,
+                    RYU_JUMP_KICK_DRAW_H_ARRAY);
+
   return ryu;
 }

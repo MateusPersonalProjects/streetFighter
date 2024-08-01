@@ -126,6 +126,19 @@ extern const short KEN_PUNCH_DRAW_H_ARRAY[3];
 #define KEN_PUNCH_HURT_W 37
 #define KEN_PUNCH_HURT_H 79
 
+/* -------------- CROUCH PUNCH --------------- */
+extern const short KEN_CROUCH_PUNCH_X[3];
+extern const short KEN_CROUCH_PUNCH_Y[3];
+extern const short KEN_CROUCH_PUNCH_DRAW_W_ARRAY[3];
+extern const short KEN_CROUCH_PUNCH_DRAW_H_ARRAY[3];
+
+#define KEN_CROUCH_PUNCH_DRAW_W 62 
+#define KEN_CROUCH_PUNCH_DRAW_H 54
+
+#define KEN_CROUCH_PUNCH_HURT_W 32 
+#define KEN_CROUCH_PUNCH_HURT_H 54
+
+
 /* -------------- KICKING --------------- */
 extern const short KEN_KICK_X[3];
 extern const short KEN_KICK_Y[3];
@@ -137,6 +150,19 @@ extern const short KEN_KICK_DRAW_H_ARRAY[3];
 
 #define KEN_KICK_HURT_W 39
 #define KEN_KICK_HURT_H 80
+
+/* --------------- JUMP KICK --------------- */
+extern const short KEN_JUMP_KICK_X[4];
+extern const short KEN_JUMP_KICK_Y[4];
+extern const short KEN_JUMP_KICK_DRAW_W_ARRAY[4];
+extern const short KEN_JUMP_KICK_DRAW_H_ARRAY[4];
+
+#define KEN_JUMP_KICK_DRAW_W 63   
+#define KEN_JUMP_KICK_DRAW_H 51
+
+#define KEN_JUMP_KICK_HURT_W 31
+#define KEN_JUMP_KICK_HURT_H 51
+
 
 /*
   Initialize KEN

@@ -121,6 +121,19 @@ extern const short CHUNLI_PUNCH_DRAW_H_ARRAY[3];
 #define CHUNLI_PUNCH_HURT_W 25
 #define CHUNLI_PUNCH_HURT_H 78
 
+/* -------------- CROUCH PUNCH --------------- */
+extern const short CHUNLI_CROUCH_PUNCH_X[3];
+extern const short CHUNLI_CROUCH_PUNCH_Y[3];
+extern const short CHUNLI_CROUCH_PUNCH_DRAW_W_ARRAY[3];
+extern const short CHUNLI_CROUCH_PUNCH_DRAW_H_ARRAY[3];
+
+#define CHUNLI_CROUCH_PUNCH_DRAW_W 83 
+#define CHUNLI_CROUCH_PUNCH_DRAW_H 60
+
+#define CHUNLI_CROUCH_PUNCH_HURT_W 47
+#define CHUNLI_CROUCH_PUNCH_HURT_H 59
+
+
 /* -------------- KICKING --------------- */
 extern const short CHUNLI_KICK_X[5];
 extern const short CHUNLI_KICK_Y[5];
@@ -132,6 +145,19 @@ extern const short CHUNLI_KICK_DRAW_H_ARRAY[5];
 
 #define CHUNLI_KICK_HURT_W 25
 #define CHUNLI_KICK_HURT_H 83
+
+/* --------------- JUMP KICK --------------- */
+extern const short CHUNLI_JUMP_KICK_X[4];
+extern const short CHUNLI_JUMP_KICK_Y[4];
+extern const short CHUNLI_JUMP_KICK_DRAW_W_ARRAY[4];
+extern const short CHUNLI_JUMP_KICK_DRAW_H_ARRAY[4];
+
+#define CHUNLI_JUMP_KICK_DRAW_W 65  
+#define CHUNLI_JUMP_KICK_DRAW_H 49
+
+#define CHUNLI_JUMP_KICK_HURT_W 44
+#define CHUNLI_JUMP_KICK_HURT_H 49
+
 
 /*
   Initialize CHUNLI
