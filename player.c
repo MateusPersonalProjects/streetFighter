@@ -130,12 +130,14 @@ void updateAnimation(PLAYER *player, long timerCount) {
     if (!(done) && !(timerCount % modAnimation)) {
       (player->character->fighterGraphics->movesSprites[currentSprite]
            .currentFrame)++;
-      player->xPosition -= 10;
-      player->yPosition +=
-          ((FLOOR - player->character->fighterGraphics->movesSprites[DEAD]
-                        .drawBoxHeight) /
-           maxSpriteFrame);
-    } else if (done) {
+      if (player->facingRight)
+        player->xPosition -= 10;
+      else
+        player->yPosition += 10;
+    }
+
+    // If the animation finished the dead body goes directly to the ground
+    else if (done) {
       player->yPosition =
           FLOOR -
           player->character->fighterGraphics->movesSprites[DEAD].drawBoxHeight;
@@ -524,10 +526,10 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
     }
   }
 
-  if (player->roundsWon == 2) {
-    anotherPlayer->animationDone = false;
-    anotherPlayer->character->currentSprite = VICTORY;
-  }
+  // if (player->roundsWon == 2) {
+  //   anotherPlayer->animationDone = false;
+  //   anotherPlayer->character->currentSprite = VICTORY;
+  // }
 
   if (anotherPlayer->life <= 0) {
     anotherPlayer->animationDone = false;
