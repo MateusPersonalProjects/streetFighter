@@ -125,7 +125,7 @@ void updateAnimation(PLAYER *player, long timerCount) {
   }
 
   // Stay in the last frame
-  else if (currentSprite == DEAD || currentSprite == VICTORY) {
+  else if (currentSprite == DEAD) {
     bool done = (currentSpriteFrame == maxSpriteFrame - 1);
     if (!(done) && !(timerCount % modAnimation)) {
       (player->character->fighterGraphics->movesSprites[currentSprite]
@@ -142,6 +142,15 @@ void updateAnimation(PLAYER *player, long timerCount) {
           FLOOR -
           player->character->fighterGraphics->movesSprites[DEAD].drawBoxHeight;
     }
+  } else if (currentSprite == VICTORY) {
+    bool done = (currentSpriteFrame == maxSpriteFrame - 1);
+    if (!(done) && !(timerCount % modAnimation)) {
+      (player->character->fighterGraphics->movesSprites[currentSprite]
+           .currentFrame)++;
+    }
+    player->yPosition =
+        FLOOR -
+        player->character->fighterGraphics->movesSprites[VICTORY].drawBoxHeight;
   }
 
   else {
@@ -525,11 +534,6 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
       }
     }
   }
-
-  // if (player->roundsWon == 2) {
-  //   anotherPlayer->animationDone = false;
-  //   anotherPlayer->character->currentSprite = VICTORY;
-  // }
 
   if (anotherPlayer->life <= 0) {
     anotherPlayer->animationDone = false;

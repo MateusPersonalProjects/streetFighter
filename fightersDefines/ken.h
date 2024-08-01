@@ -163,6 +163,30 @@ extern const short KEN_JUMP_KICK_DRAW_H_ARRAY[4];
 #define KEN_JUMP_KICK_HURT_W 31
 #define KEN_JUMP_KICK_HURT_H 51
 
+/* -------------- DEAD ---------------- */
+extern const short KEN_DEAD_X[5];
+extern const short KEN_DEAD_Y[5];
+extern const short KEN_DEAD_DRAW_W_ARRAY[5];
+extern const short KEN_DEAD_DRAW_H_ARRAY[5];
+
+#define KEN_DEAD_DRAW_W 75
+#define KEN_DEAD_DRAW_H 30
+
+#define KEN_DEAD_HURT_W 75
+#define KEN_DEAD_HURT_H 30
+
+/* -------------- VICTORY ---------------- */
+extern const short KEN_VICTORY_X[3];
+extern const short KEN_VICTORY_Y[3];
+extern const short KEN_VICTORY_DRAW_W_ARRAY[3];
+extern const short KEN_VICTORY_DRAW_H_ARRAY[3];
+
+#define KEN_VICTORY_DRAW_W 43
+#define KEN_VICTORY_DRAW_H 87
+
+#define KEN_VICTORY_HURT_W 43
+#define KEN_VICTORY_HURT_H 87
+
 
 /*
   Initialize KEN

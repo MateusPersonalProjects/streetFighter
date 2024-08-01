@@ -221,7 +221,7 @@ bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned short* frames,
                        ALLEGRO_FONT* font, bool playerOneWon) {
   bool turnOnMatchLoop = true;
   (*frames)++;
-  if (*frames <= 360) {
+  if (*frames <= 300) {
     if (*frames > 180) {
       if (playerOneWon)
         al_draw_bitmap(matchInterface->p1Wins,

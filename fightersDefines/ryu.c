@@ -93,6 +93,12 @@ const short RYU_DEAD_Y[5] = {781, 789, 806, 788, 806};
 const short RYU_DEAD_DRAW_W_ARRAY[5] = {45, 72, 74, 72, 74};
 const short RYU_DEAD_DRAW_H_ARRAY[5] = {59, 42, 30, 43, 30};
 
+/* -------------- VICTORY ---------------- */
+const short RYU_VICTORY_X[3] = {6, 57, 108};
+const short RYU_VICTORY_Y[3] = {887, 875, 853};
+const short RYU_VICTORY_DRAW_W_ARRAY[3] = {43, 43, 43};
+const short RYU_VICTORY_DRAW_H_ARRAY[3] = {75, 87, 109};
+
 /*
   Initialize RYU
 */
@@ -295,6 +301,21 @@ FIGHTER_SPRITES* initRyu() {
   attackSpritesInit(ryu, DEAD, 5, 0, RYU_DEAD_DRAW_H, RYU_DEAD_DRAW_W,
                     RYU_DEAD_HURT_H, RYU_DEAD_HURT_W, RYU_DEAD_X, RYU_DEAD_Y, 0,
                     0, 0, RYU_DEAD_DRAW_W_ARRAY, RYU_DEAD_DRAW_H_ARRAY);
+
+  /* ------------------------- VICTORY ---------------------------- */
+
+  // Getting memory for sprites
+  ryu->movesSprites[VICTORY].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
+
+  if (ryu->movesSprites[VICTORY].sprites == NULL) exit(1);
+
+  ryu->movesSprites[VICTORY].modAnimation = 3;
+
+  attackSpritesInit(ryu, VICTORY, 3, 0, RYU_VICTORY_DRAW_H, RYU_VICTORY_DRAW_W,
+                    RYU_VICTORY_HURT_H, RYU_VICTORY_HURT_W, RYU_VICTORY_X,
+                    RYU_VICTORY_Y, 0, 0, 0, RYU_VICTORY_DRAW_W_ARRAY,
+                    RYU_VICTORY_DRAW_H_ARRAY);
 
   return ryu;
 }
