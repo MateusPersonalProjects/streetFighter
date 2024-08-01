@@ -181,10 +181,10 @@ extern const short RYU_VICTORY_DRAW_W_ARRAY[3];
 extern const short RYU_VICTORY_DRAW_H_ARRAY[3];
 
 #define RYU_VICTORY_DRAW_W 43
-#define RYU_VICTORY_DRAW_H 87
+#define RYU_VICTORY_DRAW_H 109
 
 #define RYU_VICTORY_HURT_W 43
-#define RYU_VICTORY_HURT_H 87
+#define RYU_VICTORY_HURT_H 109
 
 
 /*
