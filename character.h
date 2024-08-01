@@ -19,6 +19,8 @@ typedef enum{
   CROUCH_PUNCH,
   KICKING,
   JUMP_KICK,
+  DEAD,
+  VICTORY,
   SPRITE_LIST_NUM
 } SPRITE_LIST;
 

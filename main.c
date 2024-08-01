@@ -264,6 +264,12 @@ int main(void) {
     matchInterface->roundUP = true;
 
     frames = 0;
+    resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
+                FLOOR - player1->character->height, true,
+                !matchInterface->matchUP);
+    resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
+                FLOOR - player2->character->height, false,
+                !matchInterface->matchUP);
 
     // ---------------- MATCH LOGIC ---------------
     while (matchLoop) {
@@ -332,9 +338,10 @@ int main(void) {
         }
 
         // If the match ended, we have a winner so lets show him
-        if (!matchInterface->matchUP)
+        if (!matchInterface->matchUP) {
           matchLoop = drawWinnerGreater(matchInterface, &frames, font,
                                         player2->roundsWon != 2);
+        }
         dispPostDraw(disp, bufferBitmap);
         redraw = false;
       }

@@ -48,6 +48,8 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
   player->blocking = false;
   player->yAcel = 0;
   player->life = PLAYER_LIFE;
+  player->character->fighterGraphics->movesSprites[DEAD].currentFrame = 0;
+  player->character->fighterGraphics->movesSprites[VICTORY].currentFrame = 0;
   player->animationDone = true;
 }
 
@@ -92,9 +94,9 @@ void updateAnimation(PLAYER *player, long timerCount) {
   SPRITE_LIST currentSprite = player->character->currentSprite;
 
   // Get the current frame the sprite is at
-  // short currentSpriteFrame =
-  //     player->character->fighterGraphics->movesSprites[currentSprite]
-  //         .currentFrame;
+  short currentSpriteFrame =
+      player->character->fighterGraphics->movesSprites[currentSprite]
+          .currentFrame;
 
   // Get the max frame the animation can reach out
   short maxSpriteFrame =
@@ -120,6 +122,24 @@ void updateAnimation(PLAYER *player, long timerCount) {
         .currentFrame %= maxSpriteFrame;
 
     player->animationDone = true;
+  }
+
+  // Stay in the last frame
+  else if (currentSprite == DEAD || currentSprite == VICTORY) {
+    bool done = (currentSpriteFrame == maxSpriteFrame - 1);
+    if (!(done) && !(timerCount % modAnimation)) {
+      (player->character->fighterGraphics->movesSprites[currentSprite]
+           .currentFrame)++;
+      player->xPosition -= 10;
+      player->yPosition +=
+          ((FLOOR - player->character->fighterGraphics->movesSprites[DEAD]
+                        .drawBoxHeight) /
+           maxSpriteFrame);
+    } else if (done) {
+      player->yPosition =
+          FLOOR -
+          player->character->fighterGraphics->movesSprites[DEAD].drawBoxHeight;
+    }
   }
 
   else {
@@ -502,6 +522,16 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
         }
       }
     }
+  }
+
+  if (player->roundsWon == 2) {
+    anotherPlayer->animationDone = false;
+    anotherPlayer->character->currentSprite = VICTORY;
+  }
+
+  if (anotherPlayer->life <= 0) {
+    anotherPlayer->animationDone = false;
+    anotherPlayer->character->currentSprite = DEAD;
   }
 }
 

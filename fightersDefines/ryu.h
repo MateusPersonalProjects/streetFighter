@@ -162,6 +162,17 @@ extern const short RYU_JUMP_KICK_DRAW_H_ARRAY[4];
 #define RYU_JUMP_KICK_HURT_W 35 
 #define RYU_JUMP_KICK_HURT_H 54
 
+/* -------------- DEAD ---------------- */
+extern const short RYU_DEAD_X[5];
+extern const short RYU_DEAD_Y[5];
+extern const short RYU_DEAD_DRAW_W_ARRAY[5];
+extern const short RYU_DEAD_DRAW_H_ARRAY[5];
+
+#define RYU_DEAD_DRAW_W 74
+#define RYU_DEAD_DRAW_H 30
+
+#define RYU_DEAD_HURT_W 74
+#define RYU_DEAD_HURT_H 30
 
 /*
   Initialize RYU
