@@ -84,6 +84,18 @@ const short GUILE_JUMP_KICK_Y[4] = {532, 531, 531, 527};
 const short GUILE_JUMP_KICK_DRAW_W_ARRAY[4] = {33, 83, 83, 53};
 const short GUILE_JUMP_KICK_DRAW_H_ARRAY[4] = {50, 57, 57, 54};
 
+/* -------------- DEAD ---------------- */
+const short GUILE_DEAD_X[6] = {8, 72, 142, 231, 297, 368};
+const short GUILE_DEAD_Y[6] = {976, 974, 1010, 974, 1001, 1010};
+const short GUILE_DEAD_DRAW_W_ARRAY[6] = {48, 61, 83, 61, 67, 83};
+const short GUILE_DEAD_DRAW_H_ARRAY[6] = {64, 52, 30, 53, 39, 30};
+
+/* -------------- VICTORY ---------------- */
+const short GUILE_VICTORY_X[8] = {461, 511, 561, 611, 661, 711, 760, 812};
+const short GUILE_VICTORY_Y[8] = {945, 936, 946, 936, 946, 941, 944, 945};
+const short GUILE_VICTORY_DRAW_W_ARRAY[8] = {43, 43, 43, 43, 43, 43, 43, 43};
+const short GUILE_VICTORY_DRAW_H_ARRAY[8] = {97, 106, 96, 106, 96, 101, 98, 97};
+
 /*
   Initialize GUILE
 */
@@ -277,6 +289,37 @@ FIGHTER_SPRITES* initGuile() {
                     GUILE_JUMP_KICK_HURT_W, GUILE_JUMP_KICK_X,
                     GUILE_JUMP_KICK_Y, 37, 16, 27, GUILE_JUMP_KICK_DRAW_W_ARRAY,
                     GUILE_JUMP_KICK_DRAW_H_ARRAY);
+
+  /* ------------------------- DEAD ---------------------------- */
+
+  // Getting memory for sprites
+  guile->movesSprites[DEAD].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 6);
+
+  if (guile->movesSprites[DEAD].sprites == NULL) exit(1);
+
+  guile->movesSprites[DEAD].modAnimation = 3;
+
+  attackSpritesInit(guile, DEAD, 6, 0, GUILE_DEAD_DRAW_H, GUILE_DEAD_DRAW_W,
+                    GUILE_DEAD_HURT_H, GUILE_DEAD_HURT_W, GUILE_DEAD_X,
+                    GUILE_DEAD_Y, 0, 0, 0, GUILE_DEAD_DRAW_W_ARRAY,
+                    GUILE_DEAD_DRAW_H_ARRAY);
+
+  /* ------------------------- VICTORY ---------------------------- */
+
+  // Getting memory for sprites
+  guile->movesSprites[VICTORY].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 8);
+
+  if (guile->movesSprites[VICTORY].sprites == NULL) exit(1);
+
+  guile->movesSprites[VICTORY].modAnimation = 7;
+
+  attackSpritesInit(guile, VICTORY, 8, 0, GUILE_VICTORY_DRAW_H,
+                    GUILE_VICTORY_DRAW_W, GUILE_VICTORY_HURT_H,
+                    GUILE_VICTORY_HURT_W, GUILE_VICTORY_X, GUILE_VICTORY_Y, 0,
+                    0, 0, GUILE_VICTORY_DRAW_W_ARRAY,
+                    GUILE_VICTORY_DRAW_H_ARRAY);
 
   return guile;
 }

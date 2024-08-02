@@ -84,6 +84,18 @@ const short KEN_JUMP_KICK_Y[4] = {551, 557, 557, 551};
 const short KEN_JUMP_KICK_DRAW_W_ARRAY[4] = {37, 63, 63, 37};
 const short KEN_JUMP_KICK_DRAW_H_ARRAY[4] = {63, 51, 51, 63};
 
+/* -------------- DEAD ---------------- */
+const short KEN_DEAD_X[5] = {1165, 1218, 1294, 1373, 1449};
+const short KEN_DEAD_Y[5] = {806, 813, 830, 813, 830};
+const short KEN_DEAD_DRAW_W_ARRAY[5] = {45, 72, 75, 72, 75};
+const short KEN_DEAD_DRAW_H_ARRAY[5] = {58, 42, 30, 42, 30};
+
+/* -------------- VICTORY ---------------- */
+const short KEN_VICTORY_X[3] = {161, 209, 262};
+const short KEN_VICTORY_Y[3] = {911, 899, 901};
+const short KEN_VICTORY_DRAW_W_ARRAY[3] = {43, 43, 43};
+const short KEN_VICTORY_DRAW_H_ARRAY[3] = {75, 87, 85};
+
 /*
   Initialize KEN
 */
@@ -271,6 +283,35 @@ FIGHTER_SPRITES* initKen() {
                     KEN_JUMP_KICK_HURT_W, KEN_JUMP_KICK_X, KEN_JUMP_KICK_Y, 27,
                     18, 32, KEN_JUMP_KICK_DRAW_W_ARRAY,
                     KEN_JUMP_KICK_DRAW_H_ARRAY);
+
+  /* ------------------------- DEAD ---------------------------- */
+
+  // Getting memory for sprites
+  ken->movesSprites[DEAD].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 5);
+
+  if (ken->movesSprites[DEAD].sprites == NULL) exit(1);
+
+  ken->movesSprites[DEAD].modAnimation = 3;
+
+  attackSpritesInit(ken, DEAD, 5, 0, KEN_DEAD_DRAW_H, KEN_DEAD_DRAW_W,
+                    KEN_DEAD_HURT_H, KEN_DEAD_HURT_W, KEN_DEAD_X, KEN_DEAD_Y, 0,
+                    0, 0, KEN_DEAD_DRAW_W_ARRAY, KEN_DEAD_DRAW_H_ARRAY);
+
+  /* ------------------------- VICTORY ---------------------------- */
+
+  // Getting memory for sprites
+  ken->movesSprites[VICTORY].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 3);
+
+  if (ken->movesSprites[VICTORY].sprites == NULL) exit(1);
+
+  ken->movesSprites[VICTORY].modAnimation = 3;
+
+  attackSpritesInit(ken, VICTORY, 3, 0, KEN_VICTORY_DRAW_H, KEN_VICTORY_DRAW_W,
+                    KEN_VICTORY_HURT_H, KEN_VICTORY_HURT_W, KEN_VICTORY_X,
+                    KEN_VICTORY_Y, 0, 0, 0, KEN_VICTORY_DRAW_W_ARRAY,
+                    KEN_VICTORY_DRAW_H_ARRAY);
 
   return ken;
 }

@@ -158,6 +158,30 @@ extern const short CHUNLI_JUMP_KICK_DRAW_H_ARRAY[4];
 #define CHUNLI_JUMP_KICK_HURT_W 44
 #define CHUNLI_JUMP_KICK_HURT_H 49
 
+/* -------------- DEAD ---------------- */
+extern const short CHUNLI_DEAD_X[4];
+extern const short CHUNLI_DEAD_Y[4];
+extern const short CHUNLI_DEAD_DRAW_W_ARRAY[4];
+extern const short CHUNLI_DEAD_DRAW_H_ARRAY[4];
+
+#define CHUNLI_DEAD_DRAW_W 80
+#define CHUNLI_DEAD_DRAW_H 33
+
+#define CHUNLI_DEAD_HURT_W 80
+#define CHUNLI_DEAD_HURT_H 33
+
+/* -------------- VICTORY ---------------- */
+extern const short CHUNLI_VICTORY_X[18];
+extern const short CHUNLI_VICTORY_Y[18];
+extern const short CHUNLI_VICTORY_DRAW_W_ARRAY[18];
+extern const short CHUNLI_VICTORY_DRAW_H_ARRAY[18];
+
+#define CHUNLI_VICTORY_DRAW_W 45
+#define CHUNLI_VICTORY_DRAW_H 104
+
+#define CHUNLI_VICTORY_HURT_W 45
+#define CHUNLI_VICTORY_HURT_H 104
+
 
 /*
   Initialize CHUNLI

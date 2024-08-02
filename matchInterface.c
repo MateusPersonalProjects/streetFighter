@@ -199,7 +199,7 @@ bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
   // ROUND
   bool done = false;
   (*frames)++;
-  if (*frames <= 90) {
+  if (*frames <= 180) {
     al_draw_bitmap(matchInterface->ko, (BUFFER_W / 2.0) - (KO_W / 2.0),
                    (BUFFER_H / 2.0) - (KO_H / 2.0), 0);
 
@@ -221,8 +221,8 @@ bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned short* frames,
                        ALLEGRO_FONT* font, bool playerOneWon) {
   bool turnOnMatchLoop = true;
   (*frames)++;
-  if (*frames <= 180) {
-    if (*frames > 90) {
+  if (*frames <= 300) {
+    if (*frames > 180) {
       if (playerOneWon)
         al_draw_bitmap(matchInterface->p1Wins,
                        (BUFFER_W / 2.0) - (P1_WINS_W / 2.0),

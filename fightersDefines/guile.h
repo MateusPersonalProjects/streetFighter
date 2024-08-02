@@ -164,6 +164,30 @@ extern const short GUILE_JUMP_KICK_DRAW_H_ARRAY[4];
 #define GUILE_JUMP_KICK_HURT_W 43
 #define GUILE_JUMP_KICK_HURT_H 51
 
+/* -------------- DEAD ---------------- */
+extern const short GUILE_DEAD_X[6];
+extern const short GUILE_DEAD_Y[6];
+extern const short GUILE_DEAD_DRAW_W_ARRAY[6];
+extern const short GUILE_DEAD_DRAW_H_ARRAY[6];
+
+#define GUILE_DEAD_DRAW_W 83 
+#define GUILE_DEAD_DRAW_H 30
+
+#define GUILE_DEAD_HURT_W 83
+#define GUILE_DEAD_HURT_H 30
+
+/* -------------- VICTORY ---------------- */
+extern const short GUILE_VICTORY_X[8];
+extern const short GUILE_VICTORY_Y[8];
+extern const short GUILE_VICTORY_DRAW_W_ARRAY[8];
+extern const short GUILE_VICTORY_DRAW_H_ARRAY[8];
+
+#define GUILE_VICTORY_DRAW_W 43
+#define GUILE_VICTORY_DRAW_H 97
+
+#define GUILE_VICTORY_HURT_W 43
+#define GUILE_VICTORY_HURT_H 97
+
 
 /*
   Initialize GUILE
