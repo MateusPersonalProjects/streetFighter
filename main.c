@@ -123,6 +123,11 @@ int main(void) {
   ALLEGRO_SAMPLE *versusSound = al_load_sample("./sounds/9BH.wav");
   alCheckInit(versusSound, "versus sound");
 
+  // Initialize Main theme
+  ALLEGRO_SAMPLE *mainThemeMusic =
+      al_load_sample("./sounds/mainGameTheme.opus");
+  alCheckInit(mainThemeMusic, "main theme music");
+
   // Initialize music for guile stage and vegas stage
   ALLEGRO_SAMPLE *guileStageMusic =
       al_load_sample("./sounds/stages/guileStage.opus");
@@ -151,6 +156,8 @@ int main(void) {
     // Main menu
 
     short twinkle = 0;
+    al_play_sample(mainThemeMusic, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
+                   &stageMusicID);
     while (mainMenuLoop) {
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
@@ -171,7 +178,10 @@ int main(void) {
           break;
       }
 
-      if (frames >= 24) mainMenuLoop = false;
+      if (frames >= 24) {
+        al_stop_sample(&stageMusicID);
+        mainMenuLoop = false;
+      }
 
       // If the user wants to close the game break the loop
       if (done) break;
@@ -203,6 +213,8 @@ int main(void) {
     bool chacSelecLoop = true;
     startCount = false;
     frames = 0;
+    al_play_sample(mainThemeMusic, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
+                   &stageMusicID);
     // ------------- CHARACTER SELECTION MENU -----------------
     while (chacSelecLoop) {
       switch (event.type) {
@@ -238,7 +250,10 @@ int main(void) {
           break;
       }
 
-      if (frames >= 30) chacSelecLoop = false;
+      if (frames >= 30) {
+        al_stop_sample(&stageMusicID);
+        chacSelecLoop = false;
+      }
       // If the user wants to close the game break the loop
       if (done) break;
 
@@ -424,5 +439,6 @@ int main(void) {
   al_destroy_sample(versusSound);
   al_destroy_sample(guileStageMusic);
   al_destroy_sample(vegasStageMusic);
+  al_destroy_sample(mainThemeMusic);
   return 0;
 }
