@@ -146,19 +146,19 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER *player1, PLAYER
 
   return the flag that control the controls
 */
-bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
+bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                         ALLEGRO_FONT* font, bool* narratorRound, bool* narratorFight, bool* narratorNumber);
 /*
   Ends a round writting K.O, return true when the writting ends so the code can
   reset the players or end the match
 */
-bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
+bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                     ALLEGRO_FONT* font);
 
 /*
   Show the winner on the screen for 3 seconds, then close the game
 */
-bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned short* frames,
+bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                        ALLEGRO_FONT* font, bool playerOneWon);
 
 

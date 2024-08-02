@@ -149,7 +149,7 @@ int main(void) {
   ALLEGRO_EVENT event;
 
   al_start_timer(timer);
-  unsigned short frames = 0;
+  unsigned long frames = 0;
   bool mainMenuLoop = true;
   bool startCount = false;
   while (1) {
@@ -290,7 +290,7 @@ int main(void) {
     stageChoice = al_get_timer_count(timer) % 2;
 
     bool versusLoop = true;
-    unsigned short frames = 0;
+    frames = 0;
 
     al_play_sample(versusSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
     while (versusLoop) {
@@ -317,12 +317,16 @@ int main(void) {
     matchInterface->roundUP = true;
 
     frames = 0;
-    resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
-                FLOOR - player1->character->height, true,
-                !matchInterface->matchUP);
-    resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
-                FLOOR - player2->character->height, false,
-                !matchInterface->matchUP);
+    resetPlayer(
+        player1, PLAYER_1_INIT_POSIT_X,
+        FLOOR - player1->character->fighterGraphics->movesSprites[STEADY]
+                    .drawBoxHeight,
+        true, !matchInterface->matchUP);
+    resetPlayer(
+        player2, PLAYER_2_INIT_POSIT_X,
+        FLOOR - player2->character->fighterGraphics->movesSprites[STEADY]
+                    .drawBoxHeight,
+        false, !matchInterface->matchUP);
 
     bool narratorFight = false;
     bool narratorRound = false;

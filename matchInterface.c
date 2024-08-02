@@ -166,7 +166,7 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
 
   return the flag that control the controls
 */
-bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
+bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                       ALLEGRO_FONT* font, bool* narratorRound,
                       bool* narratorFight, bool* narratorNumber) {
   bool control = false;
@@ -257,7 +257,7 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
   Ends a round writting K.O, return true when the writting ends so the code
   can reset the players or end the match
 */
-bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
+bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                     ALLEGRO_FONT* font) {
   // DRAW THE K.O THING THEN AFTER 90 FRAMES RESET PLAYER AND START NEW
   // ROUND
@@ -281,7 +281,7 @@ bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
 /*
   Show the winner on the screen for 3 seconds, then close the game
 */
-bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned short* frames,
+bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                        ALLEGRO_FONT* font, bool playerOneWon) {
   bool turnOnMatchLoop = true;
   (*frames)++;
