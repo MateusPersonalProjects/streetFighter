@@ -160,8 +160,8 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
 }
 
 /*
-  Draw the initial text of the fight
-  It deactivate the players controls for a 3 seconds then turn it on back
+  Draw the initial text of the fight and let the narrator speak
+  It deactivate the players controls for 3 seconds then turn it on back
   again so the fight can start
 
   return the flag that control the controls

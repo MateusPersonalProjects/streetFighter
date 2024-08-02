@@ -115,12 +115,22 @@ int main(void) {
   MATCH_INTERFACE *matchInterface;
   matchInterface = initMatchInterface(player1, player2);
 
+  // Initialize sounds for main menu, character selection and versus screen
   ALLEGRO_SAMPLE *startSound = al_load_sample("./sounds/20H.wav");
   alCheckInit(startSound, "start sound");
   ALLEGRO_SAMPLE *selectFighterSound = al_load_sample("./sounds/22H.wav");
   alCheckInit(selectFighterSound, "select fighter sound");
   ALLEGRO_SAMPLE *versusSound = al_load_sample("./sounds/9BH.wav");
   alCheckInit(versusSound, "versus sound");
+
+  // Initialize music for guile stage and vegas stage
+  ALLEGRO_SAMPLE *guileStageMusic =
+      al_load_sample("./sounds/stages/guileStage.opus");
+  alCheckInit(guileStageMusic, "guile stage music");
+  ALLEGRO_SAMPLE *vegasStageMusic =
+      al_load_sample("./sounds/stages/vegasStage.opus");
+  alCheckInit(vegasStage, "vegas stage music");
+  ALLEGRO_SAMPLE_ID stageMusicID;
 
   // Register the events to our events queue
   al_register_event_source(queue, al_get_keyboard_event_source());
@@ -258,6 +268,7 @@ int main(void) {
     player1->yPosition = FLOOR - player1->character->height;
     player2->character = allCharacters[selectP2];
     player2->yPosition = FLOOR - player2->character->height;
+
     // And get the stage, if even guile stage if its odd las vegas stage
     stageChoice = al_get_timer_count(timer) % 2;
 
@@ -299,6 +310,13 @@ int main(void) {
     bool narratorFight = false;
     bool narratorRound = false;
     bool narratorNumber = false;
+
+    if (!stageChoice)
+      al_play_sample(guileStageMusic, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
+                     &stageMusicID);
+    else
+      al_play_sample(vegasStageMusic, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
+                     &stageMusicID);
 
     // ---------------- MATCH LOGIC ---------------
     while (matchLoop) {
@@ -366,6 +384,8 @@ int main(void) {
             player2->animationDone = false;
             player2->character->currentSprite = VICTORY;
           }
+
+          al_stop_sample(&stageMusicID);
         }
         // If the round is not up, well someone died, so lets check this and
         // start a new round
@@ -402,5 +422,7 @@ int main(void) {
   al_destroy_sample(startSound);
   al_destroy_sample(selectFighterSound);
   al_destroy_sample(versusSound);
+  al_destroy_sample(guileStageMusic);
+  al_destroy_sample(vegasStageMusic);
   return 0;
 }
