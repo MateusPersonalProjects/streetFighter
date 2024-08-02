@@ -1,11 +1,13 @@
 #include "player.h"
 
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap_draw.h>
 #include <allegro5/color.h>
 #include <allegro5/events.h>
 #include <allegro5/keycodes.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "character.h"
 #include "display.h"
@@ -395,6 +397,8 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
           !(player->character->currentSprite == CROUCHING)) {
         player->animationDone = false;
         player->character->currentSprite = PUNCHING;  // PUNCHING
+
+        // CHECK IF THE ANOTHER PLAYER GOT HIT
         if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
                      player->character->fighterGraphics->movesSprites[PUNCHING]
                          .hitBoxWidth,
@@ -404,14 +408,21 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                          .hitBoxHeight,
                      player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
                      hurtBox2_Y2)) {
+          // IF GOT HIT AND WAS NOT DEFENDING
           if (!anotherPlayer->blocking) {
+            al_play_sample(anotherPlayer->character->sounds.gotHit, 1.0, 0.0,
+                           1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->life -= 3;
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
               anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
-          } else {
+          }
+          // IF WAS DEFENDING
+          else {
+            al_play_sample(anotherPlayer->character->sounds.blockHit, 1.0, 0.0,
+                           1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
               anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
@@ -423,8 +434,12 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        }
+        } else
+          al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
+                         ALLEGRO_PLAYMODE_ONCE, NULL);
       }
+
+      // CROUCH PUNCH
       if (player->character->currentSprite == CROUCHING) {
         player->animationDone = false;
         player->character->currentSprite = CROUCH_PUNCH;  // PUNCHING
@@ -438,14 +453,21 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                     .hitBoxHeight,
                 player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
                 hurtBox2_Y2)) {
+          // IF GOT HIT AND WAS NOT DEFENDING
           if (!anotherPlayer->blocking) {
+            al_play_sample(anotherPlayer->character->sounds.gotHit, 1.0, 0.0,
+                           1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->life -= 3;
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
               anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
-          } else {
+          }
+          // IF WAS DEFENDING
+          else {
+            al_play_sample(anotherPlayer->character->sounds.blockHit, 1.0, 0,
+                           1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
               anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
@@ -457,7 +479,9 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        }
+        } else
+          al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
+                         ALLEGRO_PLAYMODE_ONCE, NULL);
       }
     }
 
@@ -475,7 +499,10 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                          .hitBoxHeight,
                      player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
                      hurtBox2_Y2)) {
+          // IF GOT HIT AND WAS NOT DEFENDING
           if (!anotherPlayer->blocking) {
+            al_play_sample(anotherPlayer->character->sounds.gotHit, 1.0, 0.0,
+                           1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->life -= 5;
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
@@ -483,7 +510,11 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                   GOT_FACE_HIT;  // GOT_HIT
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
-          } else {
+          }
+          // IF GOT HIT AND WAS DEFENDING
+          else {
+            al_play_sample(anotherPlayer->character->sounds.blockHit, 1.0, 0.0,
+                           1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
               anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
@@ -495,7 +526,10 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        }
+        } else
+          al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
+                         ALLEGRO_PLAYMODE_ONCE, NULL);
+
       }
       // ----------------- JUMP KICK ------------------
       else {
@@ -510,7 +544,10 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                          .hitBoxHeight,
                      player->facingRight, hurtBox2_X1, hurtBox2_X2, hurtBox2_Y1,
                      hurtBox2_Y2)) {
+          // IF GOT HIT AND WAS NOT DEFENDING
           if (!anotherPlayer->blocking) {
+            al_play_sample(anotherPlayer->character->sounds.gotHit, 1.0, 0.0,
+                           1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->life -= 5;
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
@@ -518,7 +555,11 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                   GOT_FACE_HIT;  // GOT_HIT
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
-          } else {
+          }
+          // IF GOT HIT AND WAS DEFENDING
+          else {
+            al_play_sample(player->character->sounds.blockHit, 1.0, 0.0, 1.0,
+                           ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
               anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
@@ -530,7 +571,9 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        }
+        } else
+          al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
+                         ALLEGRO_PLAYMODE_ONCE, NULL);
       }
     }
   }

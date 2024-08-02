@@ -4,6 +4,8 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/bitmap.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 
 typedef enum{
   STEADY = 0,
@@ -47,10 +49,17 @@ typedef struct{
 } FIGHTER_SPRITES;
 
 typedef struct{
+  ALLEGRO_SAMPLE* gotHit;
+  ALLEGRO_SAMPLE* blockHit;
+  ALLEGRO_SAMPLE* attack;
+} CHARACTER_SOUNDS;
+
+typedef struct{
   int width;
   int height;
   int hurtWidth;
   int hurtHeight;
+  CHARACTER_SOUNDS sounds;
   SPRITE_LIST currentSprite;
   FIGHTER_SPRITES* fighterGraphics;
 } CHARACTER;

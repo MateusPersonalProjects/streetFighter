@@ -2,7 +2,8 @@
 #include <stdbool.h>
 #ifndef __PLAYER__
 #define __PLAYER__
-
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include "attacks_SpecialMoves.h"
 #include "character.h"
 typedef struct {

@@ -1,5 +1,6 @@
 #include "character.h"
 
+#include <allegro5/allegro_audio.h>
 #include <allegro5/bitmap.h>
 #include <allegro5/bitmap_io.h>
 #include <stdlib.h>
@@ -19,6 +20,11 @@ CHARACTER* characterInit(FIGHTER_SPRITES* fighterSprite) {
   // newChar->crouchHeight = 0;
   newChar->currentSprite = STEADY;
   newChar->fighterGraphics = fighterSprite;
+
+  // Initialize character sounds
+  newChar->sounds.attack = al_load_sample("./sounds/3CH.wav");
+  newChar->sounds.gotHit = al_load_sample("./sounds/2AH.wav");
+  newChar->sounds.blockHit = al_load_sample("./sounds/2BH.wav");
   return newChar;
 }
 
@@ -92,6 +98,9 @@ void characterDestroyer(CHARACTER* character) {
     free(character->fighterGraphics->movesSprites[i].sprites);
   }
   al_destroy_bitmap(character->fighterGraphics->sheet);
+  al_destroy_sample(character->sounds.attack);
+  al_destroy_sample(character->sounds.gotHit);
+  al_destroy_sample(character->sounds.blockHit);
   free(character->fighterGraphics);
   free(character);
 }
