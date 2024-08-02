@@ -82,6 +82,25 @@ const short CHUNLI_JUMP_KICK_Y[4] = {492, 491, 491, 492};
 const short CHUNLI_JUMP_KICK_DRAW_W_ARRAY[4] = {43, 65, 65, 43};
 const short CHUNLI_JUMP_KICK_DRAW_H_ARRAY[4] = {54, 49, 49, 54};
 
+/* -------------- DEAD ---------------- */
+const short CHUNLI_DEAD_X[4] = {810, 886, 948, 1024};
+const short CHUNLI_DEAD_Y[4] = {869, 869, 869, 906};
+const short CHUNLI_DEAD_DRAW_W_ARRAY[4] = {71, 58, 71, 80};
+const short CHUNLI_DEAD_DRAW_H_ARRAY[4] = {63, 63, 63, 33};
+
+/* -------------- VICTORY ---------------- */
+const short CHUNLI_VICTORY_X[18] = {164, 213, 263, 317, 369, 422,
+                                    476, 530, 582, 651, 700, 749,
+                                    800, 849, 898, 948, 999, 1053};
+const short CHUNLI_VICTORY_Y[18] = {1010, 1005, 968,  958,  968,  1005,
+                                    968,  958,  968,  1005, 1004, 1005,
+                                    1004, 1005, 1004, 1005, 1004, 991};
+const short CHUNLI_VICTORY_DRAW_W_ARRAY[18] = {
+    45, 45, 49, 49, 49, 45, 49, 49, 49, 45, 45, 45, 45, 45, 45, 45, 45, 45};
+const short CHUNLI_VICTORY_DRAW_H_ARRAY[18] = {86,  91,  128, 138, 128, 91,
+                                               128, 138, 128, 91,  92,  91,
+                                               92,  91,  92,  91,  92,  104};
+
 /*
   Initialize CHUNLI
 */
@@ -277,6 +296,37 @@ FIGHTER_SPRITES* initChunli() {
       CHUNLI_JUMP_KICK_HURT_H, CHUNLI_JUMP_KICK_HURT_W, CHUNLI_JUMP_KICK_X,
       CHUNLI_JUMP_KICK_Y, 21, 18, 26, CHUNLI_JUMP_KICK_DRAW_W_ARRAY,
       CHUNLI_JUMP_KICK_DRAW_H_ARRAY);
+
+  /* ------------------------- DEAD ---------------------------- */
+
+  // Getting memory for sprites
+  chunli->movesSprites[DEAD].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 4);
+
+  if (chunli->movesSprites[DEAD].sprites == NULL) exit(1);
+
+  chunli->movesSprites[DEAD].modAnimation = 3;
+
+  attackSpritesInit(chunli, DEAD, 4, 0, CHUNLI_DEAD_DRAW_H, CHUNLI_DEAD_DRAW_W,
+                    CHUNLI_DEAD_HURT_H, CHUNLI_DEAD_HURT_W, CHUNLI_DEAD_X,
+                    CHUNLI_DEAD_Y, 0, 0, 0, CHUNLI_DEAD_DRAW_W_ARRAY,
+                    CHUNLI_DEAD_DRAW_H_ARRAY);
+
+  /* ------------------------- VICTORY ---------------------------- */
+
+  // Getting memory for sprites
+  chunli->movesSprites[VICTORY].sprites =
+      (ALLEGRO_BITMAP**)malloc(sizeof(ALLEGRO_BITMAP*) * 18);
+
+  if (chunli->movesSprites[VICTORY].sprites == NULL) exit(1);
+
+  chunli->movesSprites[VICTORY].modAnimation = 7;
+
+  attackSpritesInit(chunli, VICTORY, 18, 0, CHUNLI_VICTORY_DRAW_H,
+                    CHUNLI_VICTORY_DRAW_W, CHUNLI_VICTORY_HURT_H,
+                    CHUNLI_VICTORY_HURT_W, CHUNLI_VICTORY_X, CHUNLI_VICTORY_Y,
+                    0, 0, 0, CHUNLI_VICTORY_DRAW_W_ARRAY,
+                    CHUNLI_VICTORY_DRAW_H_ARRAY);
 
   return chunli;
 }
