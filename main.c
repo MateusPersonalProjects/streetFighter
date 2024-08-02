@@ -171,6 +171,8 @@ int main(void) {
             al_play_sample(startSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE,
                            NULL);
           }
+
+          if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) done = true;
           break;
 
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
