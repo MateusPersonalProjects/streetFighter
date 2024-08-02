@@ -1,3 +1,5 @@
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/bitmap.h>
 #include <allegro5/color.h>
@@ -70,6 +72,14 @@
 #define LB_A_W 32
 #define LB_A_H 14
 
+typedef struct{
+  ALLEGRO_SAMPLE* round;
+  ALLEGRO_SAMPLE* fight;
+  ALLEGRO_SAMPLE* final;
+  ALLEGRO_SAMPLE* one;
+  ALLEGRO_SAMPLE* two;
+
+} NARRATOR_AUDIO;
 
 typedef struct{
 
@@ -99,6 +109,8 @@ typedef struct{
   bool matchUP;
   bool roundUP;
   unsigned short rounds;
+
+  NARRATOR_AUDIO narratorAudio;
   
 
 } MATCH_INTERFACE;
@@ -135,7 +147,7 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER *player1, PLAYER
   return the flag that control the controls
 */
 bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
-                        ALLEGRO_FONT* font);
+                        ALLEGRO_FONT* font, bool* narratorRound, bool* narratorFight, bool* narratorNumber);
 /*
   Ends a round writting K.O, return true when the writting ends so the code can
   reset the players or end the match

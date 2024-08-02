@@ -1,5 +1,6 @@
 #include "characSelecMenu.h"
 
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap.h>
@@ -7,6 +8,7 @@
 #include <allegro5/bitmap_io.h>
 #include <allegro5/color.h>
 #include <allegro5/events.h>
+#include <time.h>
 
 /*
   Initialize all the four selection boxes
@@ -137,7 +139,8 @@ void updateSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
 */
 bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
                           unsigned char* keyboardKeys,
-                          unsigned char* playerKeys, ALLEGRO_EVENT event) {
+                          unsigned char* playerKeys, ALLEGRO_EVENT event,
+                          ALLEGRO_SAMPLE* selectionSound) {
   bool playerSelected = false;
 
   if (event.keyboard.keycode == playerKeys[0]) {
@@ -165,6 +168,7 @@ bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
   */
   if (event.keyboard.keycode == playerKeys[4]) {
     if (!allSelectionBoxes[(*idSelcP)].selected) {
+      al_play_sample(selectionSound, 1.0, 0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
       playerSelected = true;
       allSelectionBoxes[(*idSelcP)].color = al_map_rgb(0, 255, 0);
       allSelectionBoxes[(*idSelcP)].selected = true;

@@ -1,3 +1,5 @@
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/bitmap.h>
 #include <allegro5/color.h>
@@ -104,7 +106,7 @@ void updateSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
 */
 bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
                           unsigned char* keyboardKeys,
-                          unsigned char* playerKeys, ALLEGRO_EVENT event);
+                          unsigned char* playerKeys, ALLEGRO_EVENT event, ALLEGRO_SAMPLE* selectionSound);
 /*
   Draw the main menu
 */

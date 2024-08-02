@@ -1,5 +1,6 @@
 #include "matchInterface.h"
 
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap.h>
@@ -63,6 +64,22 @@ MATCH_INTERFACE* initMatchInterface(PLAYER* player1, PLAYER* player2) {
       grabSprite(newMatchInterface->sheet, LB_X, LB_Y, LB_W, LB_H);
   newMatchInterface->lifeBarAnimation =
       grabSprite(newMatchInterface->sheet, LB_A_X, LB_A_Y, LB_A_W, LB_A_H);
+
+  // Initializing narrator audio
+  newMatchInterface->narratorAudio.round =
+      al_load_sample("./sounds/match/round-101soundboards.wav");
+
+  newMatchInterface->narratorAudio.fight =
+      al_load_sample("./sounds/match/fight-101soundboards.wav");
+
+  newMatchInterface->narratorAudio.final =
+      al_load_sample("./sounds/match/final-101soundboards.wav");
+
+  newMatchInterface->narratorAudio.one =
+      al_load_sample("./sounds/match/1-101soundboards.wav");
+
+  newMatchInterface->narratorAudio.two =
+      al_load_sample("./sounds/match/2-101soundboards.wav");
   return newMatchInterface;
 }
 
@@ -150,10 +167,11 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
   return the flag that control the controls
 */
 bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
-                      ALLEGRO_FONT* font) {
+                      ALLEGRO_FONT* font, bool* narratorRound,
+                      bool* narratorFight, bool* narratorNumber) {
   bool control = false;
   (*frames)++;
-  if (*frames <= 80) {
+  if (*frames <= 90) {
     if (*frames <= 45) {
       if (matchInterface->rounds == 0) {
         al_draw_bitmap(matchInterface->roundSprite,
@@ -162,6 +180,19 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
         al_draw_bitmap(matchInterface->numOneSprite,
                        (BUFFER_W / 2.0) + (ROUND_S_W / 2.0) + (N_ONE_S_W),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+        if (!(*narratorRound)) {
+          *narratorRound = true;
+          al_play_sample(matchInterface->narratorAudio.round, 1.0, 0.0, 1.0,
+                         ALLEGRO_PLAYMODE_ONCE, NULL);
+        }
+
+        if (*frames >= 25) {
+          if (!(*narratorNumber)) {
+            *narratorNumber = true;
+            al_play_sample(matchInterface->narratorAudio.one, 1.0, 0.0, 1.0,
+                           ALLEGRO_PLAYMODE_ONCE, NULL);
+          }
+        }
       } else if (matchInterface->rounds == 1) {
         al_draw_bitmap(matchInterface->roundSprite,
                        (BUFFER_W / 2.0) - (ROUND_S_W / 2.0),
@@ -169,16 +200,49 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned short* frames,
         al_draw_bitmap(matchInterface->numTwoSprite,
                        (BUFFER_W / 2.0) + (ROUND_S_W / 2.0) + (N_TWO_S_W),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+        if (!(*narratorRound)) {
+          *narratorRound = true;
+          al_play_sample(matchInterface->narratorAudio.round, 1.0, 0.0, 1.0,
+                         ALLEGRO_PLAYMODE_ONCE, NULL);
+        }
 
-      } else
+        if (*frames >= 25) {
+          if (!(*narratorNumber)) {
+            *narratorNumber = true;
+            al_play_sample(matchInterface->narratorAudio.two, 1.0, 0.0, 1.0,
+                           ALLEGRO_PLAYMODE_ONCE, NULL);
+          }
+        }
+
+      } else {
         al_draw_bitmap(matchInterface->fRoundSprite,
                        (BUFFER_W / 2.0) - (FROUND_S_W / 2.0),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+        if (!(*narratorNumber)) {
+          *narratorNumber = true;
+          al_play_sample(matchInterface->narratorAudio.final, 1.0, 0.0, 1.0,
+                         ALLEGRO_PLAYMODE_ONCE, NULL);
+        }
 
-    } else
+        if (*frames >= 25) {
+          if (!(*narratorRound)) {
+            *narratorRound = true;
+            al_play_sample(matchInterface->narratorAudio.round, 1.0, 0.0, 1.0,
+                           ALLEGRO_PLAYMODE_ONCE, NULL);
+          }
+        }
+      }
+
+    } else {
       al_draw_bitmap(matchInterface->fightSprite,
                      (BUFFER_W / 2.0) - (FIGHT_S_W / 2.0),
                      (BUFFER_H / 2.0) - (FIGHT_S_H / 2.0), 0);
+      if (!(*narratorFight)) {
+        *narratorFight = true;
+        al_play_sample(matchInterface->narratorAudio.fight, 1.0, 0.0, 1.0,
+                       ALLEGRO_PLAYMODE_ONCE, NULL);
+      }
+    }
   }
   // DRAW THE ROUND START FIGHT THING 90 frames
   // 90 FRAMES PASSED then
@@ -251,5 +315,10 @@ void matchInterfaceDestroyer(MATCH_INTERFACE* matchInterface) {
   al_destroy_bitmap(matchInterface->p2Wins);
   al_destroy_bitmap(matchInterface->ko);
   al_destroy_bitmap(matchInterface->sheet);
+  al_destroy_sample(matchInterface->narratorAudio.two);
+  al_destroy_sample(matchInterface->narratorAudio.one);
+  al_destroy_sample(matchInterface->narratorAudio.final);
+  al_destroy_sample(matchInterface->narratorAudio.round);
+  al_destroy_sample(matchInterface->narratorAudio.fight);
   free(matchInterface);
 }

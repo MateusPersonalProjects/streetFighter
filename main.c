@@ -1,9 +1,6 @@
-// gcc main.c -o teste display.c character.c keyboard.c misc.c player.c
-// environment.c matchInterface.c attacks_SpecialMoves.c characSelecMenu.c
-// ./fightersDefines/ryu.c ./fightersDefines/ken.c ./fightersDefines/chunli.c
-// ./fightersDefines/guile.c $(pkg-config allegro-5 allegro_primitives-5
-// allegro_font-5 allegro_image-5 --libs --cflags)
 #include <allegro5/alcompat.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -15,6 +12,7 @@
 #include <allegro5/keyboard.h>
 #include <allegro5/keycodes.h>
 #include <allegro5/timer.h>
+#include <time.h>
 
 #include "./fightersDefines/chunli.h"
 #include "./fightersDefines/guile.h"
@@ -46,6 +44,11 @@ int main(void) {
   ALLEGRO_BITMAP *bufferBitmap;
   dispInit(&disp, &bufferBitmap);
 
+  // Initialize audio
+  alCheckInit(al_install_audio(), "audio");
+  alCheckInit(al_init_acodec_addon(), "audio codecs");
+  alCheckInit(al_reserve_samples(16), "reserve samples");
+
   // Create event queue
   ALLEGRO_TIMER *timer = al_create_timer(1.0 / 30.0);
   alCheckInit(timer, "timer");
@@ -64,32 +67,31 @@ int main(void) {
   // Initialize the image addon
   alCheckInit(al_init_image_addon(), "images");
 
-  // Test things
+  // Initialize all characters sprites
   FIGHTER_SPRITES *ryuSprites = initRyu();
   FIGHTER_SPRITES *kenSprites = initKen();
   FIGHTER_SPRITES *chunliSprites = initChunli();
   FIGHTER_SPRITES *guileSprites = initGuile();
 
+  // Initialize all 4 characters
   CHARACTER *allCharacters[4];
-
   allCharacters[0] = characterInit(ryuSprites);
   allCharacters[1] = characterInit(kenSprites);
   allCharacters[2] = characterInit(chunliSprites);
   allCharacters[3] = characterInit(guileSprites);
 
-  // bigBoxForTest1 = characterInit(25, 50, 50 * 0.3);
-  // bigBoxForTest2 = characterInit(25, 50, 50 * 0.3);
-
   ALLEGRO_COLOR boxColors[4] = {al_map_rgb(255, 0, 0), al_map_rgb(0, 255, 0),
                                 al_map_rgb(0, 0, 255),
                                 al_map_rgb(255, 200, 50)};
 
+  // Initialize character selection sprites and boxes
   CHARAC_SELECT_SPRITES *characSelectSprites;
   characSelectSprites = initCharacSelectSprites();
 
   SELECTION_BOX characSelectBoxes[4];
   initSelectionBoxes(characSelectBoxes, characSelectSprites);
 
+  // Initialize players and set theirs keys
   PLAYER *player1;
   unsigned char p1Keys[6] = {ALLEGRO_KEY_W, ALLEGRO_KEY_S, ALLEGRO_KEY_A,
                              ALLEGRO_KEY_D, ALLEGRO_KEY_G, ALLEGRO_KEY_H};
@@ -100,8 +102,7 @@ int main(void) {
                              ALLEGRO_KEY_U,    ALLEGRO_KEY_I};
   player2 = initPlayer(NULL, PLAYER_2_INIT_POSIT_X, 0, false);
 
-  // STAGE THINGS
-
+  // Initialize stages
   short stageChoice = 0;
 
   GUILE_STAGE *guileStage;
@@ -110,8 +111,16 @@ int main(void) {
   VEGAS_STAGE *vegasStage;
   vegasStage = initVegasStage();
 
+  // Initialize the match interface
   MATCH_INTERFACE *matchInterface;
   matchInterface = initMatchInterface(player1, player2);
+
+  ALLEGRO_SAMPLE *startSound = al_load_sample("./sounds/20H.wav");
+  alCheckInit(startSound, "start sound");
+  ALLEGRO_SAMPLE *selectFighterSound = al_load_sample("./sounds/22H.wav");
+  alCheckInit(selectFighterSound, "select fighter sound");
+  ALLEGRO_SAMPLE *versusSound = al_load_sample("./sounds/9BH.wav");
+  alCheckInit(versusSound, "versus sound");
 
   // Register the events to our events queue
   al_register_event_source(queue, al_get_keyboard_event_source());
@@ -125,8 +134,9 @@ int main(void) {
   ALLEGRO_EVENT event;
 
   al_start_timer(timer);
-
+  unsigned short frames = 0;
   bool mainMenuLoop = true;
+  bool startCount = false;
   while (1) {
     // Main menu
 
@@ -134,17 +144,24 @@ int main(void) {
     while (mainMenuLoop) {
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
+          if (startCount) frames++;
           redraw = true;
           break;
 
         case ALLEGRO_EVENT_KEY_DOWN:
-          if (event.keyboard.keycode == ALLEGRO_KEY_G) mainMenuLoop = false;
+          if (event.keyboard.keycode == ALLEGRO_KEY_G) {
+            startCount = true;
+            al_play_sample(startSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE,
+                           NULL);
+          }
           break;
 
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
           done = true;
           break;
       }
+
+      if (frames >= 24) mainMenuLoop = false;
 
       // If the user wants to close the game break the loop
       if (done) break;
@@ -174,6 +191,8 @@ int main(void) {
     bool p1Selected = false;
     bool p2Selected = false;
     bool chacSelecLoop = true;
+    startCount = false;
+    frames = 0;
     // ------------- CHARACTER SELECTION MENU -----------------
     while (chacSelecLoop) {
       switch (event.type) {
@@ -184,18 +203,22 @@ int main(void) {
                                     al_map_rgb(0, 0, 255));
           updateSelectionBoxesColor(characSelectBoxes, &selectP2,
                                     al_map_rgb(255, 0, 0));
+
+          if (startCount) frames++;
           redraw = true;
           break;
 
         case ALLEGRO_EVENT_KEY_DOWN:
           if (!p1Selected)
-            p1Selected = updateSelectionBoxes(characSelectBoxes, &selectP1,
-                                              keyboardKeys, p1Keys, event);
+            p1Selected =
+                updateSelectionBoxes(characSelectBoxes, &selectP1, keyboardKeys,
+                                     p1Keys, event, selectFighterSound);
           if (!p2Selected)
-            p2Selected = updateSelectionBoxes(characSelectBoxes, &selectP2,
-                                              keyboardKeys, p2Keys, event);
+            p2Selected =
+                updateSelectionBoxes(characSelectBoxes, &selectP2, keyboardKeys,
+                                     p2Keys, event, selectFighterSound);
 
-          chacSelecLoop = (!p1Selected || !p2Selected);
+          startCount = (p1Selected && p2Selected);
 
           if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) done = true;
 
@@ -205,6 +228,7 @@ int main(void) {
           break;
       }
 
+      if (frames >= 30) chacSelecLoop = false;
       // If the user wants to close the game break the loop
       if (done) break;
 
@@ -240,6 +264,7 @@ int main(void) {
     bool versusLoop = true;
     unsigned short frames = 0;
 
+    al_play_sample(versusSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
     while (versusLoop) {
       if (event.type == ALLEGRO_EVENT_TIMER) {
         dispPreDraw(bufferBitmap);
@@ -270,6 +295,10 @@ int main(void) {
     resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
                 FLOOR - player2->character->height, false,
                 !matchInterface->matchUP);
+
+    bool narratorFight = false;
+    bool narratorRound = false;
+    bool narratorNumber = false;
 
     // ---------------- MATCH LOGIC ---------------
     while (matchLoop) {
@@ -322,7 +351,9 @@ int main(void) {
         // If the players are not able to control and the round is up, well it
         // just started so lets draw the things
         if (!controlON && matchInterface->roundUP)
-          controlON = roundStartWriter(matchInterface, &frames, font);
+          controlON =
+              roundStartWriter(matchInterface, &frames, font, &narratorRound,
+                               &narratorFight, &narratorNumber);
 
         // If the match ended, we have a winner so lets show him
         if (!matchInterface->matchUP) {
@@ -340,6 +371,9 @@ int main(void) {
         // start a new round
         else if (!matchInterface->roundUP) {
           if (roundEndWriter(matchInterface, &frames, font)) {
+            narratorRound = false;
+            narratorFight = false;
+            narratorNumber = false;
             resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
                         FLOOR - player1->character->height, true,
                         !matchInterface->matchUP);
@@ -365,5 +399,8 @@ int main(void) {
   destroyStage(guileStage, vegasStage);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
+  al_destroy_sample(startSound);
+  al_destroy_sample(selectFighterSound);
+  al_destroy_sample(versusSound);
   return 0;
 }
