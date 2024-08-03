@@ -1,10 +1,11 @@
+#ifndef __MISC__
+#define __MISC__
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
-#ifndef __MISC__
-#define __MISC__
+#include <allegro5/bitmap.h>
 
 // Checks if an allegro module was initialized correctly
 void alCheckInit(bool test, char* description);

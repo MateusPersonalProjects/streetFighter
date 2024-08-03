@@ -1,9 +1,5 @@
 #include "keyboard.h"
 
-#include <allegro5/base.h>
-#include <allegro5/events.h>
-#include <string.h>
-
 /*
   Inicitalize the keyboardKeys array with 0
 */

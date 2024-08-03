@@ -1,7 +1,10 @@
-#include <allegro5/allegro5.h>
 
 #ifndef __KEYBOARD__
 #define __KEYBOARD__
+#include <allegro5/allegro5.h>
+#include <allegro5/base.h>
+#include <allegro5/events.h>
+#include <string.h>
 
 #define KEY_PRESSED 1
 #define KEY_RELEASED 2

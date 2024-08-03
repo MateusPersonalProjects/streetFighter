@@ -1,11 +1,17 @@
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/bitmap.h>
-#include "misc.h"
-#include "display.h"
 
 #ifndef __GAME_ENVIRONMENT__
 #define __GAME_ENVIRONMENT__
+#include <allegro5/allegro5.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/bitmap.h>
+#include <allegro5/bitmap_draw.h>
+#include <allegro5/bitmap_io.h>
+#include <allegro5/color.h>
+#include <allegro5/timer.h>
+#include <time.h>
+
+#include "misc.h"
+#include "display.h"
 
 #define FLOOR 285
 #define GRAVITY_COEF 1
@@ -56,6 +62,8 @@ typedef struct {
   short persThreeFrames;
 
 } GUILE_STAGE ;
+
+/* VEGAS STAGE */
 
 #define MAIN_FLOOR_X 0
 #define MAIN_FLOOR_Y 127

@@ -1,15 +1,5 @@
 #include "characSelecMenu.h"
 
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/bitmap.h>
-#include <allegro5/bitmap_draw.h>
-#include <allegro5/bitmap_io.h>
-#include <allegro5/color.h>
-#include <allegro5/events.h>
-#include <time.h>
-
 /*
   Initialize all the four selection boxes
 */
@@ -103,7 +93,7 @@ CHARAC_SELECT_SPRITES* initCharacSelectSprites() {
 }
 
 /*
-  Reset all the boxes to the white color
+  Reset all the boxes
 */
 void resetSelectionBoxes(SELECTION_BOX* allSelectionBoxes) {
   for (int i = 0; i < 4; i++) {

@@ -1,11 +1,26 @@
-#include <allegro5/color.h>
-#include <stdbool.h>
 #ifndef __PLAYER__
 #define __PLAYER__
+#include <stdbool.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/bitmap_draw.h>
+#include <allegro5/color.h>
+#include <allegro5/events.h>
+#include <allegro5/keycodes.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "attacks_SpecialMoves.h"
 #include "character.h"
+#include "display.h"
+#include "environment.h"
+#include "misc.h"
+
+#define PLAYER_VEL 5
+#define PLAYER_LIFE 145
+
+
 typedef struct {
   CHARACTER *character;
   int xPosition;
@@ -60,7 +75,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
 /*
   Draw the player on the screen
 */
-void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle);
+void drawPlayer(PLAYER *player, long timerIdle);
 
 /*
   Free up the space that were being utilized by a Player instance

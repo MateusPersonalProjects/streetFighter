@@ -1,16 +1,21 @@
+#ifndef __MATCH_INTERFACE__
+#define __MATCH_INTERFACE__
+
 #include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/bitmap.h>
+#include <allegro5/bitmap_draw.h>
+#include <allegro5/bitmap_io.h>
+#include <allegro5/color.h>
+#include <time.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro5.h>
-#include <allegro5/bitmap.h>
-#include <allegro5/color.h>
-#include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
  
 #include "display.h"
 #include "player.h"
 
-#ifndef __MATCH_INTERFACE__
-#define __MATCH_INTERFACE__
 
 // ROUND DEFINES
 #define ROUND_S_W 61

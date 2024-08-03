@@ -1,17 +1,22 @@
+#ifndef __CHARAC_SELEC_MENU__
+#define __CHARAC_SELEC_MENU__
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-#include <allegro5/allegro5.h>
-#include <allegro5/bitmap.h>
-#include <allegro5/color.h>
-#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
-#include <allegro5/allegro_image.h>
+#include <allegro5/allegro5.h>
 #include <allegro5/events.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/bitmap.h>
+#include <allegro5/bitmap_draw.h>
+#include <allegro5/bitmap_io.h>
+#include <allegro5/color.h>
+#include <allegro5/events.h>
+#include <time.h>
+
 #include "display.h"
 #include "misc.h"
 
-#ifndef __CHARAC_SELEC_MENU__
-#define __CHARAC_SELEC_MENU__
 
 #define SELECT_BOX_WIDTH 60
 #define SELECT_BOX_HEIGHT 100

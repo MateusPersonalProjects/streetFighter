@@ -4,8 +4,12 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/bitmap.h>
-#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/bitmap_io.h>
+#include <stdlib.h>
+#include <time.h>
+
 
 typedef enum{
   STEADY = 0,
@@ -41,7 +45,6 @@ typedef struct{
   ALLEGRO_BITMAP** sprites;
 } MOVE_SPRITES;
 
-// IDEIA DO ATTACK_SPRITES VOU TER UM STRUCT CHAMA HITBOX ALI DENTRO QUE ARMAZENA AS COORDENADAS BONITAMENTE PRA PASSAR PRAS FUNÇÕES DE ATAQUE
 typedef struct{
   ALLEGRO_BITMAP* sheet;
 

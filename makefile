@@ -1,33 +1,33 @@
-# Compilador
+# Compiler
 CC = gcc
 
-# Flags de compilação
+# Compiler flags 
 CFLAGS = -Wall 
 
-# Definindo as bibliotecas do Allegro
+# Allegro libs
 LIBS = $(shell pkg-config allegro-5 allegro_primitives-5 allegro_font-5 allegro_image-5 allegro_audio-5 allegro_acodec-5 --libs --cflags)
 
-# Nome do executável
-TARGET = teste
+# Binary name 
+TARGET = streetfighter
 
-# Lista de arquivos fonte
+# All the code 
 SRC = main.c display.c character.c keyboard.c misc.c player.c environment.c matchInterface.c attacks_SpecialMoves.c characSelecMenu.c ./fightersDefines/ryu.c ./fightersDefines/ken.c ./fightersDefines/chunli.c ./fightersDefines/guile.c
 
-# Lista de arquivos objeto
+# All objects
 OBJ = $(SRC:.c=.o)
 
-# Regra padrão
+# Default
 all: $(TARGET)
 
-# Regra para compilar o executável
+# To compile the binary 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LIBS)
 
-# Remove arquivos temporarios
+# Clear the room
 clean:
 	rm -f *~ $(OBJ)
 
-# Remove temporarios e o executavel
+# Clear the room with a broom of fire
 purge: clean
 	rm -f $(TARGET)
 

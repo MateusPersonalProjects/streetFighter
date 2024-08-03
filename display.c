@@ -1,9 +1,5 @@
 #include "display.h"
 
-#include <allegro5/bitmap.h>
-#include <allegro5/bitmap_draw.h>
-#include <allegro5/display.h>
-
 /*
   Initialize the display and the bitmap buffer that is going to be draw and
   scaleted to the game display

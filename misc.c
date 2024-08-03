@@ -1,7 +1,5 @@
 #include "misc.h"
 
-#include <allegro5/bitmap.h>
-
 // Checks if an allegro module was initialized correctly
 void alCheckInit(bool test, char* description) {
   if (test) return;

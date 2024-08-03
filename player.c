@@ -1,21 +1,5 @@
 #include "player.h"
 
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/bitmap_draw.h>
-#include <allegro5/color.h>
-#include <allegro5/events.h>
-#include <allegro5/keycodes.h>
-#include <stdlib.h>
-#include <time.h>
-
-#include "character.h"
-#include "display.h"
-#include "environment.h"
-#include "misc.h"
-
-#define PLAYER_VEL 5
-#define PLAYER_LIFE 145
 /*
   Initialize a new player
 */
@@ -62,9 +46,6 @@ void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
 void updateWidthHeight(PLAYER *player) {
   // Shortcuts
   SPRITE_LIST currentSpriteP1 = player->character->currentSprite;
-  // short currentSpriteFrameP1 =
-  //     player->character->fighterGraphics->movesSprites[currentSpriteP1]
-  //         .currentFrame;
 
   short currentW =
       player->character->fighterGraphics->movesSprites[currentSpriteP1]
@@ -108,12 +89,6 @@ void updateAnimation(PLAYER *player, long timerCount) {
       player->character->fighterGraphics->movesSprites[currentSprite]
           .modAnimation;
 
-  // if (currentSprite == PUNCHING || currentSprite == KICKING) modAnimation =
-  // 3; if (currentSprite == STEADY) modAnimation = 10; if (currentSprite ==
-  // WALKING) modAnimation = 4; if (currentSprite == GOT_HIT || currentSprite ==
-  // GOT_FACE_HIT)
-  //   modAnimation = 3;
-
   // JUMP must be treated in another way
   if (currentSprite == JUMPING) {
     if (!((player->yAcel) % modAnimation))
@@ -144,7 +119,9 @@ void updateAnimation(PLAYER *player, long timerCount) {
           FLOOR -
           player->character->fighterGraphics->movesSprites[DEAD].drawBoxHeight;
     }
-  } else if (currentSprite == VICTORY) {
+  }
+  // Stay in the last frame
+  else if (currentSprite == VICTORY) {
     bool done = (currentSpriteFrame == maxSpriteFrame - 1);
     if (!(done) && !(timerCount % modAnimation)) {
       (player->character->fighterGraphics->movesSprites[currentSprite]
@@ -155,6 +132,7 @@ void updateAnimation(PLAYER *player, long timerCount) {
         player->character->fighterGraphics->movesSprites[VICTORY].drawBoxHeight;
   }
 
+  // Another animations
   else {
     if (maxSpriteFrame != 1) {
       // Updates the frame for the animation
@@ -213,7 +191,7 @@ void playerSight(PLAYER *player1, PLAYER *player2) {
 }
 
 /*
- Works with the gravity and if the players collided on the air
+ Works with the gravity and treats collision in the air
 */
 void playerJump(PLAYER *player, PLAYER *anotherPlayer, bool jumping) {
   // If the player is jumping gravity starts to desacelerate him
@@ -223,22 +201,16 @@ void playerJump(PLAYER *player, PLAYER *anotherPlayer, bool jumping) {
   player->yPosition -= player->yAcel;
   if (playersCollision(player, anotherPlayer)) {
     player->yPosition += player->yAcel;
-    // if (jumping && ((anotherPlayer->yPosition +
-    //                  anotherPlayer->character->height) < FLOOR)) {
     player->yAcel = 0;
     player->character->currentSprite = STEADY;
 
+    // Sliperry head
     if (player->xPosition <= 75)
       player->xPosition += PLAYER_VEL * 4;
     else if (player->xPosition >= (BUFFER_W - 75))
       player->xPosition -= PLAYER_VEL * 4;
     else
       player->xPosition -= PLAYER_VEL * 4;
-    //  player->yAcel -= GRAVITY_COEF;
-    //}
-    //} else
-    // We lose velocity because of gravity
-    // player->yAcel -= GRAVITY_COEF;
   }
 }
 
@@ -265,7 +237,8 @@ void playerCrouch(PLAYER *player, PLAYER *anotherPlayer) {
 }
 
 /*
- * What is going on here get out now!
+ * If the hurt box for some reason got inside the another player hurt box, this
+ * funcion fix it
  */
 void getOutCrazy(PLAYER *player, PLAYER *anotherPlayer) {
   int boundP1 = player->xPosition + player->character->width - 10;
@@ -274,6 +247,8 @@ void getOutCrazy(PLAYER *player, PLAYER *anotherPlayer) {
   int centerP2 =
       anotherPlayer->xPosition + (anotherPlayer->character->width / 2);
 
+  /* If the center of the Player 2 in in the middle of the Player 1 bounds they
+  got inside each other */
   if (centerP2 >= boundP1 && centerP2 <= bound2P1) {
     if (anotherPlayer->xPosition <= 75)
       anotherPlayer->xPosition += anotherPlayer->character->width;
@@ -296,8 +271,6 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
   // If the player is not on the ground, well he is jumping xD
   jumping = ((player->yPosition + player->character->height) <
              (FLOOR - PLAYER_VEL - 2));
-  // player->crouching = false;
-  // player->blocking = false;
 
   if (!jumping) {
     player->yAcel = 0;
@@ -323,8 +296,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     }
 
     if (keyboardKeys[whichKey[MOVE_RIGHT]]) {
-      // If player is a moonwalker, well the king of pop gives him the power to
-      // block xD
+      /* If player is a moonwalker, well the king of pop gives him the power to
+       block xD */
       if (!player->facingRight) player->blocking = true;
       if (!player->crouching) {
         if (!jumping) player->character->currentSprite = WALKING;  // WALKING
@@ -335,8 +308,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
     }
 
     if (keyboardKeys[whichKey[MOVE_LEFT]]) {
-      // If player is a moonwalker, well the king of pop gives him the power to
-      // block xD
+      /* If player is a moonwalker, well the king of pop gives him the power to
+       block xD */
       if (player->facingRight) player->blocking = true;
       if (!player->crouching) {
         if (!jumping) player->character->currentSprite = WALKING;  // WALKING
@@ -346,6 +319,8 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
       }
     }
   }
+
+  // Every time we change a animation the Width and Height must be att
   updateWidthHeight(player);
 
   // Changes y position (the head position, because he is croucing right)
@@ -361,6 +336,7 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
   // Who is looking to the right side
   playerSight(player, anotherPlayer);
 
+  // Not going to the get inside each other come on
   getOutCrazy(player, anotherPlayer);
 }
 
@@ -369,8 +345,6 @@ void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
  */
 void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                          unsigned char *keyboardKeys, unsigned char *whichKey) {
-  // SPRITE_LIST currentSprite = player->character->currentSprite;
-
   // Define limits and localization of the hurt box for player 1
   float midX = (player->xPosition + (player->character->width / 2.0));
   float midY = (player->yPosition + (player->character->height / 2.0));
@@ -389,14 +363,16 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   float hurtBox2_Y1 = (midY2 - (anotherPlayer->character->hurtHeight / 2.0));
   float hurtBox2_Y2 = (midY2 + (anotherPlayer->character->hurtHeight / 2.0));
 
-  // IF THERE IS AN ATTACK ANIMATION ROLLING HE CANNOT CHANGE ATTACK UNTIL IT
-  // FINISHES OFF
+  /* IF THERE IS AN ATTACK ANIMATION ROLLING HE CANNOT CHANGE ATTACK UNTIL IT
+   FINISHES OFF */
   if (player->animationDone) {
+    /* -------------------- PUNCH --------------------- */
     if (keyboardKeys[whichKey[PUNCH]]) {
       if (!(player->character->currentSprite == JUMPING) &&
           !(player->character->currentSprite == CROUCHING)) {
+        // Sets the animation
         player->animationDone = false;
-        player->character->currentSprite = PUNCHING;  // PUNCHING
+        player->character->currentSprite = PUNCHING;
 
         // CHECK IF THE ANOTHER PLAYER GOT HIT
         if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
@@ -414,8 +390,9 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                            1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->life -= 3;
             anotherPlayer->animationDone = false;
+
             if (!anotherPlayer->crouching)
-              anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
+              anotherPlayer->character->currentSprite = GOT_HIT;
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
           }
@@ -425,7 +402,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                            1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
-              anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+              anotherPlayer->character->currentSprite = DEFENDING;
             else
               anotherPlayer->character->currentSprite = CROUCH_BLOCK;
           }
@@ -434,15 +411,19 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        } else
+        }
+        // If the another player did not got hit
+        else
           al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
                          ALLEGRO_PLAYMODE_ONCE, NULL);
       }
 
       // CROUCH PUNCH
       if (player->character->currentSprite == CROUCHING) {
+        // Sets the animation
         player->animationDone = false;
-        player->character->currentSprite = CROUCH_PUNCH;  // PUNCHING
+        player->character->currentSprite = CROUCH_PUNCH;
+        // CHECK IF THE ANOTHER PLAYER GOT HIT
         if (hitCheck(
                 hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
                 player->character->fighterGraphics->movesSprites[CROUCH_PUNCH]
@@ -459,37 +440,46 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                            1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->life -= 3;
             anotherPlayer->animationDone = false;
+
             if (!anotherPlayer->crouching)
-              anotherPlayer->character->currentSprite = GOT_HIT;  // GOT_HIT
+              anotherPlayer->character->currentSprite = GOT_HIT;
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
           }
+
           // IF WAS DEFENDING
           else {
             al_play_sample(anotherPlayer->character->sounds.blockHit, 1.0, 0,
                            1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->animationDone = false;
+
             if (!anotherPlayer->crouching)
-              anotherPlayer->character->currentSprite = DEFENDING;  // DEFENDING
+              anotherPlayer->character->currentSprite = DEFENDING;
             else
               anotherPlayer->character->currentSprite = CROUCH_BLOCK;
           }
+
           // knock back thing
           if (anotherPlayer->facingRight)
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        } else
+        }
+        // If didnt got hit
+        else
           al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
                          ALLEGRO_PLAYMODE_ONCE, NULL);
       }
     }
 
+    /* ---------------------- KICK ---------------------- */
     if (!(player->character->currentSprite == CROUCHING) &&
         keyboardKeys[whichKey[KICK]]) {
       if (!(player->character->currentSprite == JUMPING)) {
+        // Sets the animation
         player->animationDone = false;
-        player->character->currentSprite = KICKING;  // PUNCHING
+        player->character->currentSprite = KICKING;
+
         if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
                      player->character->fighterGraphics->movesSprites[KICKING]
                          .hitBoxWidth,
@@ -505,9 +495,9 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
                            1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             anotherPlayer->life -= 5;
             anotherPlayer->animationDone = false;
+
             if (!anotherPlayer->crouching)
-              anotherPlayer->character->currentSprite =
-                  GOT_FACE_HIT;  // GOT_HIT
+              anotherPlayer->character->currentSprite = GOT_FACE_HIT;
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
           }
@@ -526,15 +516,19 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        } else
+        }
+        // If it did not got hit
+        else
           al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
                          ALLEGRO_PLAYMODE_ONCE, NULL);
 
       }
       // ----------------- JUMP KICK ------------------
       else {
+        // Sets up the animation
         player->animationDone = false;
-        player->character->currentSprite = JUMP_KICK;  // PUNCHING
+        player->character->currentSprite = JUMP_KICK;
+
         if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
                      player->character->fighterGraphics->movesSprites[JUMP_KICK]
                          .hitBoxWidth,
@@ -551,8 +545,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->life -= 5;
             anotherPlayer->animationDone = false;
             if (!anotherPlayer->crouching)
-              anotherPlayer->character->currentSprite =
-                  GOT_FACE_HIT;  // GOT_HIT
+              anotherPlayer->character->currentSprite = GOT_FACE_HIT;
             else
               anotherPlayer->character->currentSprite = GOT_CROUCH_HIT;
           }
@@ -571,13 +564,16 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
             anotherPlayer->xPosition -= 2;
           else
             anotherPlayer->xPosition += 2;
-        } else
+        }
+        // If did not got hit
+        else
           al_play_sample(player->character->sounds.attack, 1.0, 0.0, 1.0,
                          ALLEGRO_PLAYMODE_ONCE, NULL);
       }
     }
   }
 
+  // Verify if someone died
   if (anotherPlayer->life <= 0) {
     anotherPlayer->animationDone = false;
     anotherPlayer->character->currentSprite = DEAD;
@@ -587,35 +583,13 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
 /*
   Draw the player on the screen
 */
-void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
-  // ALLEGRO_COLOR color = playerColor;
-
+void drawPlayer(PLAYER *player, long timerIdle) {
   // Get the current sprite
   SPRITE_LIST currentSprite = player->character->currentSprite;
   // Get the current frame the sprite is at
   short currentSpriteFrame =
       player->character->fighterGraphics->movesSprites[currentSprite]
           .currentFrame;
-  // Get the max frame the animation can reach out
-  // short maxSpriteFrame =
-  //     player->character->fighterGraphics->movesSprites[currentSprite].numFrames;
-
-  /* ------------------ FOR TESTS ONLY ---------------- */
-  // float midX = (player->xPosition + (player->character->width / 2.0));
-  // float midY = (player->yPosition + (player->character->height / 2.0));
-
-  // float hurtBox_X1 = (midX - (player->character->hurtWidth / 2.0));
-  // float hurtBox_X2 = (midX + (player->character->hurtWidth / 2.0));
-  // float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
-  // float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
-
-  // al_draw_rectangle(hurtBox_X1, hurtBox_Y1, hurtBox_X2, hurtBox_Y2,
-  // color, 2.0);
-
-  // al_draw_rectangle(hurtBox_X2, hurtBox_Y1 + 15, hurtBox_X2 + 10,
-  //                   hurtBox_Y1 + 15 + 6, al_map_rgb(255, 255, 255), 2);
-
-  /* ------------------------------------------------------- */
 
   // DRAW THE PLAYERS
   int offset = 0;
@@ -634,11 +608,7 @@ void drawPlayer(PLAYER *player, ALLEGRO_COLOR playerColor, long timerIdle) {
         player->xPosition + offset, player->yPosition, ALLEGRO_FLIP_HORIZONTAL);
   }
 
-  // SHOWS ME THE MID POINT OF THE DRAW BOX
-  // al_draw_filled_circle(midX, midY, 2.0, color);
-
-  // ONDE VOU COLOCAR ESSES RESETS????
-  // SÓ CHAMO ESSES RESETS QUANDO A ANIMAÇÃO DE UMA SPRITE TERMINAR
+  // Resets to steady when an animation finishes off
   if (player->animationDone) {
     player->character->currentSprite = STEADY;
     player->blocking = false;

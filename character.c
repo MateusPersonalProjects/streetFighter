@@ -1,11 +1,5 @@
 #include "character.h"
 
-#include <allegro5/allegro_audio.h>
-#include <allegro5/bitmap.h>
-#include <allegro5/bitmap_io.h>
-#include <stdlib.h>
-#include <time.h>
-
 /*
   Initialize a new character
 */

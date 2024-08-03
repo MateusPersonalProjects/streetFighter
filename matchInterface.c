@@ -1,14 +1,5 @@
 #include "matchInterface.h"
 
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/bitmap.h>
-#include <allegro5/bitmap_draw.h>
-#include <allegro5/bitmap_io.h>
-#include <allegro5/color.h>
-#include <time.h>
-
 /*
   Initialize a new match interface
 */
@@ -100,13 +91,16 @@ void matchInterfaceUpdate(MATCH_INTERFACE* matchInterface, PLAYER* player1,
 bool matchUpdate(MATCH_INTERFACE* matchInterface, PLAYER* player1,
                  PLAYER* player2) {
   bool control = true;
+
   if ((player1->life <= 0 || player2->life <= 0)) {
     matchInterface->rounds++;
     matchInterface->roundUP = false;
+
     if (player1->life <= 0) player2->roundsWon += 1;
     if (player2->life <= 0) player1->roundsWon += 1;
     if ((player1->roundsWon == 2) || (player2->roundsWon == 2))
       matchInterface->matchUP = false;
+
     control = false;
   }
   return control;
@@ -119,6 +113,7 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
                         PLAYER* player2, long timerCount, short* twinkle) {
   al_draw_bitmap(matchInterface->lifeBarBackground,
                  (BUFFER_W / 2.0) - (LB_W / 2.0), 5, 0);
+  // KO twinkle
   int timerDelay;
   if (*twinkle)
     timerDelay = 30;
@@ -139,6 +134,7 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
       matchInterface->lifebarP2X, matchInterface->lifebarY, BUFFER_W - 40,
       (matchInterface->lifebarY + matchInterface->lifebarHeight),
       matchInterface->lifebarColor);
+
   // Draw the rounds won for p1
   if (player1->roundsWon >= 1) {
     al_draw_bitmap(matchInterface->countWonSprite, 140,
@@ -171,21 +167,27 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                       bool* narratorFight, bool* narratorNumber) {
   bool control = false;
   (*frames)++;
+  // Everything happens in 90 frames or 3 seconds
   if (*frames <= 90) {
+    // In the first 45 frames
     if (*frames <= 45) {
+      /* ------------ ROUND ONE --------------- */
       if (matchInterface->rounds == 0) {
+        // Draws the text
         al_draw_bitmap(matchInterface->roundSprite,
                        (BUFFER_W / 2.0) - (ROUND_S_W / 2.0),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
         al_draw_bitmap(matchInterface->numOneSprite,
                        (BUFFER_W / 2.0) + (ROUND_S_W / 2.0) + (N_ONE_S_W),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+
+        // Narrator says Round
         if (!(*narratorRound)) {
           *narratorRound = true;
           al_play_sample(matchInterface->narratorAudio.round, 1.0, 0.0, 1.0,
                          ALLEGRO_PLAYMODE_ONCE, NULL);
         }
-
+        // Narrator says One
         if (*frames >= 25) {
           if (!(*narratorNumber)) {
             *narratorNumber = true;
@@ -193,19 +195,25 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
                            ALLEGRO_PLAYMODE_ONCE, NULL);
           }
         }
-      } else if (matchInterface->rounds == 1) {
+      }
+
+      /* ----------------- ROUND TWO ---------------- */
+      else if (matchInterface->rounds == 1) {
+        // Draws the text
         al_draw_bitmap(matchInterface->roundSprite,
                        (BUFFER_W / 2.0) - (ROUND_S_W / 2.0),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
         al_draw_bitmap(matchInterface->numTwoSprite,
                        (BUFFER_W / 2.0) + (ROUND_S_W / 2.0) + (N_TWO_S_W),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+
+        // Narrator says Round
         if (!(*narratorRound)) {
           *narratorRound = true;
           al_play_sample(matchInterface->narratorAudio.round, 1.0, 0.0, 1.0,
                          ALLEGRO_PLAYMODE_ONCE, NULL);
         }
-
+        // Narrator says Two
         if (*frames >= 25) {
           if (!(*narratorNumber)) {
             *narratorNumber = true;
@@ -214,16 +222,21 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
           }
         }
 
-      } else {
+      }
+      /* ------------------ FINAL ROUND ---------------- */
+      else {
+        // Draws the text
         al_draw_bitmap(matchInterface->fRoundSprite,
                        (BUFFER_W / 2.0) - (FROUND_S_W / 2.0),
                        (BUFFER_H / 2.0) - (ROUND_S_H / 2.0), 0);
+
+        // Narrator says Final
         if (!(*narratorNumber)) {
           *narratorNumber = true;
           al_play_sample(matchInterface->narratorAudio.final, 1.0, 0.0, 1.0,
                          ALLEGRO_PLAYMODE_ONCE, NULL);
         }
-
+        // Narrator says Round
         if (*frames >= 25) {
           if (!(*narratorRound)) {
             *narratorRound = true;
@@ -233,7 +246,10 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
         }
       }
 
-    } else {
+    }
+
+    /* ---------------- FIGHT ---------------- */
+    else {
       al_draw_bitmap(matchInterface->fightSprite,
                      (BUFFER_W / 2.0) - (FIGHT_S_W / 2.0),
                      (BUFFER_H / 2.0) - (FIGHT_S_H / 2.0), 0);
@@ -244,8 +260,8 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
       }
     }
   }
-  // DRAW THE ROUND START FIGHT THING 90 frames
-  // 90 FRAMES PASSED then
+  /* DRAW THE ROUND START FIGHT THING 90 frames
+  90 FRAMES PASSED then */
   else {
     control = true;
     frames = 0;
@@ -267,11 +283,15 @@ bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
     al_draw_bitmap(matchInterface->ko, (BUFFER_W / 2.0) - (KO_W / 2.0),
                    (BUFFER_H / 2.0) - (KO_H / 2.0), 0);
 
-  } else if (*frames > 90 && matchInterface->matchUP) {
+  }
+  // Goes to a next round
+  else if (*frames > 90 && matchInterface->matchUP) {
     done = true;
     (*frames) = 0;
     matchInterface->roundUP = true;
-  } else {
+  }
+  // Match ended
+  else {
     done = true;
     matchInterface->roundUP = false;
   }

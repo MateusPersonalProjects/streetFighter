@@ -1,18 +1,18 @@
-#include <allegro5/alcompat.h>
-#include <allegro5/allegro_acodec.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/bitmap_draw.h>
-#include <allegro5/color.h>
-#include <allegro5/display.h>
-#include <allegro5/drawing.h>
-#include <allegro5/events.h>
-#include <allegro5/keyboard.h>
-#include <allegro5/keycodes.h>
-#include <allegro5/timer.h>
-#include <time.h>
+// #include <allegro5/alcompat.h>
+// #include <allegro5/allegro_acodec.h>
+// #include <allegro5/allegro_audio.h>
+// #include <allegro5/allegro_font.h>
+// #include <allegro5/allegro_image.h>
+// #include <allegro5/allegro_primitives.h>
+// #include <allegro5/bitmap_draw.h>
+// #include <allegro5/color.h>
+// #include <allegro5/display.h>
+// #include <allegro5/drawing.h>
+// #include <allegro5/events.h>
+// #include <allegro5/keyboard.h>
+// #include <allegro5/keycodes.h>
+// #include <allegro5/timer.h>
+// #include <time.h>
 
 #include "./fightersDefines/chunli.h"
 #include "./fightersDefines/guile.h"
@@ -80,9 +80,9 @@ int main(void) {
   allCharacters[2] = characterInit(chunliSprites);
   allCharacters[3] = characterInit(guileSprites);
 
-  ALLEGRO_COLOR boxColors[4] = {al_map_rgb(255, 0, 0), al_map_rgb(0, 255, 0),
-                                al_map_rgb(0, 0, 255),
-                                al_map_rgb(255, 200, 50)};
+  // ALLEGRO_COLOR boxColors[4] = {al_map_rgb(255, 0, 0), al_map_rgb(0, 255, 0),
+  //                               al_map_rgb(0, 0, 255),
+  //                               al_map_rgb(255, 200, 50)};
 
   // Initialize character selection sprites and boxes
   CHARAC_SELECT_SPRITES *characSelectSprites;
@@ -104,10 +104,8 @@ int main(void) {
 
   // Initialize stages
   short stageChoice = 0;
-
   GUILE_STAGE *guileStage;
   guileStage = initGuileStage();
-
   VEGAS_STAGE *vegasStage;
   vegasStage = initVegasStage();
 
@@ -153,14 +151,16 @@ int main(void) {
   unsigned long frames = 0;
   bool mainMenuLoop = true;
   bool startCount = false;
-  while (1) {
-    // Main menu
 
+  /* -------------------- MAIN GAME LOOP -------------------- */
+  while (1) {
+    /* ----------------- MAIN MENU -------------------------- */
     short twinkle = 0;
     if (mainMenuLoop)
-      al_play_sample(mainThemeMusic, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
+      al_play_sample(mainThemeMusic, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
                      &mainThemeID);
     while (mainMenuLoop) {
+      // ---------------- UPDATE PHASE ------------------
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
           if (startCount) frames++;
@@ -182,6 +182,7 @@ int main(void) {
           break;
       }
 
+      // Close the menu after some time so the sounds can finish
       if (frames >= 24) {
         al_stop_sample(&mainThemeID);
         mainMenuLoop = false;
@@ -189,8 +190,6 @@ int main(void) {
 
       // If the user wants to close the game break the loop
       if (done) break;
-
-      // keyboardUpdate(&event, keyboardKeys);
 
       // ------------ REDRAW PHASE ------------
       if (redraw && al_event_queue_is_empty(queue)) {
@@ -205,7 +204,11 @@ int main(void) {
 
       al_wait_for_event(queue, &event);
     }
+
+    // If the user wants to close the game break the loop
     if (done) break;
+
+    /* -------------- CHARACTER SELECTION MENU ----------------- */
     resetSelectionBoxes(characSelectBoxes);
     // CHARACTER SELECTION MENU VARIABLES
     short selectP1 = 0;
@@ -219,8 +222,10 @@ int main(void) {
     frames = 0;
     al_play_sample(mainThemeMusic, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
                    &mainThemeID);
-    // ------------- CHARACTER SELECTION MENU -----------------
+
+    // CHARACTER SELECTION MENU LOOP
     while (chacSelecLoop) {
+      // ------------------ UPDATE PHASE --------------------
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
           resetSelectionBoxesColor(characSelectBoxes);
@@ -247,21 +252,22 @@ int main(void) {
           startCount = (p1Selected && p2Selected);
 
           if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) done = true;
-
           break;
+
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
           done = true;
           break;
       }
 
+      /* After the two player has selected their fighter it is going to wait a
+       * while so the sounds can finish off */
       if (frames >= 30) {
         al_stop_sample(&mainThemeID);
         chacSelecLoop = false;
       }
+
       // If the user wants to close the game break the loop
       if (done) break;
-
-      // keyboardUpdate(&event, keyboardKeys);
 
       // ------------ REDRAW PHASE ------------
       if (redraw && al_event_queue_is_empty(queue)) {
@@ -279,23 +285,29 @@ int main(void) {
       al_wait_for_event(queue, &event);
     }
 
+    // If the user wants to close the game break the loop
     if (done) break;
 
-    // After the fighters have been selected, we assigne them for the player and
+    // After the fighters have been selected, we assign them for the player and
     // set the y position
     player1->character = allCharacters[selectP1];
     player1->yPosition = FLOOR - player1->character->height;
     player2->character = allCharacters[selectP2];
     player2->yPosition = FLOOR - player2->character->height;
 
-    // And get the stage, if even guile stage if its odd las vegas stage
+    // And get the stage. If its even guile stage if its odd las vegas stage
     stageChoice = al_get_timer_count(timer) % 2;
 
+    /* ---------------------- VERSUS SCREEN ------------------------ */
     bool versusLoop = true;
     frames = 0;
 
+    // Play that good sound
     al_play_sample(versusSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+    // Versus screen loop
     while (versusLoop) {
+      // -------------- JUST REDRAW PHASE ---------------
       if (event.type == ALLEGRO_EVENT_TIMER) {
         dispPreDraw(bufferBitmap);
         al_clear_to_color(al_map_rgb(15, 30, 86));
@@ -310,6 +322,14 @@ int main(void) {
       al_wait_for_event(queue, &event);
     }
 
+    /*
+     *                                                            *
+     *                                                            *
+     * ------------------- MATCH START POINT ----------------------
+     *                                                            *
+     *                                                            *
+     */
+
     // MATCH CONTROL VARIABLES
     bool matchLoop = true;
     bool controlON = false;
@@ -319,6 +339,8 @@ int main(void) {
     matchInterface->roundUP = true;
 
     frames = 0;
+
+    // THE PLAYERS ARE RESETED FOR A NEW MATCH
     resetPlayer(
         player1, PLAYER_1_INIT_POSIT_X,
         FLOOR - player1->character->fighterGraphics->movesSprites[STEADY]
@@ -330,10 +352,13 @@ int main(void) {
                     .drawBoxHeight,
         false, !matchInterface->matchUP);
 
+    /* These variables control de  narrator sound, so it will not play a lot of
+    times */
     bool narratorFight = false;
     bool narratorRound = false;
     bool narratorNumber = false;
 
+    /* Play the stage music */
     if (!stageChoice)
       al_play_sample(guileStageMusic, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
                      &stageMusicID);
@@ -341,10 +366,9 @@ int main(void) {
       al_play_sample(vegasStageMusic, 0.8, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP,
                      &stageMusicID);
 
-    // ---------------- MATCH LOGIC ---------------
+    // ---------------- MATCH LOOP ---------------
     while (matchLoop) {
       // -------------- UPDATE PHASE --------------
-
       switch (event.type) {
         case ALLEGRO_EVENT_TIMER:
 
@@ -360,9 +384,11 @@ int main(void) {
             controlON = matchUpdate(matchInterface, player1, player2);
           }
 
+          // The animation is updated every time event
           updateAnimation(player1, al_get_timer_count(timer));
           updateAnimation(player2, al_get_timer_count(timer));
           matchInterfaceUpdate(matchInterface, player1, player2);
+
           if (keyboardKeys[ALLEGRO_KEY_ESCAPE]) done = true;
           redraw = true;
           break;
@@ -375,6 +401,7 @@ int main(void) {
       // If the user wants to close the game break the loop
       if (done) break;
 
+      // Updates our keyboard array
       keyboardUpdate(&event, keyboardKeys);
 
       // ------------ REDRAW PHASE ------------
@@ -384,13 +411,13 @@ int main(void) {
 
         drawStage(guileStage, vegasStage, al_get_timer_count(timer),
                   stageChoice);
-        drawPlayer(player1, boxColors[selectP1], al_get_timer_count(timer));
-        drawPlayer(player2, boxColors[selectP2], al_get_timer_count(timer));
+        drawPlayer(player1, al_get_timer_count(timer));
+        drawPlayer(player2, al_get_timer_count(timer));
         drawMatchInterface(matchInterface, player1, player2,
                            al_get_timer_count(timer), &twinkle);
 
-        // If the players are not able to control and the round is up, well it
-        // just started so lets draw the things
+        /* If the players are not able to control and the round is up, well it
+        just started so lets draw the things */
         if (!controlON && matchInterface->roundUP)
           controlON =
               roundStartWriter(matchInterface, &frames, font, &narratorRound,
@@ -408,12 +435,16 @@ int main(void) {
             player2->character->currentSprite = VICTORY;
           }
 
+          // The match ended so me need to stop the music
           al_stop_sample(&stageMusicID);
         }
-        // If the round is not up, well someone died, so lets check this and
-        // start a new round
+
+        /* If the round is not up, well someone died, so lets check this and
+        start a new round */
         else if (!matchInterface->roundUP) {
           if (roundEndWriter(matchInterface, &frames, font)) {
+            /* If the round endend we reset the narrator control variables and
+             * reset the players */
             narratorRound = false;
             narratorFight = false;
             narratorNumber = false;
@@ -433,6 +464,8 @@ int main(void) {
       al_wait_for_event(queue, &event);
     }
   }
+
+  // Time to destroy everything
   dispDestroyer(disp, bufferBitmap);
   playerDestroyer(player1);
   playerDestroyer(player2);

@@ -1,14 +1,9 @@
 #include "environment.h"
 
-#include <allegro5/bitmap.h>
-#include <allegro5/bitmap_draw.h>
-#include <allegro5/bitmap_io.h>
-#include <allegro5/color.h>
-#include <allegro5/timer.h>
-#include <time.h>
+/* ---------------------- GUILE STAGE ----------------------- */
 
 /*
-  Initialize a stage
+  Initialize a guile stage
 */
 GUILE_STAGE* initGuileStage() {
   GUILE_STAGE* guileStage = (GUILE_STAGE*)malloc(sizeof(GUILE_STAGE));
@@ -58,9 +53,11 @@ GUILE_STAGE* initGuileStage() {
 */
 void drawGuileStage(GUILE_STAGE* stage, long int timer) {
   float floorNextToPlane = BUFFER_H - 138;
+  // Increase frames
   if (!(timer % 10)) stage->persOneFrames++;
   if (!(timer % 15)) stage->persTwoFrames++;
   if (!(timer % 20)) stage->persThreeFrames++;
+  // Mods for animation
   stage->persOneFrames %= 2;
   stage->persTwoFrames %= 2;
   stage->persThreeFrames %= 2;
@@ -77,6 +74,8 @@ void drawGuileStage(GUILE_STAGE* stage, long int timer) {
                  floorNextToPlane, 0);
   al_draw_bitmap(stage->wall, 0, floorNextToPlane, 0);
 }
+
+/* ------------------ VEGAS STAGE ---------------- */
 
 const short carsAndDudes_x[2] = {112, 112};
 const short carsAndDudes_y[2] = {848, 936};
@@ -140,10 +139,15 @@ VEGAS_STAGE* initVegasStage() {
   return vegasStage;
 }
 
+/*
+  Draw the vegas stage
+*/
 void drawVegasStage(VEGAS_STAGE* vegasStage, long int timer) {
+  // Increase frames
   if (!(timer % 10)) vegasStage->carsAndDudesFrames++;
   if (!(timer % 10)) vegasStage->redWomanFrames++;
   if (!(timer % 10)) vegasStage->blueWomanFrames++;
+  // Mods for animation
   vegasStage->carsAndDudesFrames %= 2;
   vegasStage->redWomanFrames %= 3;
   vegasStage->blueWomanFrames %= 3;
@@ -159,6 +163,7 @@ void drawVegasStage(VEGAS_STAGE* vegasStage, long int timer) {
   int blueIni = 55;
   int blueEnd = 130;
 
+  // Animation for the red woman
   if (vegasStage->redGoing) {
     al_draw_bitmap(vegasStage->redWoman[vegasStage->redWomanFrames],
                    vegasStage->redWomanPosition, 180, 0);
@@ -171,6 +176,7 @@ void drawVegasStage(VEGAS_STAGE* vegasStage, long int timer) {
     if (vegasStage->redWomanPosition <= redIni) vegasStage->redGoing = true;
   }
 
+  // Animation for the blue woman
   if (vegasStage->blueGoing) {
     al_draw_bitmap(vegasStage->blueWoman[vegasStage->blueWomanFrames],
                    vegasStage->blueWomanPosition, 180, ALLEGRO_FLIP_HORIZONTAL);

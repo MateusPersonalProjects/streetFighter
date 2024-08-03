@@ -1,8 +1,10 @@
-#include "misc.h"
-#include <allegro5/allegro5.h>
-
 #ifndef __DISPLAY__
 #define __DISPLAY__
+#include "misc.h"
+#include <allegro5/allegro5.h>
+#include <allegro5/bitmap.h>
+#include <allegro5/bitmap_draw.h>
+#include <allegro5/display.h>
 
 // Size of the buffer that all the things are going to be draw
 #define BUFFER_W 400
