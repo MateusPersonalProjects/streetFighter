@@ -52,7 +52,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
 /*
  Reset the player
 */
-void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight, bool matchEnd);
+void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight);
 
 /*
   This function updates the state of an attack animation going to the next
@@ -63,7 +63,7 @@ void updateAnimation(PLAYER *player, long timerCount);
 /*
   Update things for player
 */
-void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey, long timerCount);
+void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer, unsigned char *keyboardKeys, unsigned char *whichKey);
 
 
 /*
@@ -75,7 +75,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
 /*
   Draw the player on the screen
 */
-void drawPlayer(PLAYER *player, long timerIdle);
+void drawPlayer(PLAYER *player);
 
 /*
   Free up the space that were being utilized by a Player instance

@@ -128,7 +128,6 @@ void updateSelectionBoxesColor(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
   Update the selection boxes
 */
 bool updateSelectionBoxes(SELECTION_BOX* allSelectionBoxes, short* idSelcP,
-                          unsigned char* keyboardKeys,
                           unsigned char* playerKeys, ALLEGRO_EVENT event,
                           ALLEGRO_SAMPLE* selectionSound) {
   bool playerSelected = false;

@@ -25,8 +25,7 @@ PLAYER *initPlayer(CHARACTER *character, int xPosit, int yPosit,
 /*
  Reset the player
 */
-void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight,
-                 bool matchEnd) {
+void resetPlayer(PLAYER *player, int xPosit, int yPosit, bool facingRight) {
   player->xPosition = xPosit;
   player->yPosition = yPosit;
   player->facingRight = facingRight;
@@ -263,8 +262,8 @@ void getOutCrazy(PLAYER *player, PLAYER *anotherPlayer) {
   Update things for player movements
 */
 void playerUpdateMovements(PLAYER *player, PLAYER *anotherPlayer,
-                           unsigned char *keyboardKeys, unsigned char *whichKey,
-                           long timerCount) {
+                           unsigned char *keyboardKeys,
+                           unsigned char *whichKey) {
   bool jumping;
   int difPlayerFloor;
 
@@ -351,7 +350,6 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
   float hurtBox_X1 = (midX - (player->character->hurtWidth / 2.0));
   float hurtBox_X2 = (midX + (player->character->hurtWidth / 2.0));
   float hurtBox_Y1 = (midY - (player->character->hurtHeight / 2.0));
-  float hurtBox_Y2 = (midY + (player->character->hurtHeight / 2.0));
 
   // Define limits and localization of the hurt box for player 2
   float midX2 =
@@ -375,7 +373,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
         player->character->currentSprite = PUNCHING;
 
         // CHECK IF THE ANOTHER PLAYER GOT HIT
-        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1,
                      player->character->fighterGraphics->movesSprites[PUNCHING]
                          .hitBoxWidth,
                      player->character->fighterGraphics->movesSprites[PUNCHING]
@@ -425,7 +423,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
         player->character->currentSprite = CROUCH_PUNCH;
         // CHECK IF THE ANOTHER PLAYER GOT HIT
         if (hitCheck(
-                hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+                hurtBox_X1, hurtBox_X2, hurtBox_Y1,
                 player->character->fighterGraphics->movesSprites[CROUCH_PUNCH]
                     .hitBoxWidth,
                 player->character->fighterGraphics->movesSprites[CROUCH_PUNCH]
@@ -480,7 +478,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
         player->animationDone = false;
         player->character->currentSprite = KICKING;
 
-        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1,
                      player->character->fighterGraphics->movesSprites[KICKING]
                          .hitBoxWidth,
                      player->character->fighterGraphics->movesSprites[KICKING]
@@ -529,7 +527,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
         player->animationDone = false;
         player->character->currentSprite = JUMP_KICK;
 
-        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1, hurtBox_Y2,
+        if (hitCheck(hurtBox_X1, hurtBox_X2, hurtBox_Y1,
                      player->character->fighterGraphics->movesSprites[JUMP_KICK]
                          .hitBoxWidth,
                      player->character->fighterGraphics->movesSprites[JUMP_KICK]
@@ -583,7 +581,7 @@ void playerUpdateAttacks(PLAYER *player, PLAYER *anotherPlayer,
 /*
   Draw the player on the screen
 */
-void drawPlayer(PLAYER *player, long timerIdle) {
+void drawPlayer(PLAYER *player) {
   // Get the current sprite
   SPRITE_LIST currentSprite = player->character->currentSprite;
   // Get the current frame the sprite is at

@@ -1,19 +1,3 @@
-// #include <allegro5/alcompat.h>
-// #include <allegro5/allegro_acodec.h>
-// #include <allegro5/allegro_audio.h>
-// #include <allegro5/allegro_font.h>
-// #include <allegro5/allegro_image.h>
-// #include <allegro5/allegro_primitives.h>
-// #include <allegro5/bitmap_draw.h>
-// #include <allegro5/color.h>
-// #include <allegro5/display.h>
-// #include <allegro5/drawing.h>
-// #include <allegro5/events.h>
-// #include <allegro5/keyboard.h>
-// #include <allegro5/keycodes.h>
-// #include <allegro5/timer.h>
-// #include <time.h>
-
 #include "./fightersDefines/chunli.h"
 #include "./fightersDefines/guile.h"
 #include "./fightersDefines/ken.h"
@@ -111,7 +95,7 @@ int main(void) {
 
   // Initialize the match interface
   MATCH_INTERFACE *matchInterface;
-  matchInterface = initMatchInterface(player1, player2);
+  matchInterface = initMatchInterface();
 
   // Initialize sounds for main menu, character selection and versus screen
   ALLEGRO_SAMPLE *startSound = al_load_sample("./sounds/20H.wav");
@@ -242,12 +226,12 @@ int main(void) {
         case ALLEGRO_EVENT_KEY_DOWN:
           if (!p1Selected)
             p1Selected =
-                updateSelectionBoxes(characSelectBoxes, &selectP1, keyboardKeys,
-                                     p1Keys, event, selectFighterSound);
+                updateSelectionBoxes(characSelectBoxes, &selectP1, p1Keys,
+                                     event, selectFighterSound);
           if (!p2Selected)
             p2Selected =
-                updateSelectionBoxes(characSelectBoxes, &selectP2, keyboardKeys,
-                                     p2Keys, event, selectFighterSound);
+                updateSelectionBoxes(characSelectBoxes, &selectP2, p2Keys,
+                                     event, selectFighterSound);
 
           startCount = (p1Selected && p2Selected);
 
@@ -345,12 +329,12 @@ int main(void) {
         player1, PLAYER_1_INIT_POSIT_X,
         FLOOR - player1->character->fighterGraphics->movesSprites[STEADY]
                     .drawBoxHeight,
-        true, !matchInterface->matchUP);
+        true);
     resetPlayer(
         player2, PLAYER_2_INIT_POSIT_X,
         FLOOR - player2->character->fighterGraphics->movesSprites[STEADY]
                     .drawBoxHeight,
-        false, !matchInterface->matchUP);
+        false);
 
     /* These variables control de  narrator sound, so it will not play a lot of
     times */
@@ -374,10 +358,8 @@ int main(void) {
 
           // If the control is on the player can move around and start the fight
           if (controlON) {
-            playerUpdateMovements(player1, player2, keyboardKeys, p1Keys,
-                                  al_get_timer_count(timer));
-            playerUpdateMovements(player2, player1, keyboardKeys, p2Keys,
-                                  al_get_timer_count(timer));
+            playerUpdateMovements(player1, player2, keyboardKeys, p1Keys);
+            playerUpdateMovements(player2, player1, keyboardKeys, p2Keys);
 
             playerUpdateAttacks(player1, player2, keyboardKeys, p1Keys);
             playerUpdateAttacks(player2, player1, keyboardKeys, p2Keys);
@@ -411,21 +393,20 @@ int main(void) {
 
         drawStage(guileStage, vegasStage, al_get_timer_count(timer),
                   stageChoice);
-        drawPlayer(player1, al_get_timer_count(timer));
-        drawPlayer(player2, al_get_timer_count(timer));
+        drawPlayer(player1);
+        drawPlayer(player2);
         drawMatchInterface(matchInterface, player1, player2,
                            al_get_timer_count(timer), &twinkle);
 
         /* If the players are not able to control and the round is up, well it
         just started so lets draw the things */
         if (!controlON && matchInterface->roundUP)
-          controlON =
-              roundStartWriter(matchInterface, &frames, font, &narratorRound,
-                               &narratorFight, &narratorNumber);
+          controlON = roundStartWriter(matchInterface, &frames, &narratorRound,
+                                       &narratorFight, &narratorNumber);
 
         // If the match ended, we have a winner so lets show him
         if (!matchInterface->matchUP) {
-          matchLoop = drawWinnerGreater(matchInterface, &frames, font,
+          matchLoop = drawWinnerGreater(matchInterface, &frames,
                                         player2->roundsWon != 2);
           if (player1->roundsWon == 2) {
             player1->animationDone = false;
@@ -442,18 +423,16 @@ int main(void) {
         /* If the round is not up, well someone died, so lets check this and
         start a new round */
         else if (!matchInterface->roundUP) {
-          if (roundEndWriter(matchInterface, &frames, font)) {
+          if (roundEndWriter(matchInterface, &frames)) {
             /* If the round endend we reset the narrator control variables and
              * reset the players */
             narratorRound = false;
             narratorFight = false;
             narratorNumber = false;
             resetPlayer(player1, PLAYER_1_INIT_POSIT_X,
-                        FLOOR - player1->character->height, true,
-                        !matchInterface->matchUP);
+                        FLOOR - player1->character->height, true);
             resetPlayer(player2, PLAYER_2_INIT_POSIT_X,
-                        FLOOR - player2->character->height, false,
-                        !matchInterface->matchUP);
+                        FLOOR - player2->character->height, false);
           }
         }
 

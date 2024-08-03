@@ -3,7 +3,7 @@
 /*
   Initialize a new match interface
 */
-MATCH_INTERFACE* initMatchInterface(PLAYER* player1, PLAYER* player2) {
+MATCH_INTERFACE* initMatchInterface() {
   MATCH_INTERFACE* newMatchInterface =
       (MATCH_INTERFACE*)malloc(sizeof(MATCH_INTERFACE));
   if (newMatchInterface == NULL) exit(1);
@@ -163,8 +163,8 @@ void drawMatchInterface(MATCH_INTERFACE* matchInterface, PLAYER* player1,
   return the flag that control the controls
 */
 bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
-                      ALLEGRO_FONT* font, bool* narratorRound,
-                      bool* narratorFight, bool* narratorNumber) {
+                      bool* narratorRound, bool* narratorFight,
+                      bool* narratorNumber) {
   bool control = false;
   (*frames)++;
   // Everything happens in 90 frames or 3 seconds
@@ -273,8 +273,7 @@ bool roundStartWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
   Ends a round writting K.O, return true when the writting ends so the code
   can reset the players or end the match
 */
-bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
-                    ALLEGRO_FONT* font) {
+bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames) {
   // DRAW THE K.O THING THEN AFTER 90 FRAMES RESET PLAYER AND START NEW
   // ROUND
   bool done = false;
@@ -302,7 +301,7 @@ bool roundEndWriter(MATCH_INTERFACE* matchInterface, unsigned long* frames,
   Show the winner on the screen for 3 seconds, then close the game
 */
 bool drawWinnerGreater(MATCH_INTERFACE* matchInterface, unsigned long* frames,
-                       ALLEGRO_FONT* font, bool playerOneWon) {
+                       bool playerOneWon) {
   bool turnOnMatchLoop = true;
   (*frames)++;
   if (*frames <= 300) {
