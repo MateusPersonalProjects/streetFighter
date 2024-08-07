@@ -81,4 +81,4 @@ Alternatively, see the GitHub documentation on [how to create a pull request](ht
   
 ## License
 
-This project is licensed. See the [LICENSE](LICENSE.md) file for more details.
+This project is not licensed.
