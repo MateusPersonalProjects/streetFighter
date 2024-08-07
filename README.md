@@ -71,8 +71,12 @@ Como alternativa, consulte a documentação do GitHub em [como criar uma solicit
 
 ## Credits 
 
-Agradecemos às seguintes pessoas que contribuíram para este projeto:
+**Main menu and Fighters Selection Screen music**:  *Kiss of the Creature* by Dance With the Dead 
 
+**Game art and sound by** CAPCOM
+
+**Repository photo by** [Ryan Quintal](https://unsplash.com/@ryanquintal?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/street-fighter-ken-and-ryu-figurines-Rt0fXXXvf4w?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash")
+  
 ## 📝 Licença
 
 Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
