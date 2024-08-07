@@ -11,7 +11,7 @@
 
 Before you start,  make sure you have all the requirements:
 
-- The latest version of `<allegro-5>`
+- The latest version of [`Allegro 5`](https://github.com/liballeg/allegro5)
 - A computer running `Linux`.
 
 ## Installing <streetFighter>
@@ -77,6 +77,6 @@ Alternatively, see the GitHub documentation on [how to create a pull request](ht
 
 **Repository photo by** [Ryan Quintal](https://unsplash.com/@ryanquintal?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/street-fighter-ken-and-ryu-figurines-Rt0fXXXvf4w?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash")
   
-## 📝 Licença
+## License
 
-Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+This project is licensed. See the [LICENSE](LICENSE.md) file for more details.
