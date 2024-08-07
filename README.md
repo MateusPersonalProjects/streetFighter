@@ -3,7 +3,7 @@
 ![Linux](https://img.shields.io/badge/Linux-E34F26?style=for-the-badge&logo=linux&logoColor=black)
 ![C programming language](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
 
-<img src="imagem.png" alt="Exemplo imagem">
+<img src="repoImage.png" alt="streetFighter Project image">
 
 > StreetFighter is a simple and fun implementation of a Street Fighter game using the C programming language and the Allegro 5 library. The objective of this project was to learn more about event-oriented programming by creating something different.
 
