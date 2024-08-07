@@ -57,23 +57,23 @@ Unfortunatelly the game can only be played in local mutiplayer.
 - **U**: Punch
 - **I**: Kick
 
-## 📫 Contribuindo para <nome_do_projeto>
+## Contributing to StreetFighter
 
-Para contribuir com <nome_do_projeto>, siga estas etapas:
+To contribute to StreetFighter, follow these steps:
 
-1. Bifurque este repositório.
-2. Crie um branch: `git checkout -b <nome_branch>`.
-3. Faça suas alterações e confirme-as: `git commit -m '<mensagem_commit>'`
-4. Envie para o branch original: `git push origin <nome_do_projeto> / <local>`
-5. Crie a solicitação de pull.
+1. Fork this repository.
+2. Create a branch: `git checkout -b <branch_name>`.
+3. Make your changes and commit them: `git commit -m '<commit_message>'`
+4. Push to the original branch: `git push origin <project_name>/<location>`
+5. Create the pull request.
 
-Como alternativa, consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+Alternatively, see the GitHub documentation on [how to create a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 ## Credits 
 
 **Main menu and Fighters Selection Screen music**:  *Kiss of the Creature* by Dance With the Dead 
 
-**Game art and sound by** CAPCOM
+**Game art and sound**: CAPCOM
 
 **Repository photo by** [Ryan Quintal](https://unsplash.com/@ryanquintal?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/street-fighter-ken-and-ryu-figurines-Rt0fXXXvf4w?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash")
   
